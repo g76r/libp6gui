@@ -1,0 +1,7 @@
+*.pro.user
+*.o
+moc_*.cpp
+/Makefile
+/*libh6ncsu.so*
+/TODO
+.rsync-filter
