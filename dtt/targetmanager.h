@@ -64,9 +64,9 @@ public:
 
 signals:
   /** Sent every time a target changes */
-  void targetChanged(TargetType targetType,
+  void targetChanged(TargetManager::TargetType targetType,
                      PerspectiveWidget *perspectiveWidget,
-                     QList<QString> itemIds);
+                     QStringList itemIds);
 };
 
 #endif // TARGETMANAGER_H

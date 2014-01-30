@@ -54,8 +54,8 @@ bool DocumentManager::keyPressEvent(QKeyEvent *event) {
   // even worst hacks on MacOS than on other OSes
   GlobalKey gk = _globalKeys.value(event->key());
   if (gk.isNull() || gk._modifiers != event->modifiers())
-    ; //qDebug() << "key not globally associated" << event->key()
-      //         << event->text() << event->modifiers();
+    qDebug() << "key not globally associated" << event->key()
+             << event->text() << event->modifiers();
   else {
     Tool *t = _tools.value(gk._toolId).data();
     if (t) {

@@ -9,15 +9,15 @@ PerspectiveWidget::PerspectiveWidget(QWidget *parent) : QWidget(parent) {
 
 PerspectiveWidget::~PerspectiveWidget() {
   if (_documentManager)
-    _documentManager.data()->unregisterWidget(this);
+    _documentManager->unregisterWidget(this);
 }
 
 void PerspectiveWidget::setDocumentManager(DocumentManager *documentManager) {
   if (_documentManager)
-    _documentManager.data()->unregisterWidget(this);
+    _documentManager->unregisterWidget(this);
   _documentManager = documentManager;
   if (documentManager)
-    _documentManager.data()->registerWidget(this);
+    _documentManager->registerWidget(this);
   else
     qWarning() << "PerspectiveWidget::setDocumentManager(0)";
 }
@@ -28,7 +28,7 @@ QPointer<DocumentManager> PerspectiveWidget::documentManager() const {
 
 void PerspectiveWidget::keyPressEvent(QKeyEvent *event) {
   if (parent() || !_documentManager
-      || !_documentManager.data()->keyPressEvent(event))
+      || !_documentManager->keyPressEvent(event))
     QWidget::keyPressEvent(event);
 }
 

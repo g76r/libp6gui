@@ -6,6 +6,7 @@
 #include <QString>
 #include <QIcon>
 #include "libh6ncsu_global.h"
+#include "targetmanager.h"
 
 class QAction;
 class PerspectiveWidget;
@@ -50,21 +51,15 @@ public slots:
   virtual void trigger();
 
 private slots:
-  // FIXME only one, with target type
-  // FIXME rather ToolButton should be warned of target changes
-  virtual void primaryTargetChanged(
-      QPointer<PerspectiveWidget> perspectiveWidget,
-      QList<QString> itemIds);
-  virtual void mouseoverTargetChanged(
-      QPointer<PerspectiveWidget> perspectiveWidget,
-      QList<QString> itemIds);
+  // LATER rather ToolButton should be warned of target changes ? or connect only tools that are bound to a widget ?
+  virtual void targetChanged(TargetManager::TargetType targetType,
+                             PerspectiveWidget *perspectiveWidget,
+                             QStringList itemIds);
 
 signals:
   /** Notify associated widgets that something in the tool appearance has
-    * changed. E.g. it has been enabled or disabled, its label changed, etc.
-    */
+    * changed. E.g. it has been enabled or disabled, its label changed, etc. */
   void changed();
-  // FIXME add target type
   void triggered();
 };
 

@@ -6,12 +6,8 @@
 Tool::Tool(DocumentManager *parent, const QString id) : QObject(0),
   _documentManager(parent), _id(id), _label(tr("Tool")), _enabled(true),
   _action(new ToolActionWrapper(this)) {
-  connect(parent->targetManager(),
-          SIGNAL(primaryTargetChanged(QPointer<PerspectiveWidget>,QList<QString>)),
-          this, SLOT(primaryTargetChanged(QPointer<PerspectiveWidget>,QList<QString>)));
-  connect(parent->targetManager(),
-          SIGNAL(mouseoverTargetChanged(QPointer<PerspectiveWidget>,QList<QString>)),
-          this, SLOT(mouseoverTargetChanged(QPointer<PerspectiveWidget>,QList<QString>)));
+  connect(parent->targetManager(), SIGNAL(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)),
+          this, SLOT(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)));
   connect(this, SIGNAL(changed()), _action, SIGNAL(changed()));
   connect(_action, SIGNAL(triggered()), this, SLOT(trigger()));
 }
@@ -45,15 +41,10 @@ void Tool::setEnabled(bool enabled) {
   }
 }
 
-void Tool::primaryTargetChanged(QPointer<PerspectiveWidget> perspectiveWidget,
-                                QList<QString> itemIds) {
-  Q_UNUSED(perspectiveWidget)
-  Q_UNUSED(itemIds)
-  // default: don't care target
-}
-
-void Tool::mouseoverTargetChanged(
-    QPointer<PerspectiveWidget> perspectiveWidget, QList<QString> itemIds) {
+void Tool::targetChanged(TargetManager::TargetType targetType,
+                         PerspectiveWidget *perspectiveWidget,
+                         QStringList itemIds) {
+  Q_UNUSED(targetType)
   Q_UNUSED(perspectiveWidget)
   Q_UNUSED(itemIds)
   // default: don't care target
