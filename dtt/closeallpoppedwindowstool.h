@@ -9,7 +9,7 @@ class LIBH6NCSUSHARED_EXPORT CloseAllPoppedWindowsTool : public Tool {
   Q_DISABLE_COPY(CloseAllPoppedWindowsTool)
 public:
   explicit CloseAllPoppedWindowsTool(DocumentManager *parent);
-  void trigger();
+  void trigger(TargetManager::TargetType targetType);
 };
 
 #endif // CLOSEALLSUBWINDOWSTOOL_H

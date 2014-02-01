@@ -5,6 +5,7 @@
 #include <QPointer>
 #include "tool.h"
 #include "libh6ncsu_global.h"
+#include "targetmanager.h"
 
 class DocumentManager;
 
@@ -16,12 +17,11 @@ class LIBH6NCSUSHARED_EXPORT ToolButton : public QAbstractButton {
 private:
   QPointer<DocumentManager> _documentManager;
   QPointer<Tool> _tool;
-  bool _mouseover;
-  int _key;
-  Qt::KeyboardModifiers _modifiers;
+  bool _mouseCurrentlyOver, _currentlyTriggerable;
   QString _keyLabel;
   QColor _flashBackground;
   QPoint _mousePressPoint;
+  TargetManager::TargetType _targetType;
 
 public:
   explicit ToolButton(DocumentManager *documentManager, QWidget *parent = 0);
@@ -44,8 +44,15 @@ public:
   void dropEvent(QDropEvent *e);
   QColor flashBackground() const { return _flashBackground; }
   void setFlashBackground(QColor color) { _flashBackground = color; update(); }
+  void trigger();
+  TargetManager::TargetType targetType() const { return _targetType; }
+  void setTargetType(TargetManager::TargetType targetType) {
+    _targetType = targetType; }
 
 private slots:
+  void targetChanged(TargetManager::TargetType targetType,
+                     PerspectiveWidget *perspectiveWidget,
+                     QStringList itemIds);
   void toolChanged();
   void toolTriggered();
 };

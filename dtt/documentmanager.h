@@ -6,6 +6,7 @@
 #include <QPointer>
 #include "tool.h"
 #include "libh6ncsu_global.h"
+#include "toolbutton.h"
 
 class QKeyEvent;
 class QUndoStack;
@@ -28,16 +29,17 @@ class LIBH6NCSUSHARED_EXPORT DocumentManager : public QObject {
   Q_DISABLE_COPY(DocumentManager)
 
   class GlobalKey {
-    friend class DocumentManager;
-    Qt::KeyboardModifiers _modifiers;
-    QString _toolId;
   public:
-    inline explicit GlobalKey(Qt::KeyboardModifiers modifiers = Qt::NoModifier,
-                              QString toolId = QString())
-      : _modifiers(modifiers), _toolId(toolId) { }
-    inline GlobalKey(const GlobalKey &other) : _modifiers(other._modifiers),
-      _toolId(other._toolId) { }
-    inline bool isNull() const { return _toolId.isNull(); }
+    Qt::KeyboardModifiers _modifiers;
+    QPointer<Tool> _tool;
+    QPointer<ToolButton> _toolButton;
+    GlobalKey() { }
+    explicit GlobalKey(Qt::KeyboardModifiers modifiers, QPointer<Tool> tool)
+      : _modifiers(modifiers), _tool(tool) { }
+    explicit GlobalKey(Qt::KeyboardModifiers modifiers,
+                       QPointer<ToolButton> toolButton)
+      : _modifiers(modifiers), _toolButton(toolButton) { }
+    bool isNull() const { return !_tool && !_toolButton; }
   };
 
   TargetManager *_targetManager;
@@ -65,8 +67,11 @@ public:
   const QList<QPointer<Tool> > toolsCatalog() { return _permanentTools; }
   /** @warning pointer may be null */
   QPointer<Tool> toolById(const QString id);
-  void setGlobalKey(int key, QString toolId = QString(),
+  void setGlobalKey(int key, QString toolId,
                     Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+  void setGlobalKey(int key, ToolButton *toolButton,
+                    Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+  void clearGlobalKey(int key);
   virtual void unregisterWidget(PerspectiveWidget *widget);
   void addTool(QPointer<Tool> tool, bool permanent = false);
   void addTool(Tool *tool, bool permanent = false) {

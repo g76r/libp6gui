@@ -11,11 +11,14 @@
 
 ToolButton::ToolButton(DocumentManager *documentManager, QWidget *parent)
   : QAbstractButton(parent), _documentManager(documentManager),
-    _mouseover(false), _key(0), _modifiers(Qt::NoModifier),
-    _flashBackground(Qt::lightGray) {
+    _mouseCurrentlyOver(false),
+    _flashBackground(Qt::lightGray), _targetType(TargetManager::PrimaryTarget) {
   setMaximumSize(36, 36);
   setMinimumSize(36, 36);
   setAcceptDrops(true);
+  if (_documentManager)
+    connect(_documentManager->targetManager(), SIGNAL(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)),
+            this, SLOT(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)));
 }
 
 ToolButton::~ToolButton() {
@@ -27,12 +30,10 @@ void ToolButton::setTool(QPointer<Tool> tool) {
   if (!_tool.isNull()) {
     connect(_tool.data(), SIGNAL(changed()), this, SLOT(toolChanged()));
     connect(_tool.data(), SIGNAL(triggered()), this, SLOT(toolTriggered()));
+    if (!_tool->acceptedTargets().contains(_targetType))
+      _targetType = _tool->preferredTarget();
     toolChanged();
   }
-  if (_key && _documentManager)
-    _documentManager.data()
-        ->setGlobalKey(_key, _tool ? _tool.data()->id() : QString(),
-                       _modifiers);
 }
 
 void ToolButton::clearTool() {
@@ -41,9 +42,6 @@ void ToolButton::clearTool() {
                         this, SLOT(toolChanged()));
     QObject::disconnect(_tool.data(), SIGNAL(triggered()),
                         this, SLOT(toolTriggered()));
-    if (_key && _documentManager)
-      _documentManager.data()
-          ->setGlobalKey(_key, QString(), _modifiers);
   }
   _tool.clear();
 }
@@ -52,13 +50,10 @@ void ToolButton::setGlobalKey(int key, Qt::KeyboardModifiers modifiers) {
   if (!_documentManager)
     return;
   if (key) {
-    _documentManager.data()
-        ->setGlobalKey(_key = key, _tool ? _tool.data()->id() : QString(),
-                       _modifiers = modifiers);
+    _documentManager.data()->setGlobalKey(key, this, modifiers);
     // LATER better keyLabel, including modifiers
-    _keyLabel = (_key > 32 && _key < 128) ? QChar((char)_key) : '?';
+    _keyLabel = (key > 32 && key < 128) ? QChar((char)key) : '?';
   } else {
-    _documentManager.data()->setGlobalKey(_key, QString(), _modifiers);
     _keyLabel = QString();
   }
   toolChanged();
@@ -69,6 +64,7 @@ void ToolButton::toolChanged() {
   if (!_keyLabel.isNull())
     toolTip.append(" (").append(_keyLabel).append(')');
   setToolTip(toolTip);
+  _currentlyTriggerable = _tool ? _tool->triggerable(_targetType) : false;
   update();
 }
 
@@ -90,19 +86,39 @@ void ToolButton::paintEvent(QPaintEvent*) {
   p.setBrush(_flashBackground != Qt::lightGray
              ? _flashBackground
              : _mousePressPoint.isNull()
-               ? (_mouseover ? Qt::darkGray : Qt::lightGray)
+               ? (_mouseCurrentlyOver ? Qt::darkGray : Qt::lightGray)
                : Qt::white);
   p.drawRoundedRect(QRect(1, 1, 34, 34), 4, 4);
   if (_tool)
-    p.drawPixmap(2, 2, _tool.data()
-                 ->icon().pixmap(32, 32, _tool.data()->enabled()
-                                 ? QIcon::Normal : QIcon::Disabled));
+    p.drawPixmap(2, 2, _tool->icon()
+                 .pixmap(32, 32, _currentlyTriggerable
+                         ? QIcon::Normal : QIcon::Disabled));
   if (!_keyLabel.isNull()) {
     QFont font("Sans");
     font.setPixelSize(12);
     p.setFont(font);
-    p.setPen(Qt::blue);
+    p.setPen(Qt::black);
     p.drawText(QRectF(2, 34-12, 32, 12), Qt::AlignRight, _keyLabel);
+  }
+  // LATER use icon rather than text as target indicator
+  QString targetIndicator("?");
+  switch (_targetType) {
+  case TargetManager::PrimaryTarget:
+    targetIndicator = QString();
+    break;
+  case TargetManager::PreviousPrimaryTarget:
+    targetIndicator = "p";
+    break;
+  case TargetManager::MouseOverTarget:
+    targetIndicator = "o";
+    break;
+  }
+  if (!targetIndicator.isEmpty()) {
+    QFont font("Sans");
+    font.setPixelSize(12);
+    p.setFont(font);
+    p.setPen(Qt::black);
+    p.drawText(QRectF(2, 34-12, 32, 12), Qt::AlignLeft, targetIndicator);
   }
   p.end();
 }
@@ -114,23 +130,41 @@ void ToolButton::mousePressEvent(QMouseEvent *e) {
 }
 
 void ToolButton::mouseReleaseEvent(QMouseEvent *e) {
-  QAbstractButton::mouseReleaseEvent(e);
-  //qDebug() << "release";
   _mousePressPoint = QPoint();
-  if (rect().contains(e->pos()) && _tool)
-    _tool.data()->trigger();
-  update();
+  if (rect().contains(e->pos())) {
+    switch (e->button()) {
+    case Qt::LeftButton:
+      QAbstractButton::mouseReleaseEvent(e); // allow click only w/ left button
+      trigger();
+      break;
+    case Qt::RightButton:
+      // LATER add a popup menu or the like rather than right-click switch
+      _targetType = _targetType == TargetManager::PrimaryTarget
+          ? TargetManager::MouseOverTarget : TargetManager::PrimaryTarget;
+      if (_tool && !_tool->acceptedTargets().contains(_targetType))
+        _targetType = _tool->preferredTarget();
+      break;
+    default:
+      ;
+    }
+    update();
+  }
+}
+
+void ToolButton::trigger() {
+  if (_tool)
+    _tool->trigger(_targetType);
 }
 
 void ToolButton::enterEvent(QEvent *e) {
   QAbstractButton::enterEvent(e);
-  _mouseover = true;
+  _mouseCurrentlyOver = true;
   update();
 }
 
 void ToolButton::leaveEvent(QEvent *e) {
   QAbstractButton::leaveEvent(e);
-  _mouseover = false;
+  _mouseCurrentlyOver = false;
   //qDebug() << "leave";
   update();
 }
@@ -198,4 +232,18 @@ void ToolButton::dropEvent(QDropEvent *e) {
   setTool(tool);
   //qDebug() << "dropped" << e->possibleActions() << e->proposedAction();
   e->accept();
+}
+
+void ToolButton::targetChanged(TargetManager::TargetType targetType,
+                               PerspectiveWidget *perspectiveWidget,
+                               QStringList itemIds) {
+  Q_UNUSED(perspectiveWidget)
+  Q_UNUSED(itemIds)
+  //qDebug() << "ToolButton::targetChanged" << (_tool ? _tool->id() : "-") << targetType << perspectiveWidget << itemIds;
+  if (targetType == _targetType && _tool && _tool->enabled()) {
+    bool triggerable = _tool->triggerable(targetType);
+    //qDebug() << "--" << triggerable << _currentlyTriggerable;
+    if (triggerable != _currentlyTriggerable)
+      toolChanged();
+  }
 }

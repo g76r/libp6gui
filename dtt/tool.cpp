@@ -3,11 +3,21 @@
 #include "toolactionwrapper.h"
 #include "perspectivewidget.h"
 
-Tool::Tool(DocumentManager *parent, const QString id) : QObject(0),
+Tool::Tool(DocumentManager *parent, const QString id,
+           QSet<TargetManager::TargetType> acceptedTargets,
+           TargetManager::TargetType preferredTarget) : QObject(0),
   _documentManager(parent), _id(id), _label(tr("Tool")), _enabled(true),
   _action(new ToolActionWrapper(this)) {
-  connect(parent->targetManager(), SIGNAL(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)),
-          this, SLOT(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)));
+  _acceptedTargets = acceptedTargets.isEmpty() ? TargetManager::allTargets()
+                                               : acceptedTargets;
+  if (_acceptedTargets.contains(preferredTarget)) {
+    _preferredTarget = preferredTarget;
+  } else {
+    // correct preferred target in case it is not consistant w/ accepted targets
+    QList<TargetManager::TargetType> list = acceptedTargets.toList();
+    qSort(list);
+    _preferredTarget = list.first();
+  }
   connect(this, SIGNAL(changed()), _action, SIGNAL(changed()));
   connect(_action, SIGNAL(triggered()), this, SLOT(trigger()));
 }
@@ -41,17 +51,18 @@ void Tool::setEnabled(bool enabled) {
   }
 }
 
-void Tool::targetChanged(TargetManager::TargetType targetType,
-                         PerspectiveWidget *perspectiveWidget,
-                         QStringList itemIds) {
+void Tool::trigger(TargetManager::TargetType targetType) {
   Q_UNUSED(targetType)
-  Q_UNUSED(perspectiveWidget)
-  Q_UNUSED(itemIds)
-  // default: don't care target
-}
-
-void Tool::trigger() {
   // default: do nothing
   // LATER take care of last Tool triggered for F4 handling
   emit triggered();
+}
+
+void Tool::trigger() {
+  trigger(preferredTarget());
+}
+
+bool Tool::triggerable(TargetManager::TargetType targetType) const {
+  Q_UNUSED(targetType);
+  return enabled();
 }

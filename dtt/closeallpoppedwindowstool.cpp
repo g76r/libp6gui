@@ -9,9 +9,9 @@ CloseAllPoppedWindowsTool::CloseAllPoppedWindowsTool(DocumentManager *parent)
   setEnabled(true);
 }
 
-void CloseAllPoppedWindowsTool::trigger() {
+void CloseAllPoppedWindowsTool::trigger(TargetManager::TargetType targetType) {
   foreach (QWidget *w, documentManager()->perspectiveWidgets())
     if (!w->parent())
       w->close();
-  Tool::trigger();
+  Tool::trigger(targetType);
 }

@@ -7,6 +7,7 @@
 #include <QIcon>
 #include "libh6ncsu_global.h"
 #include "targetmanager.h"
+#include <QSet>
 
 class QAction;
 class PerspectiveWidget;
@@ -23,16 +24,27 @@ class DocumentManager;
   */
 class LIBH6NCSUSHARED_EXPORT Tool : public QObject {
   Q_OBJECT
-private:
+  Q_DISABLE_COPY(Tool)
+
   QPointer<DocumentManager> _documentManager;
   QString _id;
   QString _label;
   QIcon _icon;
   bool _enabled;
   QAction *_action;
+  QSet<TargetManager::TargetType> _acceptedTargets;
+  TargetManager::TargetType _preferredTarget;
 
 public:
-  Tool(DocumentManager *parent, const QString id);
+  /** @param acceptedTargets if empty, replaced with all targets
+   * @param preferredTarget if not in accepteTargets, replaced with first
+   * accepted target
+   * */
+  Tool(DocumentManager *parent, const QString id,
+       QSet<TargetManager::TargetType> acceptedTargets
+       = QSet<TargetManager::TargetType>(),
+       TargetManager::TargetType preferredTarget
+       = TargetManager::PrimaryTarget);
   ~Tool();
   QPointer<DocumentManager> documentManager() const;
   const QString id() const { return _id; }
@@ -42,19 +54,21 @@ public:
   void setIcon(QIcon icon);
   bool enabled() const { return _enabled; }
   void setEnabled(bool enabled);
+  /** return true if enabled and e.g. target is valid
+    * default: return enabled() */
+  virtual bool triggerable(TargetManager::TargetType targetType) const;
   /** Provide access to the QAction wrapper. Tool keeps QAction ownership */
   inline QAction *action() const { return _action; }
   // LATER add possibility to create widget on trigger, see QWidgetAction
+  QSet<TargetManager::TargetType> acceptedTargets() const {
+    return _acceptedTargets; }
+  TargetManager::TargetType preferredTarget() const {
+    return _preferredTarget; }
+  /** call trigger(preferredTarget()) */
+  virtual void trigger(TargetManager::TargetType targetType);
 
 public slots:
-  // FIXME add target type
-  virtual void trigger();
-
-private slots:
-  // LATER rather ToolButton should be warned of target changes ? or connect only tools that are bound to a widget ?
-  virtual void targetChanged(TargetManager::TargetType targetType,
-                             PerspectiveWidget *perspectiveWidget,
-                             QStringList itemIds);
+  void trigger();
 
 signals:
   /** Notify associated widgets that something in the tool appearance has

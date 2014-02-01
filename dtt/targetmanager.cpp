@@ -25,3 +25,12 @@ void TargetManager::setTarget(TargetType targetType,
   _targetItems[targetType] = itemsIds;
   emit targetChanged(targetType, perspectiveWidget.data(), itemsIds);
 }
+
+QSet<TargetManager::TargetType> TargetManager::allTargets() {
+  // LATER singleton
+  QSet<TargetManager::TargetType> set;
+  set.insert(PrimaryTarget);
+  set.insert(PreviousPrimaryTarget);
+  set.insert(MouseOverTarget);
+  return set;
+}

@@ -61,6 +61,7 @@ public:
                  QList<QString> itemsIds = QList<QString>()) {
     setTarget(PrimaryTarget, QPointer<PerspectiveWidget>(perspectiveWidget),
               itemsIds); }
+  static QSet<TargetManager::TargetType> allTargets();
 
 signals:
   /** Sent every time a target changes */

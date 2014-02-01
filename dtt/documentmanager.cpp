@@ -52,30 +52,52 @@ bool DocumentManager::keyPressEvent(QKeyEvent *event) {
   // LATER handle many keyboard layouts, which probably need to write
   // non-portable code, to catch QEvent::KeyboardLayoutChange, and to have
   // even worst hacks on MacOS than on other OSes
+  // LATER handle several modifiers for the same key (allow to bind both ctl-A
+  // and alt-A at the same time) or remove modifiers at all
   GlobalKey gk = _globalKeys.value(event->key());
   if (gk.isNull() || gk._modifiers != event->modifiers())
     qDebug() << "key not globally associated" << event->key()
              << event->text() << event->modifiers();
   else {
-    Tool *t = _tools.value(gk._toolId).data();
-    if (t) {
-      qDebug() << "global key" << event->key() << "triggers tool" << gk._toolId;
-      if (t->enabled())
-        t->trigger();
+    if (gk._tool) {
+      qDebug() << "global key" << event->key() << "triggers"
+               << gk._tool.data();
+      gk._tool->trigger();
       return true; // calling widget should not let its parent handle the event
-    } else
-      qWarning() << "global key associated to non existent tool" << event->key()
-                 << event->text() << event->modifiers() << gk._toolId;
+    } else if (gk._toolButton) {
+      qDebug() << "global key" << event->key() << "triggers"
+               << gk._toolButton.data();
+      gk._toolButton->trigger();
+      return true; // calling widget should not let its parent handle the event
+    } else {
+      qWarning() << "global key associated to non existent trigger"
+                 << event->key() << event->text() << event->modifiers();
+      _globalKeys.remove(event->key());
+    }
   }
   return false;
 }
 
 void DocumentManager::setGlobalKey(int key, QString toolId,
-                                      Qt::KeyboardModifiers modifiers) {
+                                   Qt::KeyboardModifiers modifiers) {
+  //qDebug() << "setGlobalKey" << key << toolId << modifiers;
   if (key && !toolId.isNull())
-    _globalKeys.insert(key, GlobalKey(modifiers, toolId));
+    _globalKeys.insert(key, GlobalKey(modifiers, _tools.value(toolId)));
   else
-    _globalKeys.remove(key);
+    qWarning() << "incorrect global key assignement:"<< key << toolId;
+}
+
+void DocumentManager::setGlobalKey(int key, ToolButton *toolButton,
+                                   Qt::KeyboardModifiers modifiers) {
+  qDebug() << "setGlobalKey" << key << toolButton << modifiers;
+  if (key && toolButton)
+    _globalKeys.insert(key, GlobalKey(modifiers, toolButton));
+  else
+    qWarning() << "incorrect global key assignement:"<< key << toolButton;
+}
+
+void DocumentManager::clearGlobalKey(int key) {
+  _globalKeys.remove(key);
 }
 
 void DocumentManager::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
