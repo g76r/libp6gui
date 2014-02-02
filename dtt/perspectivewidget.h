@@ -24,8 +24,7 @@ public:
   virtual void setDocumentManager(DocumentManager *documentManager);
   QPointer<DocumentManager> documentManager() const;
   /** Intercept keystrokes to give them to DocumentManager to handle global
-    * key shortcuts.
-    */
+    * key shortcuts. */
   void keyPressEvent(QKeyEvent *event);
   /** Called when a widget from the same top level widget receives focus.
     * The widget should update primary target to make it track itself as a

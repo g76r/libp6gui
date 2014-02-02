@@ -9,16 +9,14 @@
 #include <QMimeData>
 #include "documentmanager.h"
 
-ToolButton::ToolButton(DocumentManager *documentManager, QWidget *parent)
-  : QAbstractButton(parent), _documentManager(documentManager),
-    _mouseCurrentlyOver(false),
-    _flashBackground(Qt::lightGray), _targetType(TargetManager::PrimaryTarget) {
+ToolButton::ToolButton(QWidget *parent, DocumentManager *documentManager)
+  : QAbstractButton(parent), _mouseCurrentlyOver(false),
+    _flashBackground(Qt::lightGray), _targetType(TargetManager::PrimaryTarget),
+    _key(0), _modifiers(Qt::NoModifier) {
   setMaximumSize(36, 36);
   setMinimumSize(36, 36);
   setAcceptDrops(true);
-  if (_documentManager)
-    connect(_documentManager->targetManager(), SIGNAL(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)),
-            this, SLOT(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)));
+  setDocumentManager(documentManager);
 }
 
 ToolButton::~ToolButton() {
@@ -47,12 +45,16 @@ void ToolButton::clearTool() {
 }
 
 void ToolButton::setGlobalKey(int key, Qt::KeyboardModifiers modifiers) {
-  if (!_documentManager)
-    return;
-  if (key) {
-    _documentManager.data()->setGlobalKey(key, this, modifiers);
+  if (_key && _documentManager) {
+    _documentManager->clearGlobalKey(_key);
+  }
+  _key = key;
+  _modifiers = modifiers;
+  if (_key) {
     // LATER better keyLabel, including modifiers
-    _keyLabel = (key > 32 && key < 128) ? QChar((char)key) : '?';
+    _keyLabel = (_key > 32 && _key < 128) ? QChar((char)_key) : '?';
+    if (_documentManager)
+      _documentManager->setGlobalKey(_key, this, _modifiers);
   } else {
     _keyLabel = QString();
   }
@@ -220,7 +222,7 @@ void ToolButton::dropEvent(QDropEvent *e) {
     return;
   }
   QPointer<Tool> tool;
-  if (!_documentManager.isNull()) {
+  if (_documentManager) {
     QString id = QString::fromUtf8(e->mimeData()->data(MIMETYPE_TOOL_ID));
     if (!id.isEmpty())
       tool = _documentManager.data()->toolById(id);
@@ -245,5 +247,21 @@ void ToolButton::targetChanged(TargetManager::TargetType targetType,
     //qDebug() << "--" << triggerable << _currentlyTriggerable;
     if (triggerable != _currentlyTriggerable)
       toolChanged();
+  }
+}
+
+void ToolButton::setDocumentManager(DocumentManager *documentManager) {
+  if (_documentManager) {
+    disconnect(_documentManager->targetManager(), SIGNAL(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)),
+               this, SLOT(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)));
+    if (_key)
+      _documentManager->clearGlobalKey(_key);
+  }
+  _documentManager = documentManager;
+  if (_documentManager) {
+    connect(_documentManager->targetManager(), SIGNAL(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)),
+            this, SLOT(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)));
+    if (_key)
+      _documentManager->setGlobalKey(_key, this, _modifiers);
   }
 }

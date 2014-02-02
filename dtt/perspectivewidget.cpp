@@ -27,8 +27,7 @@ QPointer<DocumentManager> PerspectiveWidget::documentManager() const {
 }
 
 void PerspectiveWidget::keyPressEvent(QKeyEvent *event) {
-  if (parent() || !_documentManager
-      || !_documentManager->keyPressEvent(event))
+  if (!_documentManager || !_documentManager->keyPressEvent(event))
     QWidget::keyPressEvent(event);
 }
 

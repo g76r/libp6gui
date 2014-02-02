@@ -55,27 +55,27 @@ bool DocumentManager::keyPressEvent(QKeyEvent *event) {
   // LATER handle several modifiers for the same key (allow to bind both ctl-A
   // and alt-A at the same time) or remove modifiers at all
   GlobalKey gk = _globalKeys.value(event->key());
-  if (gk.isNull() || gk._modifiers != event->modifiers())
+  if (gk.isNull() || gk._modifiers != event->modifiers()) {
     qDebug() << "key not globally associated" << event->key()
              << event->text() << event->modifiers();
-  else {
+    return false;
+  } else {
     if (gk._tool) {
       qDebug() << "global key" << event->key() << "triggers"
                << gk._tool.data();
       gk._tool->trigger();
-      return true; // calling widget should not let its parent handle the event
     } else if (gk._toolButton) {
       qDebug() << "global key" << event->key() << "triggers"
                << gk._toolButton.data();
       gk._toolButton->trigger();
-      return true; // calling widget should not let its parent handle the event
     } else {
       qWarning() << "global key associated to non existent trigger"
                  << event->key() << event->text() << event->modifiers();
       _globalKeys.remove(event->key());
     }
+    event->accept();
+    return true; // calling widget should not let its parent handle the event
   }
-  return false;
 }
 
 void DocumentManager::setGlobalKey(int key, QString toolId,

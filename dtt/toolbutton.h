@@ -22,9 +22,11 @@ private:
   QColor _flashBackground;
   QPoint _mousePressPoint;
   TargetManager::TargetType _targetType;
+  int _key;
+  Qt::KeyboardModifiers _modifiers;
 
 public:
-  explicit ToolButton(DocumentManager *documentManager, QWidget *parent = 0);
+  explicit ToolButton(QWidget *parent = 0, DocumentManager *documentManager = 0);
   ~ToolButton();
   void setTool(QPointer<Tool> tool);
   void clearTool();
@@ -48,6 +50,7 @@ public:
   TargetManager::TargetType targetType() const { return _targetType; }
   void setTargetType(TargetManager::TargetType targetType) {
     _targetType = targetType; }
+  void setDocumentManager(DocumentManager *documentManager);
 
 private slots:
   void targetChanged(TargetManager::TargetType targetType,

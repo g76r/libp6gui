@@ -28,7 +28,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-  _documentManager->keyPressEvent(event);
+  if (!_documentManager || !_documentManager->keyPressEvent(event))
+    QMainWindow::keyPressEvent(event);
 }
 
 void MainWindow::windowFocused() {
