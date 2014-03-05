@@ -121,3 +121,11 @@ void DocumentManager::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
                << newWidget->objectName();
   }
 }
+
+MainWindow *DocumentManager::mainWindow() const {
+  return _mainWindow;
+}
+
+void DocumentManager::setMainWindow(MainWindow *mainWindow) {
+  _mainWindow = mainWindow;
+}

@@ -8,7 +8,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 MainWindow::MainWindow(DocumentManager *documentManager, QWidget *parent)
-  : QMainWindow(parent), _documentManager(documentManager) {
+  : QMainWindow(parent) {
+  setDocumentManager(documentManager);
 }
 
 MainWindow::~MainWindow() {
@@ -36,4 +37,14 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindow::windowFocused() {
+}
+
+DocumentManager *MainWindow::documentManager() const {
+  return _documentManager.data();
+}
+
+void MainWindow::setDocumentManager(DocumentManager *documentManager) {
+  _documentManager = documentManager;
+  if (documentManager)
+    documentManager->setMainWindow(this);
 }

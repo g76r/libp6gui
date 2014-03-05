@@ -7,6 +7,7 @@
 #include "tool.h"
 #include "libh6ncsu_global.h"
 #include "toolbutton.h"
+#include "mainwindow.h"
 
 class QKeyEvent;
 class QUndoStack;
@@ -49,6 +50,7 @@ class LIBH6NCSUSHARED_EXPORT DocumentManager : public QObject {
   QList<QPointer<Tool> > _permanentTools;
   QPointer<Tool> _currentTool, _tempTool;
   QHash<int,GlobalKey> _globalKeys;
+  QPointer<MainWindow> _mainWindow;
 
 public:
   explicit DocumentManager(QObject *parent);
@@ -76,6 +78,8 @@ public:
   void addTool(QPointer<Tool> tool, bool permanent = false);
   void addTool(Tool *tool, bool permanent = false) {
     addTool(QPointer<Tool>(tool), permanent); }
+  MainWindow *mainWindow() const;
+  void setMainWindow(MainWindow *mainWindow);
 
 signals:
   void currentToolChanged(QPointer<Tool> tool);

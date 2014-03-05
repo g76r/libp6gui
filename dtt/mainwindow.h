@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QPointer>
 #include "libh6ncsu_global.h"
-#include "documentmanager.h"
 
 class DocumentManager;
 
@@ -23,11 +22,8 @@ public:
   void keyPressEvent(QKeyEvent *event);
   virtual void windowFocused();
   void closeEvent(QCloseEvent *event);
-  QPointer<DocumentManager> documentManager() const { return _documentManager; }
-  void setDocumentManager(QPointer<DocumentManager> documentManager) {
-    _documentManager = documentManager; }
-  void setDocumentManager(DocumentManager *documentManager) {
-    _documentManager = documentManager; }
+  DocumentManager *documentManager() const;
+  void setDocumentManager(DocumentManager *documentManager);
 };
 
 #endif // MAINWINDOW_H
