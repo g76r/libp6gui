@@ -96,11 +96,20 @@ void ToolButton::paintEvent(QPaintEvent*) {
                  .pixmap(32, 32, _currentlyTriggerable
                          ? QIcon::Normal : QIcon::Disabled));
   if (!_keyLabel.isNull()) {
+    QPainterPath pp;
     QFont font("Sans");
     font.setPixelSize(12);
-    p.setFont(font);
-    p.setPen(Qt::black);
-    p.drawText(QRectF(2, 34-12, 32, 12), Qt::AlignRight, _keyLabel);
+    pp.addText(QPointF(0, 0), font, _keyLabel);
+    pp.translate(34-pp.boundingRect().width()-pp.boundingRect().x(),
+                 34-pp.boundingRect().height()-pp.boundingRect().y());
+    p.setRenderHint(QPainter::Antialiasing);
+    // LATER parametrize outline and main letter colors
+    p.setBrush(Qt::white);
+    p.setPen(Qt::white);
+    p.drawPath(pp);
+    p.setBrush(Qt::darkBlue);
+    p.setPen(Qt::transparent);
+    p.drawPath(pp);
   }
   // LATER use icon rather than text as target indicator
   QString targetIndicator("?");
