@@ -16,9 +16,11 @@ void PerspectiveWidget::setDocumentManager(DocumentManager *documentManager) {
   if (_documentManager)
     _documentManager->unregisterWidget(this);
   _documentManager = documentManager;
-  if (documentManager)
+  if (documentManager) {
     _documentManager->registerWidget(this);
-  else
+    if (_documentManager->mainWindow())
+      setWindowIcon(_documentManager->mainWindow()->windowIcon());
+  } else
     qWarning() << "PerspectiveWidget::setDocumentManager(0)";
 }
 
