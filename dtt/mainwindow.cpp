@@ -22,6 +22,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   QLabel *label = new QLabel(tr("Shuting down..."));
   label->setAttribute(Qt::WA_DeleteOnClose);
   label->setAttribute(Qt::WA_QuitOnClose);
+  label->setWindowFlags(Qt::Window|Qt::FramelessWindowHint);
+  label->setMargin(20);
+  label->move(x()+width()/2, y()+height()/2);
   label->show();
   QMetaObject::invokeMethod(label, "deleteLater", Qt::QueuedConnection);
   QMainWindow::closeEvent(event);
