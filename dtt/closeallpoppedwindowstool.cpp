@@ -4,7 +4,7 @@
 
 CloseAllPoppedWindowsTool::CloseAllPoppedWindowsTool(DocumentManager *parent)
   : Tool(parent, "closeAllPoppedWindows") {
-  setIcon(QIcon(":icons/Panda_001_Head_Cartoon.svg"));
+  setIcon(QIcon(":fa/desktop.svg"));
   setLabel(tr("Close All Popped Windows"));
   setEnabled(true);
 }
