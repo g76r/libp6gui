@@ -3,7 +3,7 @@
 #include <QKeyEvent>
 
 EnhancedListView::EnhancedListView(QWidget *parent)
-  : QListView(parent), _ignoreInternalDrop(false) {
+  : QListView(parent), _ignoreInternalDrop(false), _ignoreKeyboardInput(false) {
 }
 
 void EnhancedListView::dropEvent(QDropEvent *e) {

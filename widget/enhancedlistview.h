@@ -4,6 +4,14 @@
 #include <QListView>
 #include "libh6ncsu_global.h"
 
+/** Enhanced QListView
+ *
+ * Additionnal properties:
+ * - bool ignoreInternalDrop: ignore drop events when the drag source is this
+ *   widget (default: false)
+ * - bool ignoreKeyboardInput: disable QListView handling of keyboard input and
+ *   let container widget handle it instead (default: false)
+ */
 class LIBH6NCSUSHARED_EXPORT EnhancedListView : public QListView {
   Q_OBJECT
   Q_PROPERTY(bool ignoreInternalDrop READ ignoreInternalDrop
