@@ -4,7 +4,8 @@
 #include <QWindowStateChangeEvent>
 #include <QtDebug>
 
-PerspectiveWidget::PerspectiveWidget(QWidget *parent) : QWidget(parent) {
+PerspectiveWidget::PerspectiveWidget(QWidget *parent)
+  : QWidget(parent), _documentManager(0) {
 }
 
 PerspectiveWidget::~PerspectiveWidget() {

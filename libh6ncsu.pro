@@ -15,6 +15,16 @@ unix {
   MOC_DIR = ../build-libh6ncsu-unix/moc
 }
 
+INCLUDEPATH += ../libqtpf ../libqtssu
+win32:debug:LIBS += -L../libqtpf/build-libqtpf-windows/debug \
+  -L../libqtpf/build-libqtpfsql-windows/debug \
+  -L../build-libqtssu-windows/debug
+win32:release:LIBS += -L../libqtpf/build-libqtpf-windows/release \
+  -L../libqtpf/build-libqtpfsql-windows/release \
+  -L../build-libqtssu-windows/release
+unix:LIBS += -L../libqtpf/libqtpf -L../libqtpf/libqtpfsql -L../libqtssu
+LIBS += -lqtpf -lqtssu
+
 SOURCES += \
     widget/dynamicstackedwidget.cpp \
     widget/enhancedgraphicsview.cpp \
@@ -29,7 +39,8 @@ SOURCES += \
     dtt/toolactionwrapper.cpp \
     dtt/toolbutton.cpp \
     dtt/perspectivestackedwidget.cpp \
-    dtt/mainwindow.cpp
+    dtt/mainwindow.cpp \
+    modelview/uiitemwidgetmapper.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -47,7 +58,8 @@ HEADERS +=\
     dtt/toolactionwrapper.h \
     dtt/toolbutton.h \
     dtt/perspectivestackedwidget.h \
-    dtt/mainwindow.h
+    dtt/mainwindow.h \
+    modelview/uiitemwidgetmapper.h
 
 unix {
     target.path = /usr/lib
