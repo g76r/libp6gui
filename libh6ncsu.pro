@@ -40,7 +40,8 @@ SOURCES += \
     dtt/toolbutton.cpp \
     dtt/perspectivestackedwidget.cpp \
     dtt/mainwindow.cpp \
-    modelview/uiitemwidgetmapper.cpp
+    modelview/uiitemwidgetmapper.cpp \
+    widget/collapsiblegroupbox.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -59,7 +60,8 @@ HEADERS +=\
     dtt/toolbutton.h \
     dtt/perspectivestackedwidget.h \
     dtt/mainwindow.h \
-    modelview/uiitemwidgetmapper.h
+    modelview/uiitemwidgetmapper.h \
+    widget/collapsiblegroupbox.h
 
 unix {
     target.path = /usr/lib
