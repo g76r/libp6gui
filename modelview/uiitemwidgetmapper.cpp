@@ -33,7 +33,7 @@ void UiItemWidgetMapper::setItem(SharedUiItem item) {
 
 void UiItemWidgetMapper::itemUpdated(SharedUiItem item) {
   QString id = _item.id();
-  qDebug() << "UiItemWidgetMapper::itemUpdated" << id;
+  //qDebug() << "UiItemWidgetMapper::itemUpdated" << id;
   if (!id.isEmpty() && id == item.id())
     setItem(item);
 }
