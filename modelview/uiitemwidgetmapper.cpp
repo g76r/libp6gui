@@ -4,7 +4,13 @@
 #include <QtDebug>
 
 UiItemWidgetMapper::UiItemWidgetMapper(QObject *parent)
-  : QObject(parent) {
+  : QObject(parent), _mapEmptyStringRatherThanNull(false) {
+}
+
+UiItemWidgetMapper::UiItemWidgetMapper(bool mapEmptyStringRatherThanNull,
+                                       QObject *parent)
+  : QObject(parent),
+    _mapEmptyStringRatherThanNull(mapEmptyStringRatherThanNull) {
 }
 
 void UiItemWidgetMapper::addMapping(QWidget *widget, int section) {
@@ -39,9 +45,13 @@ void UiItemWidgetMapper::itemUpdated(SharedUiItem item) {
 }
 
 void UiItemWidgetMapper::itemRenamed(SharedUiItem item, QString oldName) {
-  QString id = _item.id();
-  if (!id.isEmpty() && id == oldName)
-    setItem(item);
+  if (item.isNull()) // FIXME make the delete semantics more explicit
+    clearItem();
+  else {
+    QString id = _item.id();
+    if (!id.isEmpty() && id == oldName)
+      setItem(item);
+  }
 }
 
 void UiItemWidgetMapper::populate() {
@@ -53,7 +63,11 @@ void UiItemWidgetMapper::populate(int section) {
   QWidget *widget = _sectionToWidget.value(section);
   if (widget) {
     QByteArray propname = widget->metaObject()->userProperty().name();
-    if (!propname.isEmpty())
-      widget->setProperty(propname, _item.uiData(section));
+    if (!propname.isEmpty()) {
+      QVariant v = _item.uiData(section);
+      if (_mapEmptyStringRatherThanNull && v.isNull())
+        v = "";
+      widget->setProperty(propname, v);
+    }
   }
 }
