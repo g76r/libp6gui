@@ -3,6 +3,7 @@
 #include <QEvent>
 #include <QWindowStateChangeEvent>
 #include <QtDebug>
+#include <QMetaObject>
 
 PerspectiveWidget::PerspectiveWidget(QWidget *parent)
   : QWidget(parent), _documentManager(0) {
@@ -37,4 +38,19 @@ void PerspectiveWidget::keyPressEvent(QKeyEvent *event) {
 void PerspectiveWidget::startItemEdition(QString itemId) {
   Q_UNUSED(itemId)
   // do nothing
+}
+
+PerspectiveWidget *PerspectiveWidget::popClone() {
+  if (_documentManager) {
+    PerspectiveWidget *pw =
+        qobject_cast<PerspectiveWidget*>(metaObject()->newInstance());
+    if (pw) {
+      pw->setAttribute(Qt::WA_QuitOnClose, false);
+      pw->setAttribute(Qt::WA_DeleteOnClose);
+      pw->setDocumentManager(documentManager());
+      pw->show();
+      return pw;
+    }
+  }
+  return 0;
 }

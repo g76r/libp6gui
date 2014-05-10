@@ -36,8 +36,13 @@ public:
 
 public slots:
   /** Create and a new identical widget (clone) showing same perspective and
-    * make it visible as a top level widget (pop). */
-  virtual void popClone() = 0;
+    * make it visible as a top level widget (pop).
+    * If child class has a Q_INVOKABLE default constructor, use it to create
+    * a new instance, set the new instance to the same DocumentManager,
+    * set Qt::WA_DeleteOnClose attribute, unset Qt::WA_QuitOnClose attribute
+    * and show the widget (as a top level window).
+    * @return a pointer on new widget */
+  virtual PerspectiveWidget *popClone();
   /** If item found: ensure visible and focus it. If item writeable: start
     * editing it.
     * This method is called e.g. when an item has just been added interactively.
