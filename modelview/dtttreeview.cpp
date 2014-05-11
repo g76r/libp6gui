@@ -61,20 +61,35 @@ void DttTreeView::clearMouseoverTarget() {
 void DttTreeView::selectionChanged(const QItemSelection &selected,
                                            const QItemSelection &deselected) {
   EnhancedTreeView::selectionChanged(selected, deselected);
-  setPrimaryTargetToSelection(); // LATER optimize
-}
-
-void DttTreeView::setPrimaryTargetToSelection() {
   QAbstractItemModel *m = model();
-  if (documentManager() && m) {
-    QStringList itemIds;
+  _selectedItemsIds.clear();
+  if (m) {
     foreach(const QModelIndex index, selectedIndexes()) {
       QString id = m->data(index, SharedUiItem::QualifiedIdRole).toString();
       if (!id.isEmpty())
-        itemIds.append(id);
+        _selectedItemsIds.append(id);
     }
-    documentManager()->targetManager()->setTarget(_perspectiveWidget, itemIds);
   }
+  emit selectedItemsChanged(_selectedItemsIds);
+  if (hasFocus())
+    setPrimaryTargetToSelection();
+}
+
+void DttTreeView::setPrimaryTargetToSelection() {
+  if (documentManager())
+    documentManager()->targetManager()
+        ->setTarget(_perspectiveWidget, _selectedItemsIds);
+}
+
+void DttTreeView::focusInEvent(QFocusEvent *event) {
+  EnhancedTreeView::focusInEvent(event);
+  setPrimaryTargetToSelection();
+}
+
+void DttTreeView::focusOutEvent(QFocusEvent *event) {
+  EnhancedTreeView::focusOutEvent(event);
+  if (documentManager())
+    documentManager()->targetManager()->setTarget();
 }
 
 void DttTreeView::dragEnterEvent(QDragEnterEvent *event) {

@@ -10,7 +10,7 @@ class DocumentVersion;
 class Perspective;
 class ItemPosition;
 
-/** Parent class for widgets/forms offer a GUI on the document through a
+/** Parent class for widgets/forms offering a GUI on the document through a
   * perspective.
   * @see DocumentManager */
 class LIBH6NCSUSHARED_EXPORT PerspectiveWidget : public QWidget {
@@ -26,11 +26,6 @@ public:
   /** Intercept keystrokes to give them to DocumentManager to handle global
     * key shortcuts. */
   void keyPressEvent(QKeyEvent *event);
-  /** Called when a widget from the same top level widget receives focus.
-    * The widget should update primary target to make it track itself as a
-    * widget and its current selection as items.
-    */
-  virtual void windowFocused() = 0;
   /** Id of currently displayed perspective */
   virtual QString currentPerspectiveId() const = 0;
 

@@ -84,9 +84,6 @@ public:
 signals:
   void currentToolChanged(QPointer<Tool> tool);
 
-private slots:
-  void focusChanged(QWidget *oldWidget, QWidget *newWidget);
-
 private:
   void setTempTool(QPointer<Tool> tool) { _tempTool = tool; }
 };

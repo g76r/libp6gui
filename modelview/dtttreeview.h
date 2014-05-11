@@ -11,6 +11,7 @@ class LIBH6NCSUSHARED_EXPORT DttTreeView : public EnhancedTreeView {
   QPointer<DocumentManager> _documentManager;
   QPointer<PerspectiveWidget> _perspectiveWidget;
   QModelIndex _mousePosition;
+  QStringList _selectedItemsIds;
 
 public:
   explicit DttTreeView(QWidget *parent = 0);
@@ -18,12 +19,16 @@ public:
   void setModel(QAbstractItemModel *model);
   void setDocumentManager(DocumentManager *dm);
   DocumentManager *documentManager() const;
-  void setPrimaryTargetToSelection();
+  void focusInEvent(QFocusEvent *event);
+  void focusOutEvent(QFocusEvent *event);
   void dragEnterEvent(QDragEnterEvent *event);
   void dragMoveEvent(QDragMoveEvent *event);
   void dropEvent(QDropEvent *event);
   //QModelIndex mousePosition() const { return _mousePosition; }
   QString mouseoverItemId() const;
+
+signals:
+  void selectedItemsChanged(QStringList selectedItemsIds);
 
 protected:
   void selectionChanged(const QItemSelection &selected,
@@ -33,6 +38,9 @@ private slots:
   void itemHovered(const QModelIndex &index);
   void setMouseoverTarget(QString itemId = QString());
   void clearMouseoverTarget();
+
+private:
+  void setPrimaryTargetToSelection();
 };
 
 #endif // DTTTREEVIEW_H

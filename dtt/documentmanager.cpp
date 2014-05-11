@@ -13,9 +13,6 @@ DocumentManager::DocumentManager(QObject *parent)
   : QObject(parent), _targetManager(new TargetManager(this)),
     _undoStack(new QUndoStack(this)) {
   addTool(new CloseAllPoppedWindowsTool(this), true);
-  connect((QApplication*)(QCoreApplication::instance()),
-          SIGNAL(focusChanged(QWidget*,QWidget*)),
-          this, SLOT(focusChanged(QWidget*,QWidget*)));
 }
 
 DocumentManager::~DocumentManager() {
@@ -98,28 +95,6 @@ void DocumentManager::setGlobalKey(int key, ToolButton *toolButton,
 
 void DocumentManager::clearGlobalKey(int key) {
   _globalKeys.remove(key);
-}
-
-void DocumentManager::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
-  if (oldWidget && newWidget && oldWidget->window() != newWidget->window()) {
-    /*qDebug() << "focus changed from TLW, old:"
-             << oldWidget->window()->windowTitle()
-             << "new:" << newWidget->window()->windowTitle();*/
-    targetManager()->setTarget();
-    PerspectiveWidget *pw = qobject_cast<PerspectiveWidget*>(
-          newWidget->window());
-    if (pw) {
-      pw->windowFocused();
-      return;
-    }
-    MainWindow *mw = qobject_cast<MainWindow*>(newWidget->window());
-    if (mw) {
-      mw->windowFocused();
-      return;
-    }
-    qWarning() << "focus changed to unsupported top level window:"
-               << newWidget->objectName();
-  }
 }
 
 MainWindow *DocumentManager::mainWindow() const {

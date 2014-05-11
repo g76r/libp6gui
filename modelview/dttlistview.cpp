@@ -61,20 +61,35 @@ void DttListView::clearMouseoverTarget() {
 void DttListView::selectionChanged(const QItemSelection &selected,
                                            const QItemSelection &deselected) {
   EnhancedListView::selectionChanged(selected, deselected);
-  setPrimaryTargetToSelection(); // LATER optimize
-}
-
-void DttListView::setPrimaryTargetToSelection() {
   QAbstractItemModel *m = model();
-  if (documentManager() && m) {
-    QStringList itemIds;
+  _selectedItemsIds.clear();
+  if (m) {
     foreach(const QModelIndex index, selectedIndexes()) {
       QString id = m->data(index, SharedUiItem::QualifiedIdRole).toString();
       if (!id.isEmpty())
-        itemIds.append(id);
+        _selectedItemsIds.append(id);
     }
-    documentManager()->targetManager()->setTarget(_perspectiveWidget, itemIds);
   }
+  emit selectedItemsChanged(_selectedItemsIds);
+  if (hasFocus())
+    setPrimaryTargetToSelection();
+}
+
+void DttListView::setPrimaryTargetToSelection() {
+  if (documentManager())
+    documentManager()->targetManager()
+        ->setTarget(_perspectiveWidget, _selectedItemsIds);
+}
+
+void DttListView::focusInEvent(QFocusEvent *event) {
+  EnhancedListView::focusInEvent(event);
+  setPrimaryTargetToSelection();
+}
+
+void DttListView::focusOutEvent(QFocusEvent *event) {
+  EnhancedListView::focusOutEvent(event);
+  if (documentManager())
+    documentManager()->targetManager()->setTarget();
 }
 
 void DttListView::dragEnterEvent(QDragEnterEvent *event) {
