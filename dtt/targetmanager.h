@@ -61,6 +61,28 @@ public:
                  QList<QString> itemsIds = QList<QString>()) {
     setTarget(PrimaryTarget, QPointer<PerspectiveWidget>(perspectiveWidget),
               itemsIds); }
+  /** Syntaxic sugar. */
+  void setTarget(TargetType targetType,
+                 QPointer<PerspectiveWidget> perspectiveWidget,
+                 QString itemId) {
+    setTarget(targetType, perspectiveWidget,
+              itemId.isNull() ? QStringList() : QStringList(itemId)); }
+  /** Syntaxic sugar. */
+  void setTarget(TargetType targetType, PerspectiveWidget* perspectiveWidget,
+                 QString itemId) {
+    setTarget(targetType, QPointer<PerspectiveWidget>(perspectiveWidget),
+              itemId.isNull() ? QStringList() : QStringList(itemId)); }
+  /** Syntaxic sugar. */
+  void setTarget(QPointer<PerspectiveWidget> perspectiveWidget,
+                 QString itemId) {
+    setTarget(PrimaryTarget, perspectiveWidget,
+              itemId.isNull() ? QStringList() : QStringList(itemId)); }
+  /** Syntaxic sugar. */
+  void setTarget(PerspectiveWidget* perspectiveWidget, QString itemId) {
+    setTarget(PrimaryTarget, QPointer<PerspectiveWidget>(perspectiveWidget),
+              itemId.isNull() ? QStringList() : QStringList(itemId)); }
+
+
   static QSet<TargetManager::TargetType> allTargets();
 
 signals:
