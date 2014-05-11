@@ -25,7 +25,8 @@ void DynamicStackedWidget::setExpandsHorizontally(bool enabled) {
   // MAYDO override setSizePolicy to disable changing sizePolicy in Qt Creator
 }
 
-void DynamicStackedWidget::showEvent(QShowEvent *) {
+void DynamicStackedWidget::showEvent(QShowEvent *event) {
+  QStackedWidget::showEvent(event);
   if (_frozen) {
     // reduce when showing if reduced index is current
     reduce(currentIndex() == _reducedIndex, false);
@@ -36,13 +37,15 @@ void DynamicStackedWidget::showEvent(QShowEvent *) {
   }
 }
 
-void DynamicStackedWidget::enterEvent(QEvent *) {
+void DynamicStackedWidget::enterEvent(QEvent *event) {
+  QStackedWidget::enterEvent(event);
   _shouldBeReduced = false;
   if (!_frozen)
     reduce(false);
 }
 
-void DynamicStackedWidget::leaveEvent(QEvent *) {
+void DynamicStackedWidget::leaveEvent(QEvent *event) {
+  QStackedWidget::leaveEvent(event);
   _shouldBeReduced = true;
   if (!_frozen)
     reduce(true);

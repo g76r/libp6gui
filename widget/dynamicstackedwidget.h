@@ -25,9 +25,9 @@ private:
 
 public:
   explicit DynamicStackedWidget(QWidget *parent = 0);
-  void enterEvent(QEvent *);
-  void leaveEvent(QEvent *);
-  void showEvent(QShowEvent *);
+  void enterEvent(QEvent *event);
+  void leaveEvent(QEvent *event);
+  void showEvent(QShowEvent *event);
   int expandedIndex() const { return _expandedIndex; }
   void setExpandedIndex(int expandedIndex) { _expandedIndex = expandedIndex; }
   int reducedIndex() const { return _reducedIndex; }
