@@ -7,7 +7,13 @@
 
 class DocumentManager;
 
-// FIXME rename this class
+// FIXME rename this class to DttMainWindow
+/** Base class for non-perspective main windows in a Document-Target-Tool
+ * application.
+ * In a DTT application main windows must either inherit from DttMainWindow
+ * or from PerspectiveWidget.
+ * @see PerspectiveWidget
+ */
 class LIBH6NCSUSHARED_EXPORT MainWindow : public QMainWindow {
   Q_OBJECT
   Q_DISABLE_COPY(MainWindow)
@@ -17,12 +23,17 @@ private:
 
 public:
   explicit MainWindow(QWidget *parent = 0);
+  /** Syntaxic sugar. @see setDocumentManager(). */
   explicit MainWindow(DocumentManager *documentManager, QWidget *parent = 0);
   ~MainWindow();
   void keyPressEvent(QKeyEvent *event);
   virtual void windowFocused();
   void closeEvent(QCloseEvent *event);
   DocumentManager *documentManager() const;
+  /** DTT applications that manage only one document type should set a
+   * DocumentManager on DttMainWindow to catch global keys at top level, but
+   * applications managing several type of documents within the same main
+   * window should not, to avoid user confusion between documents. */
   void setDocumentManager(DocumentManager *documentManager);
 };
 
