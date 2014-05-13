@@ -12,6 +12,10 @@ class ItemPosition;
 
 /** Parent class for widgets/forms offering a GUI on the document through a
   * perspective.
+  * Apart from holding the association to a DocumentManager and being resposible
+  * for providing the currently displayed perspective id, the class provides
+  * interaction behavior such as catching global key shortcuts and being
+  * clonable as a top level widget (= a standalone window).
   * @see DocumentManager */
 class LIBH6NCSUSHARED_EXPORT PerspectiveWidget : public QWidget {
   Q_OBJECT
