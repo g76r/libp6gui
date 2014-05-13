@@ -42,8 +42,7 @@ SOURCES += \
     dtt/mainwindow.cpp \
     modelview/uiitemwidgetmapper.cpp \
     widget/collapsiblegroupbox.cpp \
-    modelview/dtttreeview.cpp \
-    modelview/dttlistview.cpp
+    modelview/dtttreeview.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -64,8 +63,7 @@ HEADERS +=\
     dtt/mainwindow.h \
     modelview/uiitemwidgetmapper.h \
     widget/collapsiblegroupbox.h \
-    modelview/dtttreeview.h \
-    modelview/dttlistview.h
+    modelview/dtttreeview.h
 
 unix {
     target.path = /usr/lib
