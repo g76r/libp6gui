@@ -55,8 +55,6 @@ public slots:
   void reduceAndFreeze();
   void reduceAndUnfreeze();
   void expandAndFreeze();
-  void reduceIfFrozen() { if (_frozen) reduce(); }
-  void expandIfFrozen() { if (_frozen) expand(); }
 
 private:
   void reduce(bool reducing, bool shouldAnimate = true);
