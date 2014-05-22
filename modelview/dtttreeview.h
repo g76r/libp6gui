@@ -37,7 +37,6 @@ private slots:
 
 private:
   void setPrimaryTargetToSelection();
-  TargetManager *targetManager() const;
 };
 
 #endif // DTTTREEVIEW_H

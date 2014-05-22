@@ -27,7 +27,7 @@ LIBS += -lqtpf -lqtssu
 
 SOURCES += \
     widget/dynamicstackedwidget.cpp \
-    widget/enhancedgraphicsview.cpp \
+    modelview/enhancedgraphicsview.cpp \
     modelview/enhancedlistview.cpp \
     modelview/enhancedtreeview.cpp \
     widget/hierarchicaltabcontroller.cpp \
@@ -42,13 +42,16 @@ SOURCES += \
     dtt/mainwindow.cpp \
     modelview/uiitemwidgetmapper.cpp \
     widget/collapsiblegroupbox.cpp \
-    modelview/dtttreeview.cpp
+    modelview/dtttreeview.cpp \
+    modelview/shareduigraphicsitem.cpp \
+    modelview/dttgraphicsview.cpp \
+    modelview/dttgraphicsscene.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
     libh6ncsu_global.h \
     widget/dynamicstackedwidget.h \
-    widget/enhancedgraphicsview.h \
+    modelview/enhancedgraphicsview.h \
     modelview/enhancedlistview.h \
     modelview/enhancedtreeview.h \
     widget/hierarchicaltabcontroller.h \
@@ -63,7 +66,10 @@ HEADERS +=\
     dtt/mainwindow.h \
     modelview/uiitemwidgetmapper.h \
     widget/collapsiblegroupbox.h \
-    modelview/dtttreeview.h
+    modelview/dtttreeview.h \
+    modelview/shareduigraphicsitem.h \
+    modelview/dttgraphicsview.h \
+    modelview/dttgraphicsscene.h
 
 unix {
     target.path = /usr/lib

@@ -54,3 +54,13 @@ PerspectiveWidget *PerspectiveWidget::popClone() {
   }
   return 0;
 }
+
+TargetManager *PerspectiveWidget::targetManager(
+    PerspectiveWidget *perspectiveWidget) {
+  if (perspectiveWidget) {
+    QPointer<DocumentManager> dm = perspectiveWidget->documentManager();
+    if (dm)
+      return dm->targetManager();
+  }
+  return 0;
+}

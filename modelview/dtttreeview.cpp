@@ -35,7 +35,7 @@ void DttTreeView::itemHovered(const QModelIndex &index) {
 void DttTreeView::setMouseoverTarget(QString itemId)  {
   if (itemId.isNull())
     _mousePosition = QModelIndex();
-  TargetManager *tm = targetManager();
+  TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm) {
     QList<QString> itemIds;
     if (!itemId.isNull())
@@ -46,7 +46,7 @@ void DttTreeView::setMouseoverTarget(QString itemId)  {
 
 void DttTreeView::clearMouseoverTarget() {
   _mousePosition = QModelIndex();
-  TargetManager *tm = targetManager();
+  TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm)
     tm->setTarget(TargetManager::MouseOverTarget);
 }
@@ -77,7 +77,7 @@ void DttTreeView::selectionChanged(const QItemSelection &selected,
 }
 
 void DttTreeView::setPrimaryTargetToSelection() {
-  TargetManager *tm = targetManager();
+  TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm)
     tm->setTarget(_perspectiveWidget, _selectedItemsIds);
 }
@@ -89,7 +89,7 @@ void DttTreeView::focusInEvent(QFocusEvent *event) {
 
 void DttTreeView::focusOutEvent(QFocusEvent *event) {
   EnhancedTreeView::focusOutEvent(event);
-  TargetManager *tm = targetManager();
+  TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm)
     tm->setTarget();
 }
@@ -99,13 +99,4 @@ QString DttTreeView::mouseoverItemId() const {
   return _mousePosition.isValid() && m
       ? m->data(_mousePosition, SharedUiItem::QualifiedIdRole).toString()
       : QString();
-}
-
-TargetManager *DttTreeView::targetManager() const {
-  if (_perspectiveWidget) {
-    QPointer<DocumentManager> dm = _perspectiveWidget->documentManager();
-    if (dm)
-      return dm->targetManager();
-  }
-  return 0;
 }

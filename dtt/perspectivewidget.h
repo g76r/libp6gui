@@ -9,6 +9,7 @@ class DocumentManager;
 class DocumentVersion;
 class Perspective;
 class ItemPosition;
+class TargetManager;
 
 /** Parent class for widgets/forms offering a GUI on the document through a
   * perspective.
@@ -32,6 +33,13 @@ public:
   void keyPressEvent(QKeyEvent *event);
   /** Id of currently displayed perspective */
   virtual QString currentPerspectiveId() const = 0;
+  /** Convenience method */
+  TargetManager *targetManager() {return targetManager(this); }
+  /** Convenience method */
+  static TargetManager *targetManager(PerspectiveWidget *pw);
+  /** Convenience method */
+  static TargetManager *targetManager(QPointer<PerspectiveWidget> pw) {
+    return targetManager(pw.data()); }
 
 public slots:
   /** Create and a new identical widget (clone) showing same perspective and
