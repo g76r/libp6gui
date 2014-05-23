@@ -14,8 +14,8 @@ class LIBH6NCSUSHARED_EXPORT SharedUiGraphicsItem : public QGraphicsObject {
   SharedUiItem _uiItem;
 
 public:
-  SharedUiGraphicsItem(QGraphicsItem *parent = 0);
-  SharedUiGraphicsItem(SharedUiItem uiItem, QGraphicsItem *parent = 0);
+  explicit SharedUiGraphicsItem(QGraphicsItem *parent = 0);
+  explicit SharedUiGraphicsItem(SharedUiItem uiItem, QGraphicsItem *parent = 0);
   SharedUiItem uiItem() const { return _uiItem; }
   void setUiItem(SharedUiItem uiItem) { _uiItem = uiItem; }
   /** Syntaxic sugar - proxy on SharedUiItem */

@@ -17,6 +17,11 @@ public:
   void enterEvent(QEvent *event);
   void leaveEvent(QEvent *event);
   void setScene(QGraphicsScene *scene);
+
+signals:
+  /** same as DttGraphicsScene::selectedItemsChanged() but only emited when
+   * this view has focus */
+  void selectedItemsChanged(QStringList selectedItemsIds);
 };
 
 #endif // DTTGRAPHICSVIEW_H

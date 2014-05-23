@@ -2,6 +2,7 @@
 #include "dtt/perspectivewidget.h"
 #include <QGraphicsView>
 #include "dtt/targetmanager.h"
+#include "dttgraphicsview.h"
 
 DttGraphicsScene::DttGraphicsScene(QObject *parent) : QGraphicsScene(parent) {
   connect(this, SIGNAL(selectionChanged()),
@@ -25,10 +26,10 @@ void DttGraphicsScene::removeItem(SharedUiGraphicsItem *item) {
 void DttGraphicsScene::propagateSelectionChanged() {
   QStringList ids;
   foreach(QGraphicsItem *i, selectedItems()) {
-    SharedUiGraphicsItem *sui = reinterpret_cast<SharedUiGraphicsItem*>(i);
+    SharedUiGraphicsItem *sui = static_cast<SharedUiGraphicsItem*>(i);
     // LATER do the lookup in a fast collection such as QSet
     if (_sharedUiItems.contains(sui)) {
-      ids.append(sui->id());
+      ids.append(sui->qualifiedId());
     }
   }
   _selectedItemsIds = ids;
@@ -37,8 +38,10 @@ void DttGraphicsScene::propagateSelectionChanged() {
   if (tm) {
     foreach (QGraphicsView *gv, views())
       if (gv && gv->hasFocus()) {
-        PerspectiveWidget *pw = qobject_cast<PerspectiveWidget*>(gv);
-        tm->setTarget(pw, ids);
+        tm->setTarget(_perspectiveWidget, ids);
+        DttGraphicsView *dgv = qobject_cast<DttGraphicsView*>(gv);
+        if (dgv)
+          emit dgv->selectedItemsChanged(ids);
         break;
       }
   }
@@ -50,8 +53,7 @@ void DttGraphicsScene::setMouseOverItem(QStringList ids) {
   if (tm) {
     foreach (QGraphicsView *gv, views())
       if (gv && gv->hasFocus()) {
-        PerspectiveWidget *pw = qobject_cast<PerspectiveWidget*>(gv);
-        tm->setTarget(TargetManager::MouseOverTarget, pw, ids);
+        tm->setTarget(TargetManager::MouseOverTarget, _perspectiveWidget, ids);
         break;
       }
   }

@@ -9,14 +9,14 @@ SharedUiGraphicsItem::SharedUiGraphicsItem(QGraphicsItem *parent)
 SharedUiGraphicsItem::SharedUiGraphicsItem(
     SharedUiItem uiItem, QGraphicsItem *parent)
   : QGraphicsObject(parent), _uiItem(uiItem) {
+  setAcceptHoverEvents(true);
 }
-
 
 void SharedUiGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
   QGraphicsObject::hoverEnterEvent(event);
   DttGraphicsScene *dgs = qobject_cast<DttGraphicsScene*>(scene());
   if (dgs)
-    dgs->setMouseOverItem(id());
+    dgs->setMouseOverItem(qualifiedId());
 }
 
 void SharedUiGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
