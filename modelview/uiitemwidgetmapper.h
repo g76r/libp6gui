@@ -12,24 +12,19 @@ class LIBH6NCSUSHARED_EXPORT UiItemWidgetMapper : public QObject {
   Q_OBJECT
   SharedUiItem _item;
   QHash<int,QWidget*> _sectionToWidget;
+  QHash<int,QVariant> _sectionToDefaultValue;
   QHash<QWidget*,int> _widgetToSection;
-  bool _mapEmptyStringRatherThanNull;
 
 public:
   explicit UiItemWidgetMapper(QObject *parent = 0);
-  explicit UiItemWidgetMapper(bool mapEmptyStringRatherThanNull,
-                              QObject *parent = 0);
-  void addMapping(QWidget *widget, int section);
+  void addMapping(QWidget *widget, int section,
+                  QVariant valueWhenNull = QVariant());
   void clearMapping();
   void removeMapping(QWidget *widget);
   void removeMapping(int section);
   void setItem(SharedUiItem item);
   void clearItem() { setItem(SharedUiItem()); }
   SharedUiItem item() const { return _item; }
-  bool mapEmptyStringRatherThanNull() const {
-    return _mapEmptyStringRatherThanNull; }
-  void setMapEmptyStringRatherThanNull(bool enable = true) {
-    _mapEmptyStringRatherThanNull = enable; }
 
 public slots:
   void itemUpdated(SharedUiItem item);

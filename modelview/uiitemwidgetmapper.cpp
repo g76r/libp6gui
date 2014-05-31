@@ -4,17 +4,13 @@
 #include <QtDebug>
 
 UiItemWidgetMapper::UiItemWidgetMapper(QObject *parent)
-  : QObject(parent), _mapEmptyStringRatherThanNull(false) {
+  : QObject(parent) {
 }
 
-UiItemWidgetMapper::UiItemWidgetMapper(bool mapEmptyStringRatherThanNull,
-                                       QObject *parent)
-  : QObject(parent),
-    _mapEmptyStringRatherThanNull(mapEmptyStringRatherThanNull) {
-}
-
-void UiItemWidgetMapper::addMapping(QWidget *widget, int section) {
+void UiItemWidgetMapper::addMapping(QWidget *widget, int section,
+                                    QVariant valueWhenNull) {
   _sectionToWidget.insert(section, widget);
+  _sectionToDefaultValue.insert(section, valueWhenNull);
   populate(section);
 }
 
@@ -65,8 +61,8 @@ void UiItemWidgetMapper::populate(int section) {
     QByteArray propname = widget->metaObject()->userProperty().name();
     if (!propname.isEmpty()) {
       QVariant v = _item.uiData(section);
-      if (_mapEmptyStringRatherThanNull && v.isNull())
-        v = "";
+      if (v.isNull())
+        v = _sectionToDefaultValue.value(section);
       widget->setProperty(propname, v);
     }
   }
