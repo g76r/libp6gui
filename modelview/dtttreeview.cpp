@@ -16,7 +16,6 @@ void DttTreeView::setPerspectiveWidget(PerspectiveWidget *widget) {
 
 void DttTreeView::setModel(QAbstractItemModel *model) {
   EnhancedTreeView::setModel(model);
-  // LATER should clear _selectedItemsIds ?
   setMouseTracking(model);
   if (underMouse())
     setMouseoverTarget();
