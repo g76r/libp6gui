@@ -13,13 +13,17 @@ ToolButton::ToolButton(QWidget *parent, DocumentManager *documentManager)
   : QAbstractButton(parent), _mouseCurrentlyOver(false),
     _flashBackground(Qt::lightGray), _targetType(TargetManager::PrimaryTarget),
     _key(0), _modifiers(Qt::NoModifier) {
-  setMaximumSize(36, 36);
-  setMinimumSize(36, 36);
+  setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   setAcceptDrops(true);
   setDocumentManager(documentManager);
 }
 
 ToolButton::~ToolButton() {
+}
+
+QSize ToolButton::sizeHint() const {
+  int length = (iconSize().width()+4);
+  return QSize(length, length);
 }
 
 void ToolButton::setTool(QPointer<Tool> tool) {
@@ -78,30 +82,29 @@ void ToolButton::toolTriggered() {
   a->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void ToolButton::paintEvent(QPaintEvent*) {
+void ToolButton::paintEvent(QPaintEvent *) {
   QPainter p(this);
   p.setRenderHint(QPainter::Antialiasing);
-  //p.setRenderHint(QPainter::TextAntialiasing);
   p.setPen(Qt::black);
-  p.drawRoundedRect(QRect(0, 0, 36, 36), 4, 4);
-  p.setPen(Qt::darkGray);
   p.setBrush(_flashBackground != Qt::lightGray
-             ? _flashBackground
-             : _mousePressPoint.isNull()
-               ? (_mouseCurrentlyOver ? Qt::darkGray : Qt::lightGray)
-               : Qt::white);
-  p.drawRoundedRect(QRect(1, 1, 34, 34), 4, 4);
-  if (_tool)
+      ? _flashBackground
+      : _mousePressPoint.isNull()
+        ? (_mouseCurrentlyOver ? Qt::darkGray : Qt::lightGray)
+        : Qt::white);
+  p.drawRoundedRect(rect(), 20, 20, Qt::RelativeSize);
+  if (_tool) {
     p.drawPixmap(2, 2, _tool->icon()
-                 .pixmap(32, 32, _currentlyTriggerable
+                 .pixmap(iconSize(), _currentlyTriggerable
                          ? QIcon::Normal : QIcon::Disabled));
+  }
   if (!_keyLabel.isNull()) {
     QPainterPath pp;
-    QFont font("Sans");
-    font.setPixelSize(12);
+    QFont font = this->font();
+    //QFont font("Sans");
+    //font.setPointSize(10);
     pp.addText(QPointF(0, 0), font, _keyLabel);
-    pp.translate(34-pp.boundingRect().width()-pp.boundingRect().x(),
-                 34-pp.boundingRect().height()-pp.boundingRect().y());
+    pp.translate(width()-2-pp.boundingRect().width()-pp.boundingRect().x(),
+                 height()-2-pp.boundingRect().height()-pp.boundingRect().y());
     p.setRenderHint(QPainter::Antialiasing);
     // LATER parametrize outline and main letter colors
     p.setBrush(Qt::white);
@@ -125,11 +128,13 @@ void ToolButton::paintEvent(QPaintEvent*) {
     break;
   }
   if (!targetIndicator.isEmpty()) {
-    QFont font("Sans");
-    font.setPixelSize(12);
+    QFont font = this->font();
+    //font.setPointSize(10);
     p.setFont(font);
     p.setPen(Qt::black);
-    p.drawText(QRectF(2, 34-12, 32, 12), Qt::AlignLeft, targetIndicator);
+    QFontMetrics fm(font);
+    p.drawText(QRectF(2, height()-2-fm.height(), width()-4, fm.maxWidth()),
+               Qt::AlignLeft, targetIndicator);
   }
   p.end();
 }
@@ -191,7 +196,7 @@ void ToolButton::mouseMoveEvent(QMouseEvent *e) {
     md->setText(_tool.data()->label());
     md->setData(MIMETYPE_TOOL_ID, _tool.data()->id().toUtf8());
     d.setMimeData(md);
-    QPixmap pm = _tool.data()->icon().pixmap(32);
+    QPixmap pm = _tool.data()->icon().pixmap(iconSize().width());
     d.setPixmap(pm);
     d.setHotSpot(QPoint(pm.width()/2, pm.height()/2));
     Qt::DropAction da = d.exec(Qt::MoveAction | Qt::CopyAction,

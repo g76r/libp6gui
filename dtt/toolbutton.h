@@ -51,6 +51,7 @@ public:
   void setTargetType(TargetManager::TargetType targetType) {
     _targetType = targetType; }
   void setDocumentManager(DocumentManager *documentManager);
+  QSize sizeHint() const;
 
 private slots:
   void targetChanged(TargetManager::TargetType targetType,
