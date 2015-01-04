@@ -7,6 +7,7 @@
 
 class QWidget;
 
+// FIXME rename to SharedUiItemWidgetMapper
 /** Similar to QDataWidgetMapper for event-driven SharedUiItem display */
 class LIBH6NCSUSHARED_EXPORT UiItemWidgetMapper : public QObject {
   Q_OBJECT
@@ -27,8 +28,7 @@ public:
   SharedUiItem item() const { return _item; }
 
 public slots:
-  void itemUpdated(SharedUiItem item);
-  void itemRenamed(SharedUiItem item, QString oldName);
+  void itemChanged(SharedUiItem newItem, SharedUiItem oldItem);
 
 private:
   inline void populate();

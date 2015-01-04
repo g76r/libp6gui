@@ -33,20 +33,14 @@ void UiItemWidgetMapper::setItem(SharedUiItem item) {
   populate();
 }
 
-void UiItemWidgetMapper::itemUpdated(SharedUiItem item) {
-  QString id = _item.id();
-  //qDebug() << "UiItemWidgetMapper::itemUpdated" << id;
-  if (!id.isEmpty() && id == item.id())
-    setItem(item);
-}
-
-void UiItemWidgetMapper::itemRenamed(SharedUiItem item, QString oldName) {
-  if (item.isNull()) // FIXME make the delete semantics more explicit
-    clearItem();
-  else {
-    QString id = _item.id();
-    if (!id.isEmpty() && id == oldName)
-      setItem(item);
+void UiItemWidgetMapper::itemChanged(SharedUiItem newItem,
+                                     SharedUiItem oldItem) {
+  // refresh mapping on rename or update (newItem contains new id and data)
+  // stop following on delete (newItem is null)
+  // do nothing on creation (oldItem is null, which cannot == non null _item)
+  if (!_item.isNull() // mapper is currently following an item
+      && oldItem == _item) { // related to followed item (same qualified id)
+    setItem(newItem);
   }
 }
 

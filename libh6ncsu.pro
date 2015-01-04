@@ -45,7 +45,8 @@ SOURCES += \
     modelview/dtttreeview.cpp \
     modelview/shareduigraphicsitem.cpp \
     modelview/dttgraphicsview.cpp \
-    modelview/dttgraphicsscene.cpp
+    modelview/dttgraphicsscene.cpp \
+    modelview/shareduiitemseditabletablemodel.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -69,7 +70,8 @@ HEADERS +=\
     modelview/dtttreeview.h \
     modelview/shareduigraphicsitem.h \
     modelview/dttgraphicsview.h \
-    modelview/dttgraphicsscene.h
+    modelview/dttgraphicsscene.h \
+    modelview/shareduiitemseditabletablemodel.h
 
 unix {
     target.path = /usr/lib

@@ -8,11 +8,13 @@
 #include "libh6ncsu_global.h"
 #include "toolbutton.h"
 #include "mainwindow.h"
+#include "modelview/shareduiitem.h"
 
 class QKeyEvent;
 class QUndoStack;
 class PerspectiveWidget;
 
+// TODO use enums rather than #defines
 #define MIMETYPE_TOOL_ID "com.hallowyn/tool-id"
 #define MIMETYPE_ITEM_ID "com.hallowyn/item-id"
 
@@ -80,9 +82,15 @@ public:
     addTool(QPointer<Tool>(tool), permanent); }
   MainWindow *mainWindow() const;
   void setMainWindow(MainWindow *mainWindow);
+  virtual bool changeItemByUiData(SharedUiItem oldItem, int section,
+                                  const QVariant &value);
+  virtual SharedUiItem itemById(QString idQualifier, QString id);
+  /** Default: parses qualifiedId and calls itemById(QString,QString). */
+  virtual SharedUiItem itemById(QString qualifiedId);
 
 signals:
   void currentToolChanged(QPointer<Tool> tool);
+  void itemChanged(SharedUiItem newItem, SharedUiItem oldItem);
 
 private:
   void setTempTool(QPointer<Tool> tool) { _tempTool = tool; }

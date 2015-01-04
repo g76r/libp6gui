@@ -104,3 +104,23 @@ MainWindow *DocumentManager::mainWindow() const {
 void DocumentManager::setMainWindow(MainWindow *mainWindow) {
   _mainWindow = mainWindow;
 }
+
+bool DocumentManager::changeItemByUiData(
+    SharedUiItem oldItem, int section, const QVariant &value) {
+  Q_UNUSED(oldItem)
+  Q_UNUSED(section)
+  Q_UNUSED(value)
+  return false;
+}
+
+SharedUiItem DocumentManager::itemById(QString idQualifier, QString id) {
+  Q_UNUSED(idQualifier)
+  Q_UNUSED(id)
+  return SharedUiItem();
+}
+
+SharedUiItem DocumentManager::itemById(QString qualifiedId) {
+  int pos = qualifiedId.indexOf(':');
+  return (pos == -1) ? itemById(QString(), qualifiedId)
+                     : itemById(qualifiedId.left(pos), qualifiedId.mid(pos+1));
+}

@@ -27,7 +27,7 @@ public:
   QString uiHeaderString(int section, int role = Qt::DisplayRole) const {
     return _uiItem.uiHeaderString(section, role); }
   /** Syntaxic sugar - proxy on SharedUiItem */
-  int uiDataCount() const { return _uiItem.uiDataCount(); }
+  int uiDataCount() const { return _uiItem.uiSectionCount(); }
   /** Syntaxic sugar - proxy on SharedUiItem */
   QVariant uiData(int section, int role = Qt::DisplayRole) const {
     return _uiItem.uiData(section, role); }
