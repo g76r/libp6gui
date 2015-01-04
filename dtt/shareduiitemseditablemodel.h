@@ -11,22 +11,31 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with libqtssu.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SHAREDUIITEMSEDITABLETABLEMODEL_H
-#define SHAREDUIITEMSEDITABLETABLEMODEL_H
+#ifndef SHAREDUIITEMSEDITABLEMODEL_H
+#define SHAREDUIITEMSEDITABLEMODEL_H
 
-#include "modelview/shareduiitemstablemodel.h"
-#include "dtt/documentmanager.h"
+#include <QIdentityProxyModel>
+#include "documentmanager.h"
 
-// FIXME doc
-// FIXME get all back to SharedUiItemsModel ? apart from setData() implentation ?
-// FIXME make this an aspect thanks to QIdentityProxyModel ? make QronConfigGraphicalProxyModel inherit from it ?
-class SharedUiItemsEditableTableModel : public SharedUiItemsTableModel {
+/** Proxy model to wrap SharedUiItemsModel subclasses and add them user
+ * edition features using DocumentManager::changeItemByUiData().
+ *
+ * Think of this class (and of QIdentityProxyModel subclasses in general) as
+ * an aspect added to a base/source SharedUiItemsModel.
+ *
+ * @see SharedUiItemsModel
+ * @see SharedUiItemsTableModel
+ * @see SharedUiItemsTreeModel
+ * @see DocumentManager
+ */
+class LIBH6NCSUSHARED_EXPORT SharedUiItemsEditableModel
+    : public QIdentityProxyModel {
   Q_OBJECT
-  Q_DISABLE_COPY(SharedUiItemsEditableTableModel)
+  Q_DISABLE_COPY(SharedUiItemsEditableModel)
   DocumentManager *_documentManager;
 
 public:
-  SharedUiItemsEditableTableModel(QObject *parent = 0);
+  explicit SharedUiItemsEditableModel(QObject *parent = 0);
   DocumentManager *documentManager() const { return _documentManager; }
   void setDocumentManager(DocumentManager *documentManager) {
     _documentManager = documentManager; }
@@ -34,4 +43,4 @@ public:
                int role = Qt::EditRole);
 };
 
-#endif // SHAREDUIITEMSEDITABLETABLEMODEL_H
+#endif // SHAREDUIITEMSEDITABLEMODEL_H

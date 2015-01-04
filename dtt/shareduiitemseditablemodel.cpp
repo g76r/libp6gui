@@ -11,27 +11,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with libqtssu.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "shareduiitemseditabletablemodel.h"
+#include "shareduiitemseditablemodel.h"
+#include "modelview/shareduiitem.h"
+#include "modelview/shareduiitemsmodel.h"
 
-SharedUiItemsEditableTableModel::SharedUiItemsEditableTableModel(
-    QObject *parent)
-  : SharedUiItemsTableModel(parent), _documentManager(0) {
+SharedUiItemsEditableModel::SharedUiItemsEditableModel(QObject *parent)
+  : QIdentityProxyModel(parent), _documentManager(0) {
 }
 
-bool SharedUiItemsEditableTableModel::setData(
+#include <QtDebug>
+bool SharedUiItemsEditableModel::setData(
     const QModelIndex &index, const QVariant &value, int role) {
-  SharedUiItem oldItem = itemAt(index);
-  //int row = index.row();
-  if (role != Qt::EditRole
-      || !index.isValid()
-      //|| row < 0
-      //|| row >= rowCount()
-      || oldItem.isNull()
-      || !_documentManager
-      || !_documentManager->changeItemByUiData(oldItem, index.column(), value))
+  SharedUiItemsModel *model = qobject_cast<SharedUiItemsModel*>(sourceModel());
+  qDebug() << "SharedUiItemsEditableModel::setData" << index << value << role
+           << model << _documentManager;
+  if (!model)
     return false;
-  //  _items[index.row()] = newItem;
-  //  emit dataChanged(index, index);
-  //emit itemChanged(newItem, oldItem);
-  return true;
+  SharedUiItem oldItem = model->itemAt(index);
+  qDebug() << "oldItem:" << oldItem.qualifiedId();
+  return role == Qt::EditRole
+      && index.isValid()
+      && !oldItem.isNull()
+      && _documentManager
+      && _documentManager->changeItemByUiData(oldItem, index.column(), value);
 }
