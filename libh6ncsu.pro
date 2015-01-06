@@ -46,7 +46,8 @@ SOURCES += \
     modelview/shareduigraphicsitem.cpp \
     modelview/dttgraphicsview.cpp \
     modelview/dttgraphicsscene.cpp \
-    dtt/shareduiitemseditablemodel.cpp
+    dtt/shareduiitemseditablemodel.cpp \
+    util/failsafeundocommand.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -71,7 +72,8 @@ HEADERS +=\
     modelview/shareduigraphicsitem.h \
     modelview/dttgraphicsview.h \
     modelview/dttgraphicsscene.h \
-    dtt/shareduiitemseditablemodel.h
+    dtt/shareduiitemseditablemodel.h \
+    util/failsafeundocommand.h
 
 unix {
     target.path = /usr/lib
