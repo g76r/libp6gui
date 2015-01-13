@@ -23,8 +23,9 @@ SharedUiItemsEditableModel::SharedUiItemsEditableModel(QObject *parent)
 bool SharedUiItemsEditableModel::setData(
     const QModelIndex &index, const QVariant &value, int role) {
   SharedUiItemsModel *model = qobject_cast<SharedUiItemsModel*>(sourceModel());
-  qDebug() << "SharedUiItemsEditableModel::setData" << index << value << role
-           << model << _documentManager;
+  qDebug() << "SharedUiItemsEditableModel::setData index:" << index << "value:"
+           << value << "role:" << role << "model:" << model << "w/o cast:"
+           << sourceModel() << "this:" << this << "dm:" << _documentManager;
   if (!model)
     return false;
   SharedUiItem oldItem = model->itemAt(index);
