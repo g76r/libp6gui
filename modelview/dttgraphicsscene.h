@@ -22,7 +22,7 @@ public:
   void addItem(SharedUiGraphicsItem *item);
   using QGraphicsScene::removeItem;
   void removeItem(SharedUiGraphicsItem *item);
-  QStringList selectedItemsIds() const { return _selectedItemsIds; }
+  QStringList selectedItemsIds() const { return _selectedItemsIds; } // FIXME must recompute from indexes since an item id can change
   QStringList mouseoverItemsIds() const { return _mouseoverItemsIds; }
 
 signals:

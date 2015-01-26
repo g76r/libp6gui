@@ -12,7 +12,7 @@ class LIBH6NCSUSHARED_EXPORT DttTreeView : public EnhancedTreeView {
   Q_DISABLE_COPY(DttTreeView)
   QPointer<PerspectiveWidget> _perspectiveWidget;
   QModelIndex _mousePosition;
-  QStringList _selectedItemsIds;
+  QModelIndexList _selectedItemsIndexes;
 
 public:
   explicit DttTreeView(QWidget *parent = 0);
@@ -21,7 +21,6 @@ public:
   void focusInEvent(QFocusEvent *event);
   void focusOutEvent(QFocusEvent *event);
   //QModelIndex mousePosition() const { return _mousePosition; }
-  QString mouseoverItemId() const;
 
 signals:
   void selectedItemsChanged(QStringList selectedItemsIds);
@@ -36,7 +35,8 @@ private slots:
   void clearMouseoverTarget();
 
 private:
-  void setPrimaryTargetToSelection();
+  QStringList buildSelectedItemsIdsList() const;
+  QString mouseoverItemId() const;
 };
 
 #endif // DTTTREEVIEW_H

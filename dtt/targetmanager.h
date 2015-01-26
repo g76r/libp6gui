@@ -7,6 +7,7 @@
 #include <QPointer>
 #include "libh6ncsu_global.h"
 #include "perspectivewidget.h"
+#include "modelview/shareduiitem.h"
 
 /** Class for accessing and modifying GUI targets.
   * For every target (primary, mouseover...), items ar item ids of targeted
@@ -45,20 +46,20 @@ public:
   void setTarget(TargetType targetType,
                  QPointer<PerspectiveWidget> perspectiveWidget
                  = QPointer<PerspectiveWidget>(),
-                 QList<QString> itemsIds = QList<QString>());
+                 QStringList itemsIds = QStringList());
   /** Syntaxic sugar. */
   void setTarget(TargetType targetType, PerspectiveWidget* perspectiveWidget,
-                 QList<QString> itemsIds = QList<QString>()) {
+                 QStringList itemsIds = QStringList()) {
     setTarget(targetType, QPointer<PerspectiveWidget>(perspectiveWidget),
               itemsIds); }
   /** Syntaxic sugar. */
   void setTarget(QPointer<PerspectiveWidget> perspectiveWidget
                  = QPointer<PerspectiveWidget>(),
-                 QList<QString> itemsIds = QList<QString>()) {
+                 QStringList itemsIds = QStringList()) {
     setTarget(PrimaryTarget, perspectiveWidget, itemsIds); }
   /** Syntaxic sugar. */
   void setTarget(PerspectiveWidget* perspectiveWidget,
-                 QList<QString> itemsIds = QList<QString>()) {
+                 QStringList itemsIds = QStringList()) {
     setTarget(PrimaryTarget, QPointer<PerspectiveWidget>(perspectiveWidget),
               itemsIds); }
   /** Syntaxic sugar. */
@@ -81,9 +82,15 @@ public:
   void setTarget(PerspectiveWidget* perspectiveWidget, QString itemId) {
     setTarget(PrimaryTarget, QPointer<PerspectiveWidget>(perspectiveWidget),
               itemId.isNull() ? QStringList() : QStringList(itemId)); }
+  /** All existing target types, as a set. */
+  static QSet<TargetManager::TargetType> targetTypes();
 
-
-  static QSet<TargetManager::TargetType> allTargets();
+public slots:
+  /** This slot is only usefull for receiving DocumentManager::itemChanged()
+   * signals to update items id in targets when an item id changes.
+   * This method should not be called or connected from other classes than
+   * DocumentManager. */
+  void itemChanged(SharedUiItem newItem, SharedUiItem oldItem);
 
 signals:
   /** Sent every time a target changes */

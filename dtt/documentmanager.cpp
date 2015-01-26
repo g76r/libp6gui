@@ -13,6 +13,8 @@ DocumentManager::DocumentManager(QObject *parent)
   : QObject(parent), _targetManager(new TargetManager(this)),
     _undoStack(new QUndoStack(this)) {
   addTool(new CloseAllPoppedWindowsTool(this), true);
+  connect(this, &DocumentManager::itemChanged,
+          _targetManager, &TargetManager::itemChanged);
 }
 
 DocumentManager::~DocumentManager() {

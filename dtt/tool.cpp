@@ -8,7 +8,7 @@ Tool::Tool(DocumentManager *parent, const QString id,
            TargetManager::TargetType preferredTarget) : QObject(0),
   _documentManager(parent), _id(id), _label(tr("Tool")), _enabled(true),
   _action(new ToolActionWrapper(this)) {
-  _acceptedTargets = acceptedTargets.isEmpty() ? TargetManager::allTargets()
+  _acceptedTargets = acceptedTargets.isEmpty() ? TargetManager::targetTypes()
                                                : acceptedTargets;
   if (_acceptedTargets.contains(preferredTarget)) {
     _preferredTarget = preferredTarget;
