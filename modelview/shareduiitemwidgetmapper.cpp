@@ -3,20 +3,31 @@
 #include <QMetaProperty>
 #include <QtDebug>
 #include "dtt/documentmanager.h"
+#include <QLineEdit>
+#include <QComboBox>
+#include <QAbstractSpinBox>
+#include <QCheckBox>
+#include <QAbstractButton>
+#include "widget/enhancedtextedit.h"
+#include "widget/enhancedplaintextedit.h"
 
 SharedUiItemWidgetMapper::SharedUiItemWidgetMapper(QObject *parent)
-  : QObject(parent), _isReadOnly(false), _documentManager(0) {
+  : QObject(parent), _documentManager(0) {
 }
 
-void SharedUiItemWidgetMapper::addMapping(QWidget *widget, int section,
-                                          QVariant valueWhenNull) {
+void SharedUiItemWidgetMapper::addMapping(
+    QWidget *widget, int section, QVariant valueWhenNull) {
+  addReadOnlyMapping(widget, section, valueWhenNull);
+  connectEditionSignals(section);
+}
+
+void SharedUiItemWidgetMapper::addReadOnlyMapping(
+    QWidget *widget, int section, QVariant valueWhenNull) {
   removeMapping(section);
   removeMapping(widget);
   _sectionToWidget.insert(section, widget);
   _widgetToSection.insert(widget, section);
   _sectionToDefaultValue.insert(section, valueWhenNull);
-  if (!_isReadOnly)
-    connectEditionSignals(section);
   populate(section);
 }
 
@@ -77,29 +88,51 @@ void SharedUiItemWidgetMapper::populate(int section) {
   }
 }
 
-#include <QLineEdit> // FIXME move
-#include <QComboBox>
 void SharedUiItemWidgetMapper::connectEditionSignals(int section) {
   QWidget *widget = _sectionToWidget.value(section);
   if (widget) {
+    //qDebug() << "SharedUiItemWidgetMapper::connectEditionSignals:"
+    //         << widget->metaObject()->className();
     QLineEdit *lineEdit = qobject_cast<QLineEdit*>(widget);
     if (lineEdit) {
-      //qDebug() << "connected QLineEdit" << lineEdit << "for section" << section;
-      connect(lineEdit, SIGNAL(editingFinished()),
-              this, SLOT(widgetEdited()));
-    } else {
-      QComboBox *comboBox = qobject_cast<QComboBox*>(widget);
-      if (comboBox) {
-        connect(comboBox, SIGNAL(activated(int)),
-                this, SLOT(widgetEdited()));
-      }
+      connect(lineEdit, SIGNAL(editingFinished()), this, SLOT(widgetEdited()));
+      return;
     }
-    // FIXME other widget types
+    EnhancedTextEdit *textEdit = qobject_cast<EnhancedTextEdit*>(widget);
+    if (textEdit) {
+      connect(textEdit, SIGNAL(editingFinished()), this, SLOT(widgetEdited()));
+      return;
+    }
+    EnhancedPlainTextEdit *plainTextEdit
+        = qobject_cast<EnhancedPlainTextEdit*>(widget);
+    if (plainTextEdit) {
+      connect(plainTextEdit, SIGNAL(editingFinished()),
+              this, SLOT(widgetEdited()));
+      return;
+    }
+    QComboBox *comboBox = qobject_cast<QComboBox*>(widget);
+    if (comboBox) {
+      connect(comboBox, SIGNAL(activated(int)), this, SLOT(widgetEdited()));
+      return;
+    }
+    QAbstractSpinBox *spinBox = qobject_cast<QAbstractSpinBox*>(widget);
+    if (spinBox) {
+      connect(spinBox, SIGNAL(editingFinished()), this, SLOT(widgetEdited()));
+      return;
+    }
+    QAbstractButton *button = qobject_cast<QAbstractButton*>(widget);
+    if (button) { // includes checkable buttons, check boxes and radio buttons
+      connect(button, SIGNAL(clicked(bool)), this, SLOT(widgetEdited()));
+      return;
+    }
+    // LATER other widget types such as QCalendarWidget or maybe QGroupBox for radio/exclusive groups (anyway meanwhile one should use combo boxes)
   }
 }
 
 void SharedUiItemWidgetMapper::widgetEdited() {
   QWidget *widget = qobject_cast<QWidget*>(sender());
+  //qDebug() << "SharedUiItemWidgetMapper::widgetEdited" << sender() << widget
+  //         << _widgetToSection.value(widget);
   if (_documentManager && !_item.isNull() && widget
       && _widgetToSection.contains(widget)) {
     int section = _widgetToSection.value(widget);

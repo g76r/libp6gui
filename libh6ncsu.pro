@@ -47,7 +47,9 @@ SOURCES += \
     modelview/dttgraphicsview.cpp \
     modelview/dttgraphicsscene.cpp \
     dtt/shareduiitemseditablemodel.cpp \
-    util/failsafeundocommand.cpp
+    util/failsafeundocommand.cpp \
+    widget/enhancedtextedit.cpp \
+    widget/enhancedplaintextedit.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -73,7 +75,9 @@ HEADERS +=\
     modelview/dttgraphicsview.h \
     modelview/dttgraphicsscene.h \
     dtt/shareduiitemseditablemodel.h \
-    util/failsafeundocommand.h
+    util/failsafeundocommand.h \
+    widget/enhancedtextedit.h \
+    widget/enhancedplaintextedit.h
 
 unix {
     target.path = /usr/lib
