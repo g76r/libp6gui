@@ -42,12 +42,14 @@ QSet<TargetManager::TargetType> TargetManager::targetTypes() {
 
 void TargetManager::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
   // Update current targets when an item id changes.
-  // In many cases, there is no target containing the item at the very time it
-  // changes its id, because edition in generaly done through edition widgets
-  // (such QLineEdit or widgets created by item delegates) that do not manage
-  // targets, therefore in many cases this method/slot is useless.
-  // However, it is possible (at less in theory) that an item id changes when
-  // the item is targeted.
+  // In some cases, there is no target containing the item at the very time it
+  // changes its id, because edition in done through edition widgets (such as
+  // widgets created by item delegates) that do not manage targets, in this
+  // cases this method/slot is called while targets are empty and does nothing.
+  // However, in some other cases (for instance when edition is performed by a
+  // permanent widget within an item details form that keep target set during
+  // edition), this method/slot is the only way to update targets when an item
+  // id changes.
   //qDebug() << "***** TargetManager::itemChanged" << newItem << oldItem
   //         << _targetItems[PrimaryTarget];
   if (!oldItem.isNull()) { // new items cannot already be targeted
@@ -58,12 +60,19 @@ void TargetManager::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
         QStringList &itemsIds = _targetItems[targetType];
         if (newItem.isNull()) { // item removed
           itemsIds.removeAll(oldId);
+          emit targetChanged(targetType, _targetWidgets[targetType], itemsIds);
         } else { // item renamed
+          //qDebug() << "*** item renamed" << newId << oldId << itemsIds;
           for (int i = 0; i < itemsIds.size(); ++i) {
             QString &id = itemsIds[i];
-            if (id == oldId)
+            if (id == oldId) {
+              //qDebug() << "*** renaming at" << i;
               id = newId;
+              emit targetChanged(targetType, _targetWidgets[targetType],
+                                 itemsIds);
+            }
           }
+          //qDebug() << "*** done" << itemsIds;
         }
       }
     }

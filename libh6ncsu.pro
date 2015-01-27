@@ -1,4 +1,4 @@
-# Copyright 2014 Hallowyn and others.
+# Copyright 2014-2015 Hallowyn and others.
 
 QT += widgets
 
@@ -40,7 +40,7 @@ SOURCES += \
     dtt/toolbutton.cpp \
     dtt/perspectivestackedwidget.cpp \
     dtt/mainwindow.cpp \
-    modelview/uiitemwidgetmapper.cpp \
+    modelview/shareduiitemwidgetmapper.cpp \
     widget/collapsiblegroupbox.cpp \
     modelview/dtttreeview.cpp \
     modelview/shareduigraphicsitem.cpp \
@@ -66,7 +66,7 @@ HEADERS +=\
     dtt/toolbutton.h \
     dtt/perspectivestackedwidget.h \
     dtt/mainwindow.h \
-    modelview/uiitemwidgetmapper.h \
+    modelview/shareduiitemwidgetmapper.h \
     widget/collapsiblegroupbox.h \
     modelview/dtttreeview.h \
     modelview/shareduigraphicsitem.h \
