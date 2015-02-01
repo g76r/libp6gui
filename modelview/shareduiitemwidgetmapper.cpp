@@ -82,8 +82,6 @@ void SharedUiItemWidgetMapper::populate(int section) {
     if (!propname.isEmpty()) {
       QVariant v = _item.uiData(section, Qt::EditRole);
       if (v.isNull())
-        v = _item.uiData(section, Qt::DisplayRole);
-      if (v.isNull())
         v = _sectionToDefaultValue.value(section);
       widget->setProperty(propname, v);
     }
