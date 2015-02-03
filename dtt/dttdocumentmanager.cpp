@@ -1,4 +1,4 @@
-#include "documentmanager.h"
+#include "dttdocumentmanager.h"
 #include <QKeyEvent>
 #include <QtDebug>
 #include "perspectivewidget.h"
@@ -9,18 +9,16 @@
 
 // FIXME check remaining inconsistencies/duplicates between {Design,}DocumentManager
 
-DocumentManager::DocumentManager(QObject *parent)
-  : QObject(parent), _targetManager(new TargetManager(this)),
+DttDocumentManager::DttDocumentManager(QObject *parent)
+  : SharedUiItemDocumentManager(parent),
+    _targetManager(new TargetManager(this)),
     _undoStack(new QUndoStack(this)) {
   addTool(new CloseAllPoppedWindowsTool(this), true);
-  connect(this, &DocumentManager::itemChanged,
+  connect(this, &DttDocumentManager::itemChanged,
           _targetManager, &TargetManager::itemChanged);
 }
 
-DocumentManager::~DocumentManager() {
-}
-
-void DocumentManager::addTool(QPointer<Tool> tool, bool permanent){
+void DttDocumentManager::addTool(QPointer<Tool> tool, bool permanent){
   if (!tool.isNull()) {
     if (permanent)
       _permanentTools.append(tool);
@@ -30,7 +28,7 @@ void DocumentManager::addTool(QPointer<Tool> tool, bool permanent){
   }
 }
 
-QPointer<Tool> DocumentManager::toolById(const QString id) {
+QPointer<Tool> DttDocumentManager::toolById(const QString id) {
   // TODO implement a kind of QWeakHash template that remove nulls on the fly
   QPointer<Tool> p = _tools.value(id);
   if (p.isNull())
@@ -38,16 +36,16 @@ QPointer<Tool> DocumentManager::toolById(const QString id) {
   return p;
 }
 
-void DocumentManager::registerWidget(PerspectiveWidget *widget) {
+void DttDocumentManager::registerWidget(PerspectiveWidget *widget) {
   _registredWidgets.insert(widget);
 }
 
-void DocumentManager::unregisterWidget(PerspectiveWidget *widget) {
+void DttDocumentManager::unregisterWidget(PerspectiveWidget *widget) {
   if (widget)
     _registredWidgets.remove(widget);
 }
 
-bool DocumentManager::keyPressEvent(QKeyEvent *event) {
+bool DttDocumentManager::keyPressEvent(QKeyEvent *event) {
   // LATER handle many keyboard layouts, which probably need to write
   // non-portable code, to catch QEvent::KeyboardLayoutChange, and to have
   // even worst hacks on MacOS than on other OSes
@@ -77,7 +75,7 @@ bool DocumentManager::keyPressEvent(QKeyEvent *event) {
   }
 }
 
-void DocumentManager::setGlobalKey(int key, QString toolId,
+void DttDocumentManager::setGlobalKey(int key, QString toolId,
                                    Qt::KeyboardModifiers modifiers) {
   //qDebug() << "setGlobalKey" << key << toolId << modifiers;
   if (key && !toolId.isNull())
@@ -86,7 +84,7 @@ void DocumentManager::setGlobalKey(int key, QString toolId,
     qWarning() << "incorrect global key assignement:"<< key << toolId;
 }
 
-void DocumentManager::setGlobalKey(int key, ToolButton *toolButton,
+void DttDocumentManager::setGlobalKey(int key, ToolButton *toolButton,
                                    Qt::KeyboardModifiers modifiers) {
   qDebug() << "setGlobalKey" << key << toolButton << modifiers;
   if (key && toolButton)
@@ -95,34 +93,14 @@ void DocumentManager::setGlobalKey(int key, ToolButton *toolButton,
     qWarning() << "incorrect global key assignement:"<< key << toolButton;
 }
 
-void DocumentManager::clearGlobalKey(int key) {
+void DttDocumentManager::clearGlobalKey(int key) {
   _globalKeys.remove(key);
 }
 
-MainWindow *DocumentManager::mainWindow() const {
+MainWindow *DttDocumentManager::mainWindow() const {
   return _mainWindow;
 }
 
-void DocumentManager::setMainWindow(MainWindow *mainWindow) {
+void DttDocumentManager::setMainWindow(MainWindow *mainWindow) {
   _mainWindow = mainWindow;
-}
-
-bool DocumentManager::changeItemByUiData(
-    SharedUiItem oldItem, int section, const QVariant &value) {
-  Q_UNUSED(oldItem)
-  Q_UNUSED(section)
-  Q_UNUSED(value)
-  return false;
-}
-
-SharedUiItem DocumentManager::itemById(QString idQualifier, QString id) {
-  Q_UNUSED(idQualifier)
-  Q_UNUSED(id)
-  return SharedUiItem();
-}
-
-SharedUiItem DocumentManager::itemById(QString qualifiedId) {
-  int pos = qualifiedId.indexOf(':');
-  return (pos == -1) ? itemById(QString(), qualifiedId)
-                     : itemById(qualifiedId.left(pos), qualifiedId.mid(pos+1));
 }

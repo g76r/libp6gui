@@ -1,9 +1,9 @@
 #include "tool.h"
-#include "documentmanager.h"
+#include "dttdocumentmanager.h"
 #include "toolactionwrapper.h"
 #include "perspectivewidget.h"
 
-Tool::Tool(DocumentManager *parent, const QString id,
+Tool::Tool(DttDocumentManager *parent, const QString id,
            QSet<TargetManager::TargetType> acceptedTargets,
            TargetManager::TargetType preferredTarget) : QObject(0),
   _documentManager(parent), _id(id), _label(tr("Tool")), _enabled(true),
@@ -25,7 +25,7 @@ Tool::Tool(DocumentManager *parent, const QString id,
 Tool::~Tool() {
 }
 
-QPointer<DocumentManager> Tool::documentManager() const {
+QPointer<DttDocumentManager> Tool::documentManager() const {
   return _documentManager;
 }
 

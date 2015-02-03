@@ -1,13 +1,13 @@
 #include "mainwindow.h"
-#include "documentmanager.h"
+#include "dttdocumentmanager.h"
 #include "tool.h"
 #include <QLabel>
-#include "documentmanager.h"
+#include "dttdocumentmanager.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
-MainWindow::MainWindow(DocumentManager *documentManager, QWidget *parent)
+MainWindow::MainWindow(DttDocumentManager *documentManager, QWidget *parent)
   : QMainWindow(parent) {
   setDocumentManager(documentManager);
 }
@@ -45,11 +45,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 void MainWindow::windowFocused() {
 }
 
-DocumentManager *MainWindow::documentManager() const {
+DttDocumentManager *MainWindow::documentManager() const {
   return _documentManager.data();
 }
 
-void MainWindow::setDocumentManager(DocumentManager *documentManager) {
+void MainWindow::setDocumentManager(DttDocumentManager *documentManager) {
   _documentManager = documentManager;
   if (documentManager)
     documentManager->setMainWindow(this);

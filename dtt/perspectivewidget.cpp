@@ -1,5 +1,5 @@
 #include "perspectivewidget.h"
-#include "documentmanager.h"
+#include "dttdocumentmanager.h"
 #include <QEvent>
 #include <QWindowStateChangeEvent>
 #include <QtDebug>
@@ -14,7 +14,7 @@ PerspectiveWidget::~PerspectiveWidget() {
     _documentManager->unregisterWidget(this);
 }
 
-void PerspectiveWidget::setDocumentManager(DocumentManager *documentManager) {
+void PerspectiveWidget::setDocumentManager(DttDocumentManager *documentManager) {
   if (_documentManager)
     _documentManager->unregisterWidget(this);
   _documentManager = documentManager;
@@ -26,7 +26,7 @@ void PerspectiveWidget::setDocumentManager(DocumentManager *documentManager) {
     qWarning() << "PerspectiveWidget::setDocumentManager(0)";
 }
 
-QPointer<DocumentManager> PerspectiveWidget::documentManager() const {
+QPointer<DttDocumentManager> PerspectiveWidget::documentManager() const {
   return _documentManager;
 }
 
@@ -58,7 +58,7 @@ PerspectiveWidget *PerspectiveWidget::popClone() {
 TargetManager *PerspectiveWidget::targetManager(
     PerspectiveWidget *perspectiveWidget) {
   if (perspectiveWidget) {
-    QPointer<DocumentManager> dm = perspectiveWidget->documentManager();
+    QPointer<DttDocumentManager> dm = perspectiveWidget->documentManager();
     if (dm)
       return dm->targetManager();
   }

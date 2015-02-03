@@ -7,7 +7,7 @@
 #include "libh6ncsu_global.h"
 #include "targetmanager.h"
 
-class DocumentManager;
+class DttDocumentManager;
 
 class LIBH6NCSUSHARED_EXPORT ToolButton : public QAbstractButton {
   Q_OBJECT
@@ -15,7 +15,7 @@ class LIBH6NCSUSHARED_EXPORT ToolButton : public QAbstractButton {
              READ flashBackground
              WRITE setFlashBackground)
 private:
-  QPointer<DocumentManager> _documentManager;
+  QPointer<DttDocumentManager> _documentManager;
   QPointer<Tool> _tool;
   bool _mouseCurrentlyOver, _currentlyTriggerable;
   QString _keyLabel;
@@ -26,7 +26,7 @@ private:
   Qt::KeyboardModifiers _modifiers;
 
 public:
-  explicit ToolButton(QWidget *parent = 0, DocumentManager *documentManager = 0);
+  explicit ToolButton(QWidget *parent = 0, DttDocumentManager *documentManager = 0);
   ~ToolButton();
   void setTool(QPointer<Tool> tool);
   void clearTool();
@@ -50,7 +50,7 @@ public:
   TargetManager::TargetType targetType() const { return _targetType; }
   void setTargetType(TargetManager::TargetType targetType) {
     _targetType = targetType; }
-  void setDocumentManager(DocumentManager *documentManager);
+  void setDocumentManager(DttDocumentManager *documentManager);
   QSize sizeHint() const;
 
 private slots:

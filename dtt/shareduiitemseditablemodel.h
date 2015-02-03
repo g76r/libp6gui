@@ -15,7 +15,7 @@
 #define SHAREDUIITEMSEDITABLEMODEL_H
 
 #include <QIdentityProxyModel>
-#include "documentmanager.h"
+#include "dttdocumentmanager.h"
 
 /** Proxy model to wrap SharedUiItemsModel subclasses and add them user
  * edition features using DocumentManager::changeItemByUiData().
@@ -32,12 +32,12 @@ class LIBH6NCSUSHARED_EXPORT SharedUiItemsEditableModel
     : public QIdentityProxyModel {
   Q_OBJECT
   Q_DISABLE_COPY(SharedUiItemsEditableModel)
-  DocumentManager *_documentManager;
+  DttDocumentManager *_documentManager;
 
 public:
   explicit SharedUiItemsEditableModel(QObject *parent = 0);
-  DocumentManager *documentManager() const { return _documentManager; }
-  void setDocumentManager(DocumentManager *documentManager) {
+  DttDocumentManager *documentManager() const { return _documentManager; }
+  void setDocumentManager(DttDocumentManager *documentManager) {
     _documentManager = documentManager; }
   bool setData(const QModelIndex &index, const QVariant &value,
                int role = Qt::EditRole);

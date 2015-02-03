@@ -5,7 +5,7 @@
 #include <QPointer>
 #include "libh6ncsu_global.h"
 
-class DocumentManager;
+class DttDocumentManager;
 class DocumentVersion;
 class Perspective;
 class ItemPosition;
@@ -21,13 +21,13 @@ class TargetManager;
 class LIBH6NCSUSHARED_EXPORT PerspectiveWidget : public QWidget {
   Q_OBJECT
 private:
-  QPointer<DocumentManager> _documentManager;
+  QPointer<DttDocumentManager> _documentManager;
 
 public:
   explicit PerspectiveWidget(QWidget *parent);
   virtual ~PerspectiveWidget();
-  virtual void setDocumentManager(DocumentManager *documentManager);
-  QPointer<DocumentManager> documentManager() const;
+  virtual void setDocumentManager(DttDocumentManager *documentManager);
+  QPointer<DttDocumentManager> documentManager() const;
   /** Intercept keystrokes to give them to DocumentManager to handle global
     * key shortcuts. */
   void keyPressEvent(QKeyEvent *event);

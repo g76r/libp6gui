@@ -32,7 +32,6 @@ SOURCES += \
     modelview/enhancedtreeview.cpp \
     widget/hierarchicaltabcontroller.cpp \
     dtt/closeallpoppedwindowstool.cpp \
-    dtt/documentmanager.cpp \
     dtt/perspectivewidget.cpp \
     dtt/targetmanager.cpp \
     dtt/tool.cpp \
@@ -49,7 +48,8 @@ SOURCES += \
     dtt/shareduiitemseditablemodel.cpp \
     util/failsafeundocommand.cpp \
     widget/enhancedtextedit.cpp \
-    widget/enhancedplaintextedit.cpp
+    widget/enhancedplaintextedit.cpp \
+    dtt/dttdocumentmanager.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -60,7 +60,6 @@ HEADERS +=\
     modelview/enhancedtreeview.h \
     widget/hierarchicaltabcontroller.h \
     dtt/closeallpoppedwindowstool.h \
-    dtt/documentmanager.h \
     dtt/perspectivewidget.h \
     dtt/targetmanager.h \
     dtt/tool.h \
@@ -77,7 +76,8 @@ HEADERS +=\
     dtt/shareduiitemseditablemodel.h \
     util/failsafeundocommand.h \
     widget/enhancedtextedit.h \
-    widget/enhancedplaintextedit.h
+    widget/enhancedplaintextedit.h \
+    dtt/dttdocumentmanager.h
 
 unix {
     target.path = /usr/lib

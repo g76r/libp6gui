@@ -11,7 +11,7 @@
 
 class QAction;
 class PerspectiveWidget;
-class DocumentManager;
+class DttDocumentManager;
 
 /** Tool has nearly the same usage than QAction, however it is target-aware
   * and therefore able to change its behaviour or appearance depending on
@@ -26,7 +26,7 @@ class LIBH6NCSUSHARED_EXPORT Tool : public QObject {
   Q_OBJECT
   Q_DISABLE_COPY(Tool)
 
-  QPointer<DocumentManager> _documentManager;
+  QPointer<DttDocumentManager> _documentManager;
   QString _id;
   QString _label;
   QIcon _icon;
@@ -40,13 +40,13 @@ public:
    * @param preferredTarget if not in accepteTargets, replaced with first
    * accepted target
    * */
-  Tool(DocumentManager *parent, const QString id,
+  Tool(DttDocumentManager *parent, const QString id,
        QSet<TargetManager::TargetType> acceptedTargets
        = QSet<TargetManager::TargetType>(),
        TargetManager::TargetType preferredTarget
        = TargetManager::PrimaryTarget);
   ~Tool();
-  QPointer<DocumentManager> documentManager() const;
+  QPointer<DttDocumentManager> documentManager() const;
   const QString id() const { return _id; }
   const QString label() const { return _label; }
   void setLabel(QString label);

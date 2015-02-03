@@ -1,8 +1,8 @@
 #include "closeallpoppedwindowstool.h"
-#include "documentmanager.h"
+#include "dttdocumentmanager.h"
 #include "perspectivewidget.h"
 
-CloseAllPoppedWindowsTool::CloseAllPoppedWindowsTool(DocumentManager *parent)
+CloseAllPoppedWindowsTool::CloseAllPoppedWindowsTool(DttDocumentManager *parent)
   : Tool(parent, "closeAllPoppedWindows") {
   setIcon(QIcon(":fa/desktop.svg"));
   setLabel(tr("Close All Popped Windows"));

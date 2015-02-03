@@ -8,7 +8,7 @@
 #include "libh6ncsu_global.h"
 #include "toolbutton.h"
 #include "mainwindow.h"
-#include "modelview/shareduiitem.h"
+#include "modelview/shareduiitemdocumentmanager.h"
 
 class QKeyEvent;
 class QUndoStack;
@@ -18,6 +18,7 @@ class PerspectiveWidget;
 #define MIMETYPE_TOOL_ID "com.hallowyn/tool-id"
 #define MIMETYPE_ITEM_ID "com.hallowyn/item-id"
 
+// FIXME rename file
 /** This is a non-visible (i.e. non-widget) class for handling data and events
  * global to a given document.
  * This includes generic features such as: global key handling
@@ -27,9 +28,10 @@ class PerspectiveWidget;
  * application-specific features such as: load-save features, data access
  * or version control.
  */
-class LIBH6NCSUSHARED_EXPORT DocumentManager : public QObject {
+class LIBH6NCSUSHARED_EXPORT DttDocumentManager
+    : public SharedUiItemDocumentManager {
   Q_OBJECT
-  Q_DISABLE_COPY(DocumentManager)
+  Q_DISABLE_COPY(DttDocumentManager)
 
   class GlobalKey {
   public:
@@ -55,8 +57,7 @@ class LIBH6NCSUSHARED_EXPORT DocumentManager : public QObject {
   QPointer<MainWindow> _mainWindow;
 
 public:
-  explicit DocumentManager(QObject *parent);
-  ~DocumentManager();
+  explicit DttDocumentManager(QObject *parent = 0);
   TargetManager *targetManager() { return _targetManager; }
   virtual void registerWidget(PerspectiveWidget *widget);
   QUndoStack *undoStack() { return _undoStack; }
@@ -82,15 +83,9 @@ public:
     addTool(QPointer<Tool>(tool), permanent); }
   MainWindow *mainWindow() const;
   void setMainWindow(MainWindow *mainWindow);
-  virtual bool changeItemByUiData(SharedUiItem oldItem, int section,
-                                  const QVariant &value);
-  virtual SharedUiItem itemById(QString idQualifier, QString id);
-  /** Default: parses qualifiedId and calls itemById(QString,QString). */
-  virtual SharedUiItem itemById(QString qualifiedId);
 
 signals:
   void currentToolChanged(QPointer<Tool> tool);
-  void itemChanged(SharedUiItem newItem, SharedUiItem oldItem);
 
 private:
   void setTempTool(QPointer<Tool> tool) { _tempTool = tool; }

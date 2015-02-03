@@ -7,9 +7,9 @@
 #include <QPropertyAnimation>
 #include <QDrag>
 #include <QMimeData>
-#include "documentmanager.h"
+#include "dttdocumentmanager.h"
 
-ToolButton::ToolButton(QWidget *parent, DocumentManager *documentManager)
+ToolButton::ToolButton(QWidget *parent, DttDocumentManager *documentManager)
   : QAbstractButton(parent), _mouseCurrentlyOver(false),
     _flashBackground(Qt::lightGray), _targetType(TargetManager::PrimaryTarget),
     _key(0), _modifiers(Qt::NoModifier) {
@@ -264,7 +264,7 @@ void ToolButton::targetChanged(TargetManager::TargetType targetType,
   }
 }
 
-void ToolButton::setDocumentManager(DocumentManager *documentManager) {
+void ToolButton::setDocumentManager(DttDocumentManager *documentManager) {
   if (_documentManager) {
     disconnect(_documentManager->targetManager(), SIGNAL(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)),
                this, SLOT(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)));

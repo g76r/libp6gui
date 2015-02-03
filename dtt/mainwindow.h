@@ -5,7 +5,7 @@
 #include <QPointer>
 #include "libh6ncsu_global.h"
 
-class DocumentManager;
+class DttDocumentManager;
 
 // FIXME rename this class to DttMainWindow
 /** Base class for non-perspective main windows in a Document-Target-Tool
@@ -19,22 +19,22 @@ class LIBH6NCSUSHARED_EXPORT MainWindow : public QMainWindow {
   Q_DISABLE_COPY(MainWindow)
 
 private:
-  QPointer<DocumentManager> _documentManager;
+  QPointer<DttDocumentManager> _documentManager;
 
 public:
   explicit MainWindow(QWidget *parent = 0);
   /** Syntaxic sugar. @see setDocumentManager(). */
-  explicit MainWindow(DocumentManager *documentManager, QWidget *parent = 0);
+  explicit MainWindow(DttDocumentManager *documentManager, QWidget *parent = 0);
   ~MainWindow();
   void keyPressEvent(QKeyEvent *event);
   virtual void windowFocused();
   void closeEvent(QCloseEvent *event);
-  DocumentManager *documentManager() const;
+  DttDocumentManager *documentManager() const;
   /** DTT applications that manage only one document type should set a
    * DocumentManager on DttMainWindow to catch global keys at top level, but
    * applications managing several type of documents within the same main
    * window should not, to avoid user confusion between documents. */
-  void setDocumentManager(DocumentManager *documentManager);
+  void setDocumentManager(DttDocumentManager *documentManager);
 };
 
 #endif // MAINWINDOW_H

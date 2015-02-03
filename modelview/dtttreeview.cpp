@@ -1,5 +1,5 @@
 #include "dtttreeview.h"
-#include "dtt/documentmanager.h"
+#include "dtt/dttdocumentmanager.h"
 #include "modelview/shareduiitem.h"
 #include <QtDebug>
 

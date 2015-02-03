@@ -1,5 +1,5 @@
 #include "perspectivestackedwidget.h"
-#include "documentmanager.h"
+#include "dttdocumentmanager.h"
 
 PerspectiveStackedWidget::PerspectiveStackedWidget(PerspectiveWidget *parent)
   : QStackedWidget(parent), _perspectiveWidget(parent) {
@@ -22,7 +22,7 @@ void PerspectiveStackedWidget::perspectiveChanged() {
 
 void PerspectiveStackedWidget::setMouseoverTarget(bool set) {
   if (_perspectiveWidget) {
-    DocumentManager *manager = _perspectiveWidget.data()->documentManager();
+    DttDocumentManager *manager = _perspectiveWidget.data()->documentManager();
     if (manager) {
       if (set)
         manager->targetManager()->setTarget(TargetManager::MouseOverTarget,
