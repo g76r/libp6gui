@@ -2,21 +2,34 @@
 #include "dtt/dttdocumentmanager.h"
 #include "modelview/shareduiitem.h"
 #include <QtDebug>
+#include "modelview/shareduiitemsmodel.h"
 
 DttTreeView::DttTreeView(QWidget *parent) : EnhancedTreeView(parent) {
-  connect(this, SIGNAL(entered(QModelIndex)),
-          this, SLOT(itemHovered(QModelIndex)));
-  connect(this, SIGNAL(viewportEntered()), this, SLOT(setMouseoverTarget()));
-  connect(this, SIGNAL(leaved()), this, SLOT(clearMouseoverTarget()));
+  connect(this, &QAbstractItemView::entered,
+          this, &DttTreeView::itemHovered);
+  connect(this, SIGNAL(viewportEntered),
+          this, SLOT(setMouseoverTarget));
+  connect(this, &EnhancedTreeView::leaved,
+          this, &DttTreeView::clearMouseoverTarget);
 }
 
 void DttTreeView::setPerspectiveWidget(PerspectiveWidget *widget) {
   _perspectiveWidget = widget;
 }
 
-void DttTreeView::setModel(QAbstractItemModel *model) {
-  EnhancedTreeView::setModel(model);
-  setMouseTracking(model);
+void DttTreeView::setModel(QAbstractItemModel *newModel) {
+  SharedUiItemsModel *m = SharedUiItemsModel::castEvenThroughProxies(model());
+  if (m) {
+    disconnect(m, &SharedUiItemsModel::itemChanged,
+               this, &DttTreeView::itemChanged);
+  }
+  EnhancedTreeView::setModel(newModel);
+  m = SharedUiItemsModel::castEvenThroughProxies(model());
+  if (m) {
+    connect(m, &SharedUiItemsModel::itemChanged,
+            this, &DttTreeView::itemChanged);
+  }
+  setMouseTracking(newModel);
   if (underMouse())
     setMouseoverTarget();
 }
@@ -33,7 +46,7 @@ void DttTreeView::itemHovered(const QModelIndex &index) {
 
 void DttTreeView::setMouseoverTarget(QString itemId)  {
   if (itemId.isNull())
-    _mousePosition = QModelIndex();
+    _mousePosition = QPersistentModelIndex();
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm) {
     QStringList itemIds;
@@ -44,7 +57,7 @@ void DttTreeView::setMouseoverTarget(QString itemId)  {
 }
 
 void DttTreeView::clearMouseoverTarget() {
-  _mousePosition = QModelIndex();
+  _mousePosition = QPersistentModelIndex();
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm)
     tm->setTarget(TargetManager::MouseOverTarget);
@@ -58,21 +71,22 @@ void DttTreeView::selectionChanged(const QItemSelection &selected,
   if (m) {
     foreach(const QModelIndex &index, deselected.indexes()) {
       if (index.column() == 0) {
-        _selectedItemsIndexes.removeAll(index);
+        _selectedItemsIds.removeAll(index.data(SharedUiItem::QualifiedIdRole)
+                                    .toString());
       }
     }
     foreach(const QModelIndex &index, selected.indexes()) {
-      if (index.column() == 0 && !_selectedItemsIndexes.contains(index)) {
-        _selectedItemsIndexes.append(index);
+      QString id = index.data(SharedUiItem::QualifiedIdRole).toString();
+      if (index.column() == 0 && !_selectedItemsIds.contains(id)) {
+        _selectedItemsIds.append(id);
       }
     }
   }
-  QStringList selectedItemsIds = buildSelectedItemsIdsList();
-  emit selectedItemsChanged(selectedItemsIds);
+  emit selectedItemsChanged(_selectedItemsIds);
   if (hasFocus()) {
     TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
     if (tm)
-      tm->setTarget(_perspectiveWidget, selectedItemsIds);
+      tm->setTarget(_perspectiveWidget, _selectedItemsIds);
   }
 }
 
@@ -80,7 +94,7 @@ void DttTreeView::focusInEvent(QFocusEvent *event) {
   EnhancedTreeView::focusInEvent(event);
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm) {
-    tm->setTarget(_perspectiveWidget, buildSelectedItemsIdsList());
+    tm->setTarget(_perspectiveWidget, _selectedItemsIds);
     // set mouseover target in case overed item's id has just changed (which is
     // the case when focus in event is received just after an item id widget
     // editor has been closed)
@@ -89,19 +103,23 @@ void DttTreeView::focusInEvent(QFocusEvent *event) {
   }
 }
 
-QStringList DttTreeView::buildSelectedItemsIdsList() const {
-  // the purpose of this method is to transform selection indexes into item ids
-  // ids cannot be kept as is because in case an item id changes, selection does
-  // not change in the indexes point of view and target becomes wrong
-  // LATER optimize for large selections, keeping ids list and subscribing to DocumentManager::itemChanged() to handle ids changes rather than rebuilding the whole list every time
-  QStringList selectedItemsIds;
-  selectedItemsIds.clear();
-  foreach (const QModelIndex &index, _selectedItemsIndexes) {
-    QString id = index.data(SharedUiItem::QualifiedIdRole).toString();
-    if (!id.isEmpty())
-      selectedItemsIds.append(id);
+void DttTreeView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
+  // Update current selection when an item id changes.
+  if (!oldItem.isNull()) { // new items cannot already be targeted
+    QString newId = newItem.qualifiedId(), oldId = oldItem.qualifiedId();
+    if (oldId != newId) { // only handle events where id changed
+      if (newItem.isNull()) { // item removed
+        _selectedItemsIds.removeAll(oldId);
+      } else { // item renamed
+        for (int i = 0; i < _selectedItemsIds.size(); ++i) {
+          QString &id = _selectedItemsIds[i];
+          if (id == oldId) {
+            id = newId;
+          }
+        }
+      }
+    }
   }
-  return selectedItemsIds;
 }
 
 void DttTreeView::focusOutEvent(QFocusEvent *event) {
@@ -114,6 +132,6 @@ void DttTreeView::focusOutEvent(QFocusEvent *event) {
 QString DttTreeView::mouseoverItemId() const {
   QAbstractItemModel *m = model();
   return _mousePosition.isValid() && m
-      ? m->data(_mousePosition, SharedUiItem::QualifiedIdRole).toString()
+      ? _mousePosition.data(SharedUiItem::QualifiedIdRole).toString()
       : QString();
 }

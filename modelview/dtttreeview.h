@@ -3,24 +3,28 @@
 
 #include "enhancedtreeview.h"
 #include "dtt/perspectivewidget.h"
+#include "modelview/shareduiitem.h"
+#include <QPersistentModelIndex>
 
 class TargetManager;
 
-// TODO comment
+/** Document-Target-Tool enabled TreeView, with features such as target
+ * management according to widget focus, selection and mouse over. */
 class LIBH6NCSUSHARED_EXPORT DttTreeView : public EnhancedTreeView {
   Q_OBJECT
   Q_DISABLE_COPY(DttTreeView)
   QPointer<PerspectiveWidget> _perspectiveWidget;
-  QModelIndex _mousePosition;
-  QModelIndexList _selectedItemsIndexes;
+  QPersistentModelIndex _mousePosition;
+  QStringList _selectedItemsIds;
 
 public:
   explicit DttTreeView(QWidget *parent = 0);
   void setPerspectiveWidget(PerspectiveWidget *widget);
-  void setModel(QAbstractItemModel *model);
+  void setModel(QAbstractItemModel *newModel);
   void focusInEvent(QFocusEvent *event);
   void focusOutEvent(QFocusEvent *event);
-  //QModelIndex mousePosition() const { return _mousePosition; }
+  //QStringList selectedItemsIds() const { return _selectedItemsIds; }
+  //QPersistentModelIndex mousePosition() const { return _mousePosition; }
 
 signals:
   void selectedItemsChanged(QStringList selectedItemsIds);
@@ -33,9 +37,9 @@ private slots:
   void itemHovered(const QModelIndex &index);
   void setMouseoverTarget(QString itemId = QString());
   void clearMouseoverTarget();
+  void itemChanged(SharedUiItem newItem, SharedUiItem oldItem);
 
 private:
-  QStringList buildSelectedItemsIdsList() const;
   QString mouseoverItemId() const;
 };
 
