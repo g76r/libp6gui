@@ -18,13 +18,14 @@ void DttTreeView::setPerspectiveWidget(PerspectiveWidget *widget) {
 }
 
 void DttTreeView::setModel(QAbstractItemModel *newModel) {
-  SharedUiItemsModel *m = SharedUiItemsModel::castEvenThroughProxies(model());
+  SharedUiItemsModel *m = _proxyModelHelper.realModel();
   if (m) {
     disconnect(m, &SharedUiItemsModel::itemChanged,
                this, &DttTreeView::itemChanged);
   }
   EnhancedTreeView::setModel(newModel);
-  m = SharedUiItemsModel::castEvenThroughProxies(model());
+  _proxyModelHelper.setApparentModel(newModel);
+  m = _proxyModelHelper.realModel();
   if (m) {
     connect(m, &SharedUiItemsModel::itemChanged,
             this, &DttTreeView::itemChanged);
@@ -119,6 +120,12 @@ void DttTreeView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
         }
       }
     }
+  }
+  // ensure new or modified item is visible
+  if (!newItem.isNull()) {
+    QModelIndex index = _proxyModelHelper.indexOf(newItem);
+    if (index.isValid())
+      scrollTo(index);
   }
 }
 

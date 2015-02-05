@@ -5,6 +5,7 @@
 #include "dtt/perspectivewidget.h"
 #include "modelview/shareduiitem.h"
 #include <QPersistentModelIndex>
+#include "modelview/shareduiitemsmodel.h"
 
 class TargetManager;
 
@@ -16,6 +17,7 @@ class LIBH6NCSUSHARED_EXPORT DttTreeView : public EnhancedTreeView {
   QPointer<PerspectiveWidget> _perspectiveWidget;
   QPersistentModelIndex _mousePosition;
   QStringList _selectedItemsIds;
+  SharedUiItemsProxyModelHelper _proxyModelHelper;
 
 public:
   explicit DttTreeView(QWidget *parent = 0);
