@@ -10,14 +10,14 @@
 class LIBH6NCSUSHARED_EXPORT SharedUiGraphicsItem : public QGraphicsObject {
   Q_OBJECT
   Q_DISABLE_COPY(SharedUiGraphicsItem)
-  // LATER declare id and qualifiedId as Q_PROPERTYs
+  // LATER declare id and qualifiedId as readonly Q_PROPERTYs
   SharedUiItem _uiItem;
 
 public:
   explicit SharedUiGraphicsItem(QGraphicsItem *parent = 0);
-  explicit SharedUiGraphicsItem(SharedUiItem uiItem, QGraphicsItem *parent = 0);
-  SharedUiItem uiItem() const { return _uiItem; }
-  void setUiItem(SharedUiItem uiItem) { _uiItem = uiItem; }
+  // cannot have a constructor seting SharedUiItem because setUiItem is virtual
+  SharedUiItem uiItem() const { return _uiItem;}
+  virtual void setUiItem(SharedUiItem uiItem);
   /** Syntaxic sugar - proxy on SharedUiItem */
   bool isNull() const { return _uiItem.isNull(); }
   /** Syntaxic sugar - proxy on SharedUiItem */

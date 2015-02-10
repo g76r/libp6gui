@@ -6,10 +6,9 @@ SharedUiGraphicsItem::SharedUiGraphicsItem(QGraphicsItem *parent)
   setAcceptHoverEvents(true);
 }
 
-SharedUiGraphicsItem::SharedUiGraphicsItem(
-    SharedUiItem uiItem, QGraphicsItem *parent)
-  : QGraphicsObject(parent), _uiItem(uiItem) {
-  setAcceptHoverEvents(true);
+void SharedUiGraphicsItem::setUiItem(SharedUiItem uiItem) {
+  prepareGeometryChange();
+  _uiItem = uiItem;
 }
 
 void SharedUiGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
