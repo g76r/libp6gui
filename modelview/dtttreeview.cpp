@@ -7,8 +7,8 @@
 DttTreeView::DttTreeView(QWidget *parent) : EnhancedTreeView(parent) {
   connect(this, &QAbstractItemView::entered,
           this, &DttTreeView::itemHovered);
-  connect(this, SIGNAL(viewportEntered),
-          this, SLOT(setMouseoverTarget));
+  connect(this, SIGNAL(viewportEntered()),
+          this, SLOT(setMouseoverTarget()));
   connect(this, &EnhancedTreeView::leaved,
           this, &DttTreeView::clearMouseoverTarget);
 }
