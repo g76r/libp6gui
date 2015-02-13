@@ -3,6 +3,8 @@
 #include <QGraphicsView>
 #include "dtt/targetmanager.h"
 #include "dttgraphicsview.h"
+#include <QGraphicsItem>
+#include "modelview/shareduiitem.h"
 
 DttGraphicsScene::DttGraphicsScene(QObject *parent) : QGraphicsScene(parent) {
   connect(this, SIGNAL(selectionChanged()),
@@ -13,23 +15,12 @@ void DttGraphicsScene::setPerspectiveWidget(PerspectiveWidget *widget) {
   _perspectiveWidget = widget;
 }
 
-void DttGraphicsScene::addItem(SharedUiGraphicsItem *item) {
-  QGraphicsScene::addItem(item);
-  _sharedUiItems.append(item);
-}
-
-void DttGraphicsScene::removeItem(SharedUiGraphicsItem *item) {
-  QGraphicsScene::removeItem(item);
-  _sharedUiItems.removeAll(item);
-}
-
 void DttGraphicsScene::propagateSelectionChanged() {
   QStringList ids;
   foreach(QGraphicsItem *i, selectedItems()) {
-    SharedUiGraphicsItem *sui = static_cast<SharedUiGraphicsItem*>(i);
-    // LATER do the lookup in a fast collection such as QSet
-    if (_sharedUiItems.contains(sui)) {
-      ids.append(sui->qualifiedId());
+    QString qualifiedId = i->data(SharedUiItem::QualifiedIdRole).toString();
+    if (!qualifiedId.isEmpty()) {
+      ids.append(qualifiedId);
     }
   }
   _selectedItemsIds = ids;

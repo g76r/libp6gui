@@ -42,7 +42,6 @@ SOURCES += \
     modelview/shareduiitemwidgetmapper.cpp \
     widget/collapsiblegroupbox.cpp \
     modelview/dtttreeview.cpp \
-    modelview/shareduigraphicsitem.cpp \
     modelview/dttgraphicsview.cpp \
     modelview/dttgraphicsscene.cpp \
     dtt/shareduiitemseditablemodel.cpp \
@@ -70,7 +69,6 @@ HEADERS +=\
     modelview/shareduiitemwidgetmapper.h \
     widget/collapsiblegroupbox.h \
     modelview/dtttreeview.h \
-    modelview/shareduigraphicsitem.h \
     modelview/dttgraphicsview.h \
     modelview/dttgraphicsscene.h \
     dtt/shareduiitemseditablemodel.h \

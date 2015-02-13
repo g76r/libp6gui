@@ -2,13 +2,18 @@
 #define DTTGRAPHICSSCENE_H
 
 #include <QGraphicsScene>
-#include "shareduigraphicsitem.h"
 #include "dtt/perspectivewidget.h"
 
+/** FIXME doc
+ *
+ * To have target management working, this class needs that every graphics item
+ * representing a SharedUiItem return its qualified id through
+ * QGraphicsItem::data(SharedUiItem::QualifiedIdRole), for instance by setting
+ * the data in its constructor or when a SharedUiItem is affected to it.
+ */
 class LIBH6NCSUSHARED_EXPORT DttGraphicsScene : public QGraphicsScene {
   Q_OBJECT
   Q_DISABLE_COPY(DttGraphicsScene)
-  QList<SharedUiGraphicsItem*> _sharedUiItems;
   QPointer<PerspectiveWidget> _perspectiveWidget;
   QStringList _selectedItemsIds, _mouseoverItemsIds;
 
@@ -17,11 +22,6 @@ public:
   void setPerspectiveWidget(PerspectiveWidget *widget);
   PerspectiveWidget *perspectiveWidget() const {
     return _perspectiveWidget.data(); }
-  QList<SharedUiGraphicsItem*> sharedUiItems() const { return _sharedUiItems; }
-  using QGraphicsScene::addItem;
-  void addItem(SharedUiGraphicsItem *item);
-  using QGraphicsScene::removeItem;
-  void removeItem(SharedUiGraphicsItem *item);
   QStringList selectedItemsIds() const { return _selectedItemsIds; } // FIXME must recompute from indexes since an item id can change
   QStringList mouseoverItemsIds() const { return _mouseoverItemsIds; }
 
