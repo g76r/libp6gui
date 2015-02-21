@@ -48,7 +48,9 @@ SOURCES += \
     util/failsafeundocommand.cpp \
     widget/enhancedtextedit.cpp \
     widget/enhancedplaintextedit.cpp \
-    dtt/dttdocumentmanager.cpp
+    dtt/dttdocumentmanager.cpp \
+    graphics/graphvizedgegraphicsitem.cpp \
+    graphics/graphvizgraphicslayout.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -75,7 +77,9 @@ HEADERS +=\
     util/failsafeundocommand.h \
     widget/enhancedtextedit.h \
     widget/enhancedplaintextedit.h \
-    dtt/dttdocumentmanager.h
+    dtt/dttdocumentmanager.h \
+    graphics/graphvizedgegraphicsitem.h \
+    graphics/graphvizgraphicslayout.h
 
 unix {
     target.path = /usr/lib
