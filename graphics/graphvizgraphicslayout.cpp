@@ -3,6 +3,8 @@
 #include <QProcess>
 #include <QBuffer>
 
+#define DPI 72.0
+
 /* Implementation note:
  * This is a custom QGraphicsLayout.
  *
@@ -142,8 +144,8 @@ QSizeF GraphvizGraphicsLayout::sizeHint(Qt::SizeHint which,
   Q_UNUSED(constraint)
   if (which == Qt::PreferredSize) {
     const_cast<GraphvizGraphicsLayout*>(this)->computeLayout();
-    qDebug() << "******** GraphvizGraphicsLayout::sizeHint(preferred)"
-             << _currentLayout._graphSize;
+    //qDebug() << "******** GraphvizGraphicsLayout::sizeHint(preferred)"
+    //         << _currentLayout._graphSize;
     return _currentLayout._graphSize;
   }
   return QSizeF();
@@ -168,7 +170,8 @@ void GraphvizGraphicsLayout::computeLayout() {
     if (!nodeName.isEmpty()) { // should always be true
       inGraph += "  \""+nodeName+"\" [";
       // TODO setting width and height should be an option
-      qreal width = node->preferredWidth(), height = node->preferredHeight();
+      qreal width = node->preferredWidth()/DPI,
+          height = node->preferredHeight()/DPI;
       if (width > 0)
         inGraph += "width="+QString::number(width)+" ";
       if (height > 0)
@@ -192,7 +195,7 @@ void GraphvizGraphicsLayout::computeLayout() {
   // B-splines cannot be converted to cubic Bezier for QPainterPath support
   QByteArray outGraph = execGraphivzEngine(
         _graphvizCommand, QStringList() << "-Tplain"
-        << "-Granksep=60" // TODO make ranksep a parameter
+        //<< "-Granksep=1" // TODO make ranksep a parameter
         << "-Gsplines=spline"
         << "-Nshape=box" // TODO make box shape a param (used for edges cliping)
         << "-Nstyle=rounded" // TODO same
@@ -317,7 +320,7 @@ GraphvizGraphicsLayout::Layout GraphvizGraphicsLayout::parseGraphvizOutput(
     if (fields.size() < 4)
       continue; // LATER this should not occur and should be an error
     if (fields[0] == "graph") {
-      scale = fields[1].toDouble();
+      scale = fields[1].toDouble()*DPI;
       layout._graphSize.setWidth(fields[2].toDouble()*scale);
       layout._graphSize.setHeight(fields[3].toDouble()*scale);
     } else if (fields[0] == "node") {
