@@ -197,6 +197,7 @@ void GraphvizGraphicsLayout::computeLayout() {
         _graphvizCommand, QStringList() << "-Tplain"
         //<< "-Granksep=1" // TODO make ranksep a parameter
         << "-Gsplines=spline"
+        << "-Eheadclip=false" << "-Etailclip=false" // TODO make cliping a param
         << "-Nshape=box" // TODO make box shape a param (used for edges cliping)
         << "-Nstyle=rounded" // TODO same
         << "-Edir=none", // make edge ends the closer possible to nodes
