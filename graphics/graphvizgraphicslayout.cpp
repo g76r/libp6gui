@@ -188,9 +188,16 @@ void GraphvizGraphicsLayout::computeLayout() {
   inGraph.append("}\n");
   //qDebug() << "input graphviz graph: " << inGraph;
   // TODO set environment to ensure UTF8
-  // TODO make ranksep a parameter
+  // -Gsplines must be "spline" or "polyline", avoid "curved" since the produced
+  // B-splines cannot be converted to cubic Bezier for QPainterPath support
   QByteArray outGraph = execGraphivzEngine(
-        _graphvizCommand, QStringList() << "-Tplain" << "-Granksep=60",
+        _graphvizCommand, QStringList() << "-Tplain"
+        << "-Granksep=60" // TODO make ranksep a parameter
+        << "-Gsplines=spline"
+        << "-Nshape=box" // TODO make box shape a param (used for edges cliping)
+        << "-Nstyle=rounded" // TODO same
+        << "-Edir=none", // make edge ends the closer possible to nodes
+        //<< "-Earrowhead=none" << "-Earrowtail=none",
         inGraph.toUtf8());
   Layout newLayout = parseGraphvizOutput(outGraph);
   _currentLayout = newLayout;
@@ -209,8 +216,8 @@ void GraphvizGraphicsLayout::applyLayout() {
   foreach(QGraphicsLayoutItem *node, _currentLayout._nodesPos.keys()) {
     QRectF geometry(fromLayoutCoord(_currentLayout._nodesPos.value(node)),
                     _currentLayout._nodesSize.value(node));
-    qDebug() << "*** applygeometry to node:" << _nodesNames.value(node)
-             << geometry;
+    //qDebug() << "*** applygeometry to node:" << _nodesNames.value(node)
+    //         << geometry;
     node->setGeometry(geometry);
   }
   foreach (GraphvizEdgeGraphicsItem *edge, _currentLayout._edgePoints.keys()) {
@@ -331,11 +338,12 @@ GraphvizGraphicsLayout::Layout GraphvizGraphicsLayout::parseGraphvizOutput(
         continue; // LATER should be an error
       QList<QPointF> points;
       for (int i = 0; i < n; ++i) {
-        QPointF point(fields[4+2*n].toDouble()*scale,
-            fields[4+2*n+1].toDouble()*scale);
+        QPointF point(fields[4+2*i].toDouble()*scale,
+            fields[4+2*i+1].toDouble()*scale);
         points << fromPsCoord(point, layout._graphSize);
       }
       layout._edgePoints.insert(_edges[edgeIndex], points);
+      // TODO process label pos only if present
       QPointF pos(fields[4+2*n+3].toDouble()*scale,
           fields[4+2*n+4].toDouble()*scale);
       layout._edgeLabelsPos.insert(_edges[edgeIndex++],

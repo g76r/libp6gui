@@ -4,6 +4,8 @@
 #include <QGraphicsItem>
 #include <QGraphicsLayoutItem>
 #include "libh6ncsu_global.h"
+#include <QPainterPath>
+#include <QRectF>
 
 class GraphvizGraphicsLayout;
 
@@ -17,6 +19,8 @@ class LIBH6NCSUSHARED_EXPORT GraphvizEdgeGraphicsItem : public QGraphicsItem {
   QPointF _labelPos;
   QList<QPointF> _controlPoints;
   GraphvizGraphicsLayout *_parentLayout;
+  QPainterPath _path;
+  QRectF _boundingRect;
 
 public:
   GraphvizEdgeGraphicsItem(QGraphicsItem *parent, QGraphicsLayoutItem *tail,
