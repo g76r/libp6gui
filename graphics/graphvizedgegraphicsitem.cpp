@@ -76,8 +76,8 @@ void GraphvizEdgeGraphicsItem::paint(
   //painter->drawRect(boundingRect());
   painter->setPen(pen);
   painter->drawPath(_path);
-  painter->setPen(Qt::yellow);
-  painter->drawEllipse(_labelPos, 5, 5);
+  //painter->setPen(Qt::yellow);
+  //painter->drawEllipse(_labelPos, 5, 5);
   // TODO head and tails decorations (arrows)
   // TODO color and color gradient
   // LATER draw label
