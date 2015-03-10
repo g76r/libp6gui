@@ -12,7 +12,7 @@ GraphvizEdgeGraphicsItem::GraphvizEdgeGraphicsItem(
     QGraphicsItem *parent, QGraphicsLayoutItem *tail, QGraphicsLayoutItem *head,
     QString label)
   : QGraphicsItem(parent), _tail(tail), _head(head), _label(label),
-    _parentLayout(0) {
+    _parentLayout(0), _penStyle(Qt::SolidLine) {
 }
 
 GraphvizEdgeGraphicsItem::~GraphvizEdgeGraphicsItem() {
@@ -74,6 +74,7 @@ void GraphvizEdgeGraphicsItem::paint(
   pen.setWidth(isSelected() ? SELECTED_PENWIDTH : NORMAL_PENWIDTH);
   //painter->setPen(Qt::red);
   //painter->drawRect(boundingRect());
+  pen.setStyle(penStyle());
   painter->setPen(pen);
   painter->drawPath(_path);
   //painter->setPen(Qt::yellow);

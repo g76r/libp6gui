@@ -21,6 +21,7 @@ class LIBH6NCSUSHARED_EXPORT GraphvizEdgeGraphicsItem : public QGraphicsItem {
   GraphvizGraphicsLayout *_parentLayout;
   QPainterPath _path;
   QRectF _boundingRect;
+  Qt::PenStyle _penStyle;
 
 public:
   GraphvizEdgeGraphicsItem(QGraphicsItem *parent, QGraphicsLayoutItem *tail,
@@ -40,6 +41,8 @@ public:
   void setControlPoints(QList<QPointF> points);
   GraphvizGraphicsLayout *parentLayout() const { return _parentLayout; }
   void setParentLayout(GraphvizGraphicsLayout *l) { _parentLayout = l; }
+  Qt::PenStyle penStyle() const { return _penStyle; }
+  void setPenStyle(Qt::PenStyle penStyle) { _penStyle = penStyle; }
 };
 
 QDebug LIBH6NCSUSHARED_EXPORT operator<<(
