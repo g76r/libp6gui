@@ -15,14 +15,15 @@ unix {
   MOC_DIR = ../build-libh6ncsu-unix/moc
 }
 
-INCLUDEPATH += ../libqtpf ../libqtssu
+INCLUDEPATH += ../qron/libqtpf ../qron/libqtssu
 win32:debug:LIBS += -L../build-libqtpf-windows/libqtpf/debug \
   -L../build-libqtpf-windows/libqtpfsql/debug \
   -L../build-libqtssu-windows/debug
 win32:release:LIBS += -L../build-libqtpf-windows/libqtpf/release \
   -L../build-libqtpf-windows/libqtpfsql/release \
   -L../build-libqtssu-windows/release
-unix:LIBS += -L../libqtpf/libqtpf -L../libqtpf/libqtpfsql -L../libqtssu
+unix:LIBS += -L../qron/libqtpf/libqtpf -L../qron/libqtpf/libqtpfsql \
+   -L../qron/libqtssu
 LIBS += -lqtpf -lqtssu
 
 SOURCES += \
