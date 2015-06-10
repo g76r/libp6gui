@@ -16,14 +16,13 @@ unix {
 }
 
 INCLUDEPATH += ../qron/libqtpf ../qron/libqtssu
-win32:debug:LIBS += -L../build-libqtpf-windows/libqtpf/debug \
-  -L../build-libqtpf-windows/libqtpfsql/debug \
+win32:debug:LIBS += -L../build-libqtpf-windows/debug \
+  -L../build-libqtpfsql-windows/debug \
   -L../build-libqtssu-windows/debug
-win32:release:LIBS += -L../build-libqtpf-windows/libqtpf/release \
-  -L../build-libqtpf-windows/libqtpfsql/release \
+win32:release:LIBS += -L../build-libqtpf-windows/release \
+  -L../build-libqtpfsql-windows/release \
   -L../build-libqtssu-windows/release
-unix:LIBS += -L../qron/libqtpf/libqtpf -L../qron/libqtpf/libqtpfsql \
-   -L../qron/libqtssu
+unix:LIBS += -L../qron/libqtpf -L../qron/libqtssu
 LIBS += -lqtpf -lqtssu
 
 SOURCES += \
