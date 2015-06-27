@@ -1,6 +1,7 @@
 # Copyright 2014-2015 Hallowyn and others.
 
 QT += widgets
+CONFIG += c++11
 
 TARGET = h6ncsu
 TEMPLATE = lib
