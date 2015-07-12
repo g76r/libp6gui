@@ -15,10 +15,12 @@
 #define SHAREDUIITEMSEDITABLEMODEL_H
 
 #include <QIdentityProxyModel>
-#include "dttdocumentmanager.h"
+#include "modelview/shareduiitemdocumentmanager.h"
+#include "libh6ncsu_global.h"
 
+// FIXME move to qtssu/modelview, or even include it within SharedUiItemsModel
 /** Proxy model to wrap SharedUiItemsModel subclasses and add them user
- * edition features using DocumentManager::changeItemByUiData().
+ * edition features using SharedUiItemDocumentManager::changeItemByUiData().
  *
  * Think of this class (and of QIdentityProxyModel subclasses in general) as
  * an aspect added to a base/source SharedUiItemsModel.
@@ -26,18 +28,19 @@
  * @see SharedUiItemsModel
  * @see SharedUiItemsTableModel
  * @see SharedUiItemsTreeModel
- * @see DocumentManager
+ * @see SharedUiItemDocumentManager
  */
 class LIBH6NCSUSHARED_EXPORT SharedUiItemsEditableModel
     : public QIdentityProxyModel {
   Q_OBJECT
   Q_DISABLE_COPY(SharedUiItemsEditableModel)
-  DttDocumentManager *_documentManager;
+  SharedUiItemDocumentManager *_documentManager;
 
 public:
   explicit SharedUiItemsEditableModel(QObject *parent = 0);
-  DttDocumentManager *documentManager() const { return _documentManager; }
-  void setDocumentManager(DttDocumentManager *documentManager) {
+  SharedUiItemDocumentManager *documentManager() const {
+    return _documentManager; }
+  void setDocumentManager(SharedUiItemDocumentManager *documentManager) {
     _documentManager = documentManager; }
   bool setData(const QModelIndex &index, const QVariant &value,
                int role = Qt::EditRole);
