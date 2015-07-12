@@ -47,7 +47,6 @@ SOURCES += \
     modelview/dtttreeview.cpp \
     modelview/dttgraphicsview.cpp \
     modelview/dttgraphicsscene.cpp \
-    dtt/shareduiitemseditablemodel.cpp \
     util/failsafeundocommand.cpp \
     widget/enhancedtextedit.cpp \
     widget/enhancedplaintextedit.cpp \
@@ -76,7 +75,6 @@ HEADERS +=\
     modelview/dtttreeview.h \
     modelview/dttgraphicsview.h \
     modelview/dttgraphicsscene.h \
-    dtt/shareduiitemseditablemodel.h \
     util/failsafeundocommand.h \
     widget/enhancedtextedit.h \
     widget/enhancedplaintextedit.h \
