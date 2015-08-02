@@ -52,7 +52,8 @@ SOURCES += \
     widget/enhancedplaintextedit.cpp \
     dtt/dttdocumentmanager.cpp \
     graphics/graphvizedgegraphicsitem.cpp \
-    graphics/graphvizgraphicslayout.cpp
+    graphics/graphvizgraphicslayout.cpp \
+    widget/interruptiblewaitwidget.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -80,9 +81,13 @@ HEADERS +=\
     widget/enhancedplaintextedit.h \
     dtt/dttdocumentmanager.h \
     graphics/graphvizedgegraphicsitem.h \
-    graphics/graphvizgraphicslayout.h
+    graphics/graphvizgraphicslayout.h \
+    widget/interruptiblewaitwidget.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+FORMS += \
+    widget/interruptiblewaitwidget.ui
