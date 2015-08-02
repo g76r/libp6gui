@@ -49,7 +49,6 @@ class LIBH6NCSUSHARED_EXPORT DttDocumentManager
 
   TargetManager *_targetManager;
   QUndoStack *_undoStack;
-  QSet<PerspectiveWidget*> _registredWidgets;
   QHash<QString,QPointer<Tool> > _tools;
   QList<QPointer<Tool> > _permanentTools;
   QPointer<Tool> _currentTool, _tempTool;
@@ -59,13 +58,10 @@ class LIBH6NCSUSHARED_EXPORT DttDocumentManager
 public:
   explicit DttDocumentManager(QObject *parent = 0);
   TargetManager *targetManager() { return _targetManager; }
-  virtual void registerWidget(PerspectiveWidget *widget);
   QUndoStack *undoStack() { return _undoStack; }
   /** @return true if the key was intercepted, false if it was ignored and thus
     * should be left to standard Qt processing */
   bool keyPressEvent(QKeyEvent *event);
-  const QSet<PerspectiveWidget*> perspectiveWidgets() const {
-    return _registredWidgets; }
   QPointer<Tool> currentTool() { return _currentTool; }
   /** return list of permanent (i.e. not drag'n droped or data-related) tools
     * @warning some pointers in the list may be null */
@@ -77,7 +73,6 @@ public:
   void setGlobalKey(int key, ToolButton *toolButton,
                     Qt::KeyboardModifiers modifiers = Qt::NoModifier);
   void clearGlobalKey(int key);
-  virtual void unregisterWidget(PerspectiveWidget *widget);
   void addTool(QPointer<Tool> tool, bool permanent = false);
   void addTool(Tool *tool, bool permanent = false) {
     addTool(QPointer<Tool>(tool), permanent); }

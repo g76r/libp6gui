@@ -36,15 +36,6 @@ QPointer<Tool> DttDocumentManager::toolById(const QString id) {
   return p;
 }
 
-void DttDocumentManager::registerWidget(PerspectiveWidget *widget) {
-  _registredWidgets.insert(widget);
-}
-
-void DttDocumentManager::unregisterWidget(PerspectiveWidget *widget) {
-  if (widget)
-    _registredWidgets.remove(widget);
-}
-
 bool DttDocumentManager::keyPressEvent(QKeyEvent *event) {
   // LATER handle many keyboard layouts, which probably need to write
   // non-portable code, to catch QEvent::KeyboardLayoutChange, and to have

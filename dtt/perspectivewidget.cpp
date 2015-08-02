@@ -9,17 +9,9 @@ PerspectiveWidget::PerspectiveWidget(QWidget *parent)
   : QWidget(parent), _documentManager(0) {
 }
 
-PerspectiveWidget::~PerspectiveWidget() {
-  if (_documentManager)
-    _documentManager->unregisterWidget(this);
-}
-
 void PerspectiveWidget::setDocumentManager(DttDocumentManager *documentManager) {
-  if (_documentManager)
-    _documentManager->unregisterWidget(this);
   _documentManager = documentManager;
   if (documentManager) {
-    _documentManager->registerWidget(this);
     if (_documentManager->mainWindow())
       setWindowIcon(_documentManager->mainWindow()->windowIcon());
   } else

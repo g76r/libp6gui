@@ -25,7 +25,6 @@ private:
 
 public:
   explicit PerspectiveWidget(QWidget *parent);
-  virtual ~PerspectiveWidget();
   virtual void setDocumentManager(DttDocumentManager *documentManager);
   QPointer<DttDocumentManager> documentManager() const;
   /** Intercept keystrokes to give them to DocumentManager to handle global

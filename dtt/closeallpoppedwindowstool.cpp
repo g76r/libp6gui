@@ -1,6 +1,7 @@
 #include "closeallpoppedwindowstool.h"
 #include "dttdocumentmanager.h"
 #include "perspectivewidget.h"
+#include <QApplication>
 
 CloseAllPoppedWindowsTool::CloseAllPoppedWindowsTool(DttDocumentManager *parent)
   : Tool(parent, "closeAllPoppedWindows") {
@@ -10,8 +11,10 @@ CloseAllPoppedWindowsTool::CloseAllPoppedWindowsTool(DttDocumentManager *parent)
 }
 
 void CloseAllPoppedWindowsTool::trigger(TargetManager::TargetType targetType) {
-  foreach (QWidget *w, documentManager()->perspectiveWidgets())
-    if (!w->parent())
-      w->close();
+  foreach (QWidget *w, QApplication::topLevelWidgets()) {
+    auto pw = qobject_cast<PerspectiveWidget*>(w);
+    if (pw)
+      pw->close();
+  }
   Tool::trigger(targetType);
 }

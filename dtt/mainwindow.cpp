@@ -3,6 +3,7 @@
 #include "tool.h"
 #include <QLabel>
 #include "dttdocumentmanager.h"
+#include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
@@ -20,9 +21,11 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   // closing subwindows before main window is needed because subwindows may
   // rely on resources allocated by main window, such as the DocumentManager,
   // some QAbstractItemModels, loaded configuration, etc.
-  foreach (QWidget *w, documentManager()->perspectiveWidgets())
-    if (!w->parent())
-      w->close();
+  foreach (QWidget *w, QApplication::topLevelWidgets()) {
+    auto pw = qobject_cast<PerspectiveWidget*>(w);
+    if (pw)
+      pw->close();
+  }
   // Note: creating a label here is a hack to ensure that MainWindow and chidren
   // destructors will all be called, even on platforms (at less Windows) where
   // closing the last window kills the program
