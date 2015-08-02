@@ -7,9 +7,9 @@
 #include <QPropertyAnimation>
 #include <QDrag>
 #include <QMimeData>
-#include "dttdocumentmanager.h"
+#include "dtpdocumentmanager.h"
 
-ToolButton::ToolButton(QWidget *parent, DttDocumentManager *documentManager)
+ToolButton::ToolButton(QWidget *parent, DtpDocumentManager *documentManager)
   : QAbstractButton(parent), _mouseCurrentlyOver(false),
     _flashBackground(Qt::lightGray), _targetType(TargetManager::PrimaryTarget),
     _key(0), _modifiers(Qt::NoModifier) {
@@ -26,14 +26,12 @@ QSize ToolButton::sizeHint() const {
   return QSize(length, length);
 }
 
-void ToolButton::setTool(QPointer<Tool> tool) {
+void ToolButton::setTool(QPointer<DtpAction> tool) {
   clearTool();
   _tool = tool;
   if (!_tool.isNull()) {
     connect(_tool.data(), SIGNAL(changed()), this, SLOT(toolChanged()));
     connect(_tool.data(), SIGNAL(triggered()), this, SLOT(toolTriggered()));
-    if (!_tool->acceptedTargets().contains(_targetType))
-      _targetType = _tool->preferredTarget();
     toolChanged();
   }
 }
@@ -48,29 +46,12 @@ void ToolButton::clearTool() {
   _tool.clear();
 }
 
-void ToolButton::setGlobalKey(int key, Qt::KeyboardModifiers modifiers) {
-  if (_key && _documentManager) {
-    _documentManager->clearGlobalKey(_key);
-  }
-  _key = key;
-  _modifiers = modifiers;
-  if (_key) {
-    // LATER better keyLabel, including modifiers
-    _keyLabel = (_key > 32 && _key < 128) ? QChar((char)_key) : '?';
-    if (_documentManager)
-      _documentManager->setGlobalKey(_key, this, _modifiers);
-  } else {
-    _keyLabel = QString();
-  }
-  toolChanged();
-}
-
 void ToolButton::toolChanged() {
-  QString toolTip = _tool ? _tool.data()->label() : QString();
+  QString toolTip = _tool ? _tool.data()->toolTip() : QString();
   if (!_keyLabel.isNull())
     toolTip.append(" (").append(_keyLabel).append(')');
   setToolTip(toolTip);
-  _currentlyTriggerable = _tool ? _tool->triggerable(_targetType) : false;
+  _currentlyTriggerable = _tool ? _tool.data()->isEnabled() : false;
   update();
 }
 
@@ -157,8 +138,6 @@ void ToolButton::mouseReleaseEvent(QMouseEvent *e) {
       // LATER add a popup menu or the like rather than right-click switch
       _targetType = _targetType == TargetManager::PrimaryTarget
           ? TargetManager::MouseOverTarget : TargetManager::PrimaryTarget;
-      if (_tool && !_tool->acceptedTargets().contains(_targetType))
-        _targetType = _tool->preferredTarget();
       break;
     default:
       ;
@@ -169,7 +148,7 @@ void ToolButton::mouseReleaseEvent(QMouseEvent *e) {
 
 void ToolButton::trigger() {
   if (_tool)
-    _tool->trigger(_targetType);
+    _tool->trigger();
 }
 
 void ToolButton::enterEvent(QEvent *e) {
@@ -193,7 +172,7 @@ void ToolButton::mouseMoveEvent(QMouseEvent *e) {
       >= QApplication::startDragDistance()) {
     QDrag d(this);
     QMimeData *md = new QMimeData;
-    md->setText(_tool.data()->label());
+    md->setText(_tool.data()->text());
     md->setData(MIMETYPE_TOOL_ID, _tool.data()->id().toUtf8());
     d.setMimeData(md);
     QPixmap pm = _tool.data()->icon().pixmap(iconSize().width());
@@ -235,11 +214,11 @@ void ToolButton::dropEvent(QDropEvent *e) {
     e->ignore();
     return;
   }
-  QPointer<Tool> tool;
+  QPointer<DtpAction> tool;
   if (_documentManager) {
     QString id = QString::fromUtf8(e->mimeData()->data(MIMETYPE_TOOL_ID));
     if (!id.isEmpty())
-      tool = _documentManager.data()->toolById(id);
+      tool = _documentManager.data()->actionById(id);
   }
   if (tool.isNull()) {
     e->ignore();
@@ -256,26 +235,22 @@ void ToolButton::targetChanged(TargetManager::TargetType targetType,
   Q_UNUSED(perspectiveWidget)
   Q_UNUSED(itemIds)
   //qDebug() << "ToolButton::targetChanged" << (_tool ? _tool->id() : "-") << targetType << perspectiveWidget << itemIds;
-  if (targetType == _targetType && _tool && _tool->enabled()) {
-    bool triggerable = _tool->triggerable(targetType);
+  if (targetType == _targetType && _tool && _tool->isEnabled()) {
+    bool triggerable = _tool->isEnabled();
     //qDebug() << "--" << triggerable << _currentlyTriggerable;
     if (triggerable != _currentlyTriggerable)
       toolChanged();
   }
 }
 
-void ToolButton::setDocumentManager(DttDocumentManager *documentManager) {
+void ToolButton::setDocumentManager(DtpDocumentManager *documentManager) {
   if (_documentManager) {
-    disconnect(_documentManager->targetManager(), SIGNAL(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)),
-               this, SLOT(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)));
-    if (_key)
-      _documentManager->clearGlobalKey(_key);
+    disconnect(_documentManager->targetManager(), &TargetManager::targetChanged,
+               this, &ToolButton::targetChanged);
   }
   _documentManager = documentManager;
   if (_documentManager) {
-    connect(_documentManager->targetManager(), SIGNAL(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)),
-            this, SLOT(targetChanged(TargetManager::TargetType,PerspectiveWidget*,QStringList)));
-    if (_key)
-      _documentManager->setGlobalKey(_key, this, _modifiers);
+    connect(_documentManager->targetManager(), &TargetManager::targetChanged,
+            this, &ToolButton::targetChanged);
   }
 }

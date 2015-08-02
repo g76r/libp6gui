@@ -1,17 +1,17 @@
-#ifndef DTTGRAPHICSVIEW_H
-#define DTTGRAPHICSVIEW_H
+#ifndef DTPGRAPHICSVIEW_H
+#define DTPGRAPHICSVIEW_H
 
 #include "libh6ncsu_global.h"
 #include "enhancedgraphicsview.h"
-#include "dtt/perspectivewidget.h"
+#include "dtp/perspectivewidget.h"
 
-class LIBH6NCSUSHARED_EXPORT DttGraphicsView : public EnhancedGraphicsView {
+class LIBH6NCSUSHARED_EXPORT DtpGraphicsView : public EnhancedGraphicsView {
   Q_OBJECT
-  Q_DISABLE_COPY(DttGraphicsView)
+  Q_DISABLE_COPY(DtpGraphicsView)
   QPointer<PerspectiveWidget> _perspectiveWidget;
 
 public:
-  explicit DttGraphicsView(QWidget *parent = 0);
+  explicit DtpGraphicsView(QWidget *parent = 0);
   void focusInEvent(QFocusEvent *event);
   void focusOutEvent(QFocusEvent *event);
   void enterEvent(QEvent *event);
@@ -19,9 +19,9 @@ public:
   void setScene(QGraphicsScene *scene);
 
 signals:
-  /** same as DttGraphicsScene::selectedItemsChanged() but only emited when
+  /** Same as DtpGraphicsScene::selectedItemsChanged() but only emited when
    * this view has focus */
   void selectedItemsChanged(QStringList selectedItemsIds);
 };
 
-#endif // DTTGRAPHICSVIEW_H
+#endif // DTPGRAPHICSVIEW_H

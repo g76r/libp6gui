@@ -1,26 +1,26 @@
-#ifndef DTTTREEVIEW_H
-#define DTTTREEVIEW_H
+#ifndef DTPTREEVIEW_H
+#define DTPTREEVIEW_H
 
 #include "enhancedtreeview.h"
-#include "dtt/perspectivewidget.h"
+#include "dtp/perspectivewidget.h"
 #include "modelview/shareduiitem.h"
 #include <QPersistentModelIndex>
 #include "modelview/shareduiitemsmodel.h"
 
 class TargetManager;
 
-/** Document-Target-Tool enabled TreeView, with features such as target
+/** Document-Target-Perspective enabled TreeView, with features such as target
  * management according to widget focus, selection and mouse over. */
-class LIBH6NCSUSHARED_EXPORT DttTreeView : public EnhancedTreeView {
+class LIBH6NCSUSHARED_EXPORT DtpTreeView : public EnhancedTreeView {
   Q_OBJECT
-  Q_DISABLE_COPY(DttTreeView)
+  Q_DISABLE_COPY(DtpTreeView)
   QPointer<PerspectiveWidget> _perspectiveWidget;
   QPersistentModelIndex _mousePosition;
   QStringList _selectedItemsIds;
   SharedUiItemsProxyModelHelper _proxyModelHelper;
 
 public:
-  explicit DttTreeView(QWidget *parent = 0);
+  explicit DtpTreeView(QWidget *parent = 0);
   void setPerspectiveWidget(PerspectiveWidget *widget);
   void setModel(QAbstractItemModel *newModel);
   void focusInEvent(QFocusEvent *event);
@@ -45,4 +45,4 @@ private:
   QString mouseoverItemId() const;
 };
 
-#endif // DTTTREEVIEW_H
+#endif // DTPTREEVIEW_H

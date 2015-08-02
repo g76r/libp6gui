@@ -1,23 +1,27 @@
-#include "mainwindow.h"
-#include "dttdocumentmanager.h"
-#include "tool.h"
+#include "dtpmainwindow.h"
+#include "dtpdocumentmanager.h"
+#include "dtpaction.h"
 #include <QLabel>
-#include "dttdocumentmanager.h"
 #include <QApplication>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+static DtpMainWindow *singletonInstance = 0;
+
+DtpMainWindow::DtpMainWindow(QWidget *parent) : QMainWindow(parent) {
+  singletonInstance = this;
 }
 
-MainWindow::MainWindow(DttDocumentManager *documentManager, QWidget *parent)
+DtpMainWindow::DtpMainWindow(DtpDocumentManager *documentManager,
+                             QWidget *parent)
   : QMainWindow(parent) {
-  setDocumentManager(documentManager);
+  addDocumentManager(documentManager);
 }
 
-MainWindow::~MainWindow() {
+DtpMainWindow::~DtpMainWindow() {
+  singletonInstance = 0;
 }
 
 // LATER check if document should be saved and ignore event do prevent closing
-void MainWindow::closeEvent(QCloseEvent *event) {
+void DtpMainWindow::closeEvent(QCloseEvent *event) {
   // closing subwindows before main window is needed because subwindows may
   // rely on resources allocated by main window, such as the DocumentManager,
   // some QAbstractItemModels, loaded configuration, etc.
@@ -40,20 +44,17 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   QMainWindow::closeEvent(event);
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event) {
-  if (!_documentManager || !_documentManager->keyPressEvent(event))
-    QMainWindow::keyPressEvent(event);
+void DtpMainWindow::windowFocused() {
 }
 
-void MainWindow::windowFocused() {
+QList<DtpDocumentManager*> DtpMainWindow::documentManagers() const {
+  return _documentManagers;
 }
 
-DttDocumentManager *MainWindow::documentManager() const {
-  return _documentManager.data();
+void DtpMainWindow::addDocumentManager(DtpDocumentManager *documentManager) {
+  _documentManagers.append(documentManager);
 }
 
-void MainWindow::setDocumentManager(DttDocumentManager *documentManager) {
-  _documentManager = documentManager;
-  if (documentManager)
-    documentManager->setMainWindow(this);
+DtpMainWindow *DtpMainWindow::instance() {
+  return singletonInstance;
 }

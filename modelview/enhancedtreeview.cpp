@@ -1,6 +1,4 @@
 #include "enhancedtreeview.h"
-#include "dtt/perspectivewidget.h"
-#include "dtt/mainwindow.h"
 #include <QKeyEvent>
 
 EnhancedTreeView::EnhancedTreeView(QWidget *parent) : QTreeView(parent),

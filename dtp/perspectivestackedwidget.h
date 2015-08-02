@@ -6,7 +6,7 @@
 #include "perspectivewidget.h"
 #include "libh6ncsu_global.h"
 
-class DttDocumentManager;
+class DtpDocumentManager;
 
 /** This class is an helper for view design form which stacks several widgets
   * page and wants mouseover target handling being consistant over the stacked

@@ -6,7 +6,7 @@
 #include "libh6ncsu_global.h"
 
 class QWidget;
-class DttDocumentManager;
+class SharedUiItemDocumentManager;
 
 /** Similar to QDataWidgetMapper for event-driven SharedUiItem display.
  *
@@ -29,7 +29,7 @@ class LIBH6NCSUSHARED_EXPORT SharedUiItemWidgetMapper : public QObject {
   QHash<int,QWidget*> _sectionToWidget;
   QHash<int,QVariant> _sectionToDefaultValue;
   QHash<QWidget*,int> _widgetToSection;
-  DttDocumentManager *_documentManager;
+  SharedUiItemDocumentManager *_documentManager;
 
 public:
   explicit SharedUiItemWidgetMapper(QObject *parent = 0);
@@ -43,8 +43,9 @@ public:
   void setItem(SharedUiItem item);
   void clearItem() { setItem(SharedUiItem()); }
   SharedUiItem item() const { return _item; }
-  DttDocumentManager *documentManager() const { return _documentManager; }
-  void setDocumentManager(DttDocumentManager *documentManager);
+  SharedUiItemDocumentManager *documentManager() const {
+    return _documentManager; }
+  void setDocumentManager(SharedUiItemDocumentManager *documentManager);
 
 private slots:
   void widgetEdited();

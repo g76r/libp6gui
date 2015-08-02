@@ -2,7 +2,7 @@
 #include <QWidget>
 #include <QMetaProperty>
 #include <QtDebug>
-#include "dtt/dttdocumentmanager.h"
+#include "modelview/shareduiitemdocumentmanager.h"
 #include <QLineEdit>
 #include <QComboBox>
 #include <QAbstractSpinBox>
@@ -156,14 +156,14 @@ void SharedUiItemWidgetMapper::widgetEdited() {
 }
 
 void SharedUiItemWidgetMapper::setDocumentManager(
-    DttDocumentManager *documentManager) {
+    SharedUiItemDocumentManager *documentManager) {
   if (_documentManager) {
-    disconnect(_documentManager, &DttDocumentManager::itemChanged,
+    disconnect(_documentManager, &SharedUiItemDocumentManager::itemChanged,
                this, &SharedUiItemWidgetMapper::itemChanged);
   }
   _documentManager = documentManager;
   if (_documentManager) {
-    connect(_documentManager, &DttDocumentManager::itemChanged,
+    connect(_documentManager, &SharedUiItemDocumentManager::itemChanged,
             this, &SharedUiItemWidgetMapper::itemChanged);
   }
 }

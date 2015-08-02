@@ -3,11 +3,13 @@
 
 #include <QPushButton>
 #include <QPointer>
-#include "tool.h"
+#include "dtpaction.h"
 #include "libh6ncsu_global.h"
 #include "targetmanager.h"
 
-class DttDocumentManager;
+class DtpDocumentManager;
+
+// FIXME is it still usefull since Tool inherits from QAction ?
 
 class LIBH6NCSUSHARED_EXPORT ToolButton : public QAbstractButton {
   Q_OBJECT
@@ -15,8 +17,8 @@ class LIBH6NCSUSHARED_EXPORT ToolButton : public QAbstractButton {
              READ flashBackground
              WRITE setFlashBackground)
 private:
-  QPointer<DttDocumentManager> _documentManager;
-  QPointer<Tool> _tool;
+  QPointer<DtpDocumentManager> _documentManager;
+  QPointer<DtpAction> _tool;
   bool _mouseCurrentlyOver, _currentlyTriggerable;
   QString _keyLabel;
   QColor _flashBackground;
@@ -26,9 +28,9 @@ private:
   Qt::KeyboardModifiers _modifiers;
 
 public:
-  explicit ToolButton(QWidget *parent = 0, DttDocumentManager *documentManager = 0);
+  explicit ToolButton(QWidget *parent = 0, DtpDocumentManager *documentManager = 0);
   ~ToolButton();
-  void setTool(QPointer<Tool> tool);
+  void setTool(QPointer<DtpAction> tool);
   void clearTool();
   QString toolTip() const;
   /** @key as in Qt::Key, if 0 remove global key
@@ -50,7 +52,7 @@ public:
   TargetManager::TargetType targetType() const { return _targetType; }
   void setTargetType(TargetManager::TargetType targetType) {
     _targetType = targetType; }
-  void setDocumentManager(DttDocumentManager *documentManager);
+  void setDocumentManager(DtpDocumentManager *documentManager);
   QSize sizeHint() const;
 
 private slots:

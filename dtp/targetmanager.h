@@ -24,6 +24,8 @@ public:
     PrimaryTarget,
     PreviousPrimaryTarget,
     MouseOverTarget
+    // MAYDO add a TemplateTarget or AuxiliaryTarget or DragTarget to handle
+    // a-la-Visio drag'n drop action through Tools that use such a target
   };
 
 private:

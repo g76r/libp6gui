@@ -1,8 +1,8 @@
-#ifndef DTTGRAPHICSSCENE_H
-#define DTTGRAPHICSSCENE_H
+#ifndef DTPGRAPHICSSCENE_H
+#define DTPGRAPHICSSCENE_H
 
 #include <QGraphicsScene>
-#include "dtt/perspectivewidget.h"
+#include "dtp/perspectivewidget.h"
 
 /** FIXME doc
  *
@@ -11,14 +11,14 @@
  * QGraphicsItem::data(SharedUiItem::QualifiedIdRole), for instance by setting
  * the data in its constructor or when a SharedUiItem is affected to it.
  */
-class LIBH6NCSUSHARED_EXPORT DttGraphicsScene : public QGraphicsScene {
+class LIBH6NCSUSHARED_EXPORT DtpGraphicsScene : public QGraphicsScene {
   Q_OBJECT
-  Q_DISABLE_COPY(DttGraphicsScene)
+  Q_DISABLE_COPY(DtpGraphicsScene)
   QPointer<PerspectiveWidget> _perspectiveWidget;
   QStringList _selectedItemsIds, _mouseoverItemsIds;
 
 public:
-  explicit DttGraphicsScene(QObject *parent = 0);
+  explicit DtpGraphicsScene(QObject *parent = 0);
   void setPerspectiveWidget(PerspectiveWidget *widget);
   PerspectiveWidget *perspectiveWidget() const {
     return _perspectiveWidget.data(); }
@@ -38,4 +38,4 @@ private:
   void clearMouseOverItem() { setMouseOverItem(QStringList()); }
 };
 
-#endif // DTTGRAPHICSSCENE_H
+#endif // DTPGRAPHICSSCENE_H

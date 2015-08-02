@@ -5,7 +5,7 @@
 #include <QPointer>
 #include "libh6ncsu_global.h"
 
-class DttDocumentManager;
+class DtpDocumentManager;
 class DocumentVersion;
 class Perspective;
 class ItemPosition;
@@ -15,21 +15,18 @@ class TargetManager;
   * perspective.
   * Apart from holding the association to a DocumentManager and being resposible
   * for providing the currently displayed perspective id, the class provides
-  * interaction behavior such as catching global key shortcuts and being
-  * clonable as a top level widget (= a standalone window).
+  * interaction behavior such as being clonable as a top level widget (= a
+  * standalone window).
   * @see DocumentManager */
 class LIBH6NCSUSHARED_EXPORT PerspectiveWidget : public QWidget {
   Q_OBJECT
 private:
-  QPointer<DttDocumentManager> _documentManager;
+  QPointer<DtpDocumentManager> _documentManager;
 
 public:
   explicit PerspectiveWidget(QWidget *parent);
-  virtual void setDocumentManager(DttDocumentManager *documentManager);
-  QPointer<DttDocumentManager> documentManager() const;
-  /** Intercept keystrokes to give them to DocumentManager to handle global
-    * key shortcuts. */
-  void keyPressEvent(QKeyEvent *event);
+  virtual void setDocumentManager(DtpDocumentManager *documentManager);
+  QPointer<DtpDocumentManager> documentManager() const;
   /** Id of currently displayed perspective */
   virtual QString currentPerspectiveId() const = 0;
   /** Convenience method */

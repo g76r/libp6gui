@@ -1,41 +1,41 @@
-#include "dtttreeview.h"
-#include "dtt/dttdocumentmanager.h"
+#include "dtptreeview.h"
+#include "dtp/dtpdocumentmanager.h"
 #include "modelview/shareduiitem.h"
 #include <QtDebug>
 #include "modelview/shareduiitemsmodel.h"
 
-DttTreeView::DttTreeView(QWidget *parent) : EnhancedTreeView(parent) {
+DtpTreeView::DtpTreeView(QWidget *parent) : EnhancedTreeView(parent) {
   connect(this, &QAbstractItemView::entered,
-          this, &DttTreeView::itemHovered);
+          this, &DtpTreeView::itemHovered);
   connect(this, SIGNAL(viewportEntered()),
           this, SLOT(setMouseoverTarget()));
   connect(this, &EnhancedTreeView::leaved,
-          this, &DttTreeView::clearMouseoverTarget);
+          this, &DtpTreeView::clearMouseoverTarget);
 }
 
-void DttTreeView::setPerspectiveWidget(PerspectiveWidget *widget) {
+void DtpTreeView::setPerspectiveWidget(PerspectiveWidget *widget) {
   _perspectiveWidget = widget;
 }
 
-void DttTreeView::setModel(QAbstractItemModel *newModel) {
+void DtpTreeView::setModel(QAbstractItemModel *newModel) {
   SharedUiItemsModel *m = _proxyModelHelper.realModel();
   if (m) {
     disconnect(m, &SharedUiItemsModel::itemChanged,
-               this, &DttTreeView::itemChanged);
+               this, &DtpTreeView::itemChanged);
   }
   EnhancedTreeView::setModel(newModel);
   _proxyModelHelper.setApparentModel(newModel);
   m = _proxyModelHelper.realModel();
   if (m) {
     connect(m, &SharedUiItemsModel::itemChanged,
-            this, &DttTreeView::itemChanged);
+            this, &DtpTreeView::itemChanged);
   }
   setMouseTracking(newModel);
   if (underMouse())
     setMouseoverTarget();
 }
 
-void DttTreeView::itemHovered(const QModelIndex &index) {
+void DtpTreeView::itemHovered(const QModelIndex &index) {
   QAbstractItemModel *m = model();
   QString id;
   if (m) {
@@ -45,7 +45,7 @@ void DttTreeView::itemHovered(const QModelIndex &index) {
   setMouseoverTarget(id);
 }
 
-void DttTreeView::setMouseoverTarget(QString itemId)  {
+void DtpTreeView::setMouseoverTarget(QString itemId)  {
   if (itemId.isNull())
     _mousePosition = QPersistentModelIndex();
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
@@ -57,14 +57,14 @@ void DttTreeView::setMouseoverTarget(QString itemId)  {
   }
 }
 
-void DttTreeView::clearMouseoverTarget() {
+void DtpTreeView::clearMouseoverTarget() {
   _mousePosition = QPersistentModelIndex();
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm)
     tm->setTarget(TargetManager::MouseOverTarget);
 }
 
-void DttTreeView::selectionChanged(const QItemSelection &selected,
+void DtpTreeView::selectionChanged(const QItemSelection &selected,
                                    const QItemSelection &deselected) {
   EnhancedTreeView::selectionChanged(selected, deselected);
   QAbstractItemModel *m = model();
@@ -91,7 +91,7 @@ void DttTreeView::selectionChanged(const QItemSelection &selected,
   }
 }
 
-void DttTreeView::focusInEvent(QFocusEvent *event) {
+void DtpTreeView::focusInEvent(QFocusEvent *event) {
   EnhancedTreeView::focusInEvent(event);
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm) {
@@ -104,7 +104,7 @@ void DttTreeView::focusInEvent(QFocusEvent *event) {
   }
 }
 
-void DttTreeView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
+void DtpTreeView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
   // Update current selection when an item id changes.
   if (!oldItem.isNull()) { // new items cannot already be targeted
     QString newId = newItem.qualifiedId(), oldId = oldItem.qualifiedId();
@@ -129,14 +129,14 @@ void DttTreeView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
   }
 }
 
-void DttTreeView::focusOutEvent(QFocusEvent *event) {
+void DtpTreeView::focusOutEvent(QFocusEvent *event) {
   EnhancedTreeView::focusOutEvent(event);
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm)
     tm->setTarget();
 }
 
-QString DttTreeView::mouseoverItemId() const {
+QString DtpTreeView::mouseoverItemId() const {
   QAbstractItemModel *m = model();
   return _mousePosition.isValid() && m
       ? _mousePosition.data(SharedUiItem::QualifiedIdRole).toString()

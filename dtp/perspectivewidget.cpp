@@ -1,5 +1,5 @@
 #include "perspectivewidget.h"
-#include "dttdocumentmanager.h"
+#include "dtpdocumentmanager.h"
 #include <QEvent>
 #include <QWindowStateChangeEvent>
 #include <QtDebug>
@@ -9,22 +9,14 @@ PerspectiveWidget::PerspectiveWidget(QWidget *parent)
   : QWidget(parent), _documentManager(0) {
 }
 
-void PerspectiveWidget::setDocumentManager(DttDocumentManager *documentManager) {
+void PerspectiveWidget::setDocumentManager(DtpDocumentManager *documentManager) {
   _documentManager = documentManager;
-  if (documentManager) {
-    if (_documentManager->mainWindow())
-      setWindowIcon(_documentManager->mainWindow()->windowIcon());
-  } else
+  if (!documentManager)
     qWarning() << "PerspectiveWidget::setDocumentManager(0)";
 }
 
-QPointer<DttDocumentManager> PerspectiveWidget::documentManager() const {
+QPointer<DtpDocumentManager> PerspectiveWidget::documentManager() const {
   return _documentManager;
-}
-
-void PerspectiveWidget::keyPressEvent(QKeyEvent *event) {
-  if (!_documentManager || !_documentManager->keyPressEvent(event))
-    QWidget::keyPressEvent(event);
 }
 
 void PerspectiveWidget::startItemEdition(QString itemId) {
@@ -40,6 +32,7 @@ PerspectiveWidget *PerspectiveWidget::popClone() {
       pw->setAttribute(Qt::WA_QuitOnClose, false);
       pw->setAttribute(Qt::WA_DeleteOnClose);
       pw->setDocumentManager(documentManager());
+      pw->setWindowIcon(window()->windowIcon());
       pw->show();
       return pw;
     }
@@ -50,7 +43,7 @@ PerspectiveWidget *PerspectiveWidget::popClone() {
 TargetManager *PerspectiveWidget::targetManager(
     PerspectiveWidget *perspectiveWidget) {
   if (perspectiveWidget) {
-    QPointer<DttDocumentManager> dm = perspectiveWidget->documentManager();
+    QPointer<DtpDocumentManager> dm = perspectiveWidget->documentManager();
     if (dm)
       return dm->targetManager();
   }

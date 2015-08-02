@@ -34,26 +34,25 @@ SOURCES += \
     modelview/enhancedlistview.cpp \
     modelview/enhancedtreeview.cpp \
     widget/hierarchicaltabcontroller.cpp \
-    dtt/closeallpoppedwindowstool.cpp \
-    dtt/perspectivewidget.cpp \
-    dtt/targetmanager.cpp \
-    dtt/tool.cpp \
-    dtt/toolactionwrapper.cpp \
-    dtt/toolbutton.cpp \
-    dtt/perspectivestackedwidget.cpp \
-    dtt/mainwindow.cpp \
+    dtp/perspectivewidget.cpp \
+    dtp/targetmanager.cpp \
+    dtp/toolbutton.cpp \
+    dtp/perspectivestackedwidget.cpp \
     modelview/shareduiitemwidgetmapper.cpp \
     widget/collapsiblegroupbox.cpp \
-    modelview/dtttreeview.cpp \
-    modelview/dttgraphicsview.cpp \
-    modelview/dttgraphicsscene.cpp \
     util/failsafeundocommand.cpp \
     widget/enhancedtextedit.cpp \
     widget/enhancedplaintextedit.cpp \
-    dtt/dttdocumentmanager.cpp \
     graphics/graphvizedgegraphicsitem.cpp \
     graphics/graphvizgraphicslayout.cpp \
-    widget/interruptiblewaitwidget.cpp
+    widget/interruptiblewaitwidget.cpp \
+    dtp/dtpaction.cpp \
+    dtp/dtpdocumentmanager.cpp \
+    dtp/dtpmainwindow.cpp \
+    dtp/closeallpoppedwindowsaction.cpp \
+    modelview/dtpgraphicsscene.cpp \
+    modelview/dtpgraphicsview.cpp \
+    modelview/dtptreeview.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -63,26 +62,25 @@ HEADERS +=\
     modelview/enhancedlistview.h \
     modelview/enhancedtreeview.h \
     widget/hierarchicaltabcontroller.h \
-    dtt/closeallpoppedwindowstool.h \
-    dtt/perspectivewidget.h \
-    dtt/targetmanager.h \
-    dtt/tool.h \
-    dtt/toolactionwrapper.h \
-    dtt/toolbutton.h \
-    dtt/perspectivestackedwidget.h \
-    dtt/mainwindow.h \
+    dtp/perspectivewidget.h \
+    dtp/targetmanager.h \
+    dtp/toolbutton.h \
+    dtp/perspectivestackedwidget.h \
     modelview/shareduiitemwidgetmapper.h \
     widget/collapsiblegroupbox.h \
-    modelview/dtttreeview.h \
-    modelview/dttgraphicsview.h \
-    modelview/dttgraphicsscene.h \
     util/failsafeundocommand.h \
     widget/enhancedtextedit.h \
     widget/enhancedplaintextedit.h \
-    dtt/dttdocumentmanager.h \
     graphics/graphvizedgegraphicsitem.h \
     graphics/graphvizgraphicslayout.h \
-    widget/interruptiblewaitwidget.h
+    widget/interruptiblewaitwidget.h \
+    dtp/dtpaction.h \
+    dtp/closeallpoppedwindowsaction.h \
+    dtp/dtpdocumentmanager.h \
+    dtp/dtpmainwindow.h \
+    modelview/dtptreeview.h \
+    modelview/dtpgraphicsscene.h \
+    modelview/dtpgraphicsview.h
 
 unix {
     target.path = /usr/lib
