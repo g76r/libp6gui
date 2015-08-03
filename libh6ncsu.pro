@@ -52,7 +52,8 @@ SOURCES += \
     dtp/closeallpoppedwindowsaction.cpp \
     modelview/dtpgraphicsscene.cpp \
     modelview/dtpgraphicsview.cpp \
-    modelview/dtptreeview.cpp
+    modelview/dtptreeview.cpp \
+    dtp/dtpdocumentmanagerwrapper.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -80,7 +81,8 @@ HEADERS +=\
     dtp/dtpmainwindow.h \
     modelview/dtptreeview.h \
     modelview/dtpgraphicsscene.h \
-    modelview/dtpgraphicsview.h
+    modelview/dtpgraphicsview.h \
+    dtp/dtpdocumentmanagerwrapper.h
 
 unix {
     target.path = /usr/lib
