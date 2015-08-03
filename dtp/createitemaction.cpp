@@ -2,9 +2,9 @@
 #include "dtpdocumentmanager.h"
 
 CreateItemAction::CreateItemAction(
-    DtpDocumentManager *documentManager, QString id, QString idQualifier,
-    QIcon icon, QString text)
-  : DtpAction(documentManager, id) {
+    DtpDocumentManager *documentManager, QString idQualifier, QIcon icon,
+    QString text, QObject *parent)
+  : DtpAction(documentManager, parent) {
   setIcon(icon);
   setText(text);
   connect(this, &CreateItemAction::triggered, [=]() {

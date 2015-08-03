@@ -13,10 +13,10 @@ DtpDocumentManager::DtpDocumentManager(QObject *parent)
           _targetManager, &TargetManager::itemChanged);
 }
 
-void DtpDocumentManager::addAction(DtpAction *action){
-  if (!action) {
-    qDebug() << "DtpDocumentManager::addAction called with null pointer";
-    return;
-  }
-  _actions.insert(action->id(), action);
-}
+//void DtpDocumentManager::addAction(DtpAction *action){
+//  if (!action) {
+//    qDebug() << "DtpDocumentManager::addAction called with null pointer";
+//    return;
+//  }
+//  _actions.insert(action->id(), action);
+//}

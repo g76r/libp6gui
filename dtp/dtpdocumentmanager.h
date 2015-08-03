@@ -13,8 +13,8 @@ class QUndoStack;
 class PerspectiveWidget;
 
 // TODO use enums rather than #defines
-#define MIMETYPE_TOOL_ID "com.hallowyn/tool-id"
-#define MIMETYPE_ITEM_ID "com.hallowyn/item-id"
+//#define MIMETYPE_TOOL_ID "com.hallowyn/tool-id"
+//#define MIMETYPE_ITEM_ID "com.hallowyn/item-id"
 
 /** DtpDocumentManager is a core class of the Document-Target-Perspective model,
  * this is a non-visible (i.e. non-widget) class for handling data and events
@@ -26,7 +26,7 @@ class PerspectiveWidget;
  */
 class LIBH6NCSUSHARED_EXPORT DtpDocumentManager
     : public SharedUiItemDocumentManager {
-  friend class DtpAction;
+  //friend class DtpAction;
   Q_OBJECT
   Q_DISABLE_COPY(DtpDocumentManager)
   TargetManager *_targetManager;
@@ -41,7 +41,7 @@ public:
   DtpAction *actionById(const QString id) { return _actions.value(id); }
 
 private:
-  void addAction(DtpAction* action);
+  //void addAction(DtpAction* action);
 };
 
 #endif // DTPDOCUMENTMANAGER_H

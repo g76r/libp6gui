@@ -19,13 +19,10 @@ class LIBH6NCSUSHARED_EXPORT DtpAction : public QAction {
   Q_OBJECT
   Q_DISABLE_COPY(DtpAction)
   DtpDocumentManager *_documentManager;
-  QString _id;
 
 public:
-  /** Become child of documentManager whose takes ownership. */
-  DtpAction(DtpDocumentManager *documentManager, const QString id);
+  explicit DtpAction(DtpDocumentManager *documentManager, QObject *parent = 0);
   DtpDocumentManager *documentManager() const { return _documentManager; }
-  const QString id() const { return _id; }
 };
 
 #endif // DTPACTION_H

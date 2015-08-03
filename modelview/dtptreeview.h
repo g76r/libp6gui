@@ -6,6 +6,7 @@
 #include "modelview/shareduiitem.h"
 #include <QPersistentModelIndex>
 #include "modelview/shareduiitemsmodel.h"
+#include <QPointer>
 
 class TargetManager;
 

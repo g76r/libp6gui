@@ -3,6 +3,7 @@
 
 #include <QGraphicsScene>
 #include "dtp/perspectivewidget.h"
+#include <QPointer>
 
 /** FIXME doc
  *

@@ -2,7 +2,6 @@
 #define PERSPECTIVEWIDGET_H
 
 #include <QWidget>
-#include <QPointer>
 #include "libh6ncsu_global.h"
 
 class DtpDocumentManager;
@@ -21,21 +20,18 @@ class TargetManager;
 class LIBH6NCSUSHARED_EXPORT PerspectiveWidget : public QWidget {
   Q_OBJECT
 private:
-  QPointer<DtpDocumentManager> _documentManager;
+  DtpDocumentManager *_documentManager;
 
 public:
   explicit PerspectiveWidget(QWidget *parent);
   virtual void setDocumentManager(DtpDocumentManager *documentManager);
-  QPointer<DtpDocumentManager> documentManager() const;
+  DtpDocumentManager *documentManager() const;
   /** Id of currently displayed perspective */
   virtual QString currentPerspectiveId() const = 0;
   /** Convenience method */
   TargetManager *targetManager() {return targetManager(this); }
   /** Convenience method */
   static TargetManager *targetManager(PerspectiveWidget *pw);
-  /** Convenience method */
-  static TargetManager *targetManager(QPointer<PerspectiveWidget> pw) {
-    return targetManager(pw.data()); }
 
 public slots:
   /** Create and a new identical widget (clone) showing same perspective and

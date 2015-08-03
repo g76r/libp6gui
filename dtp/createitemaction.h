@@ -2,6 +2,7 @@
 #define CREATEITEMACTION_H
 
 #include "dtpaction.h"
+#include "dtpdocumentmanager.h"
 
 class LIBH6NCSUSHARED_EXPORT CreateItemAction : public DtpAction {
   Q_OBJECT
@@ -9,13 +10,18 @@ class LIBH6NCSUSHARED_EXPORT CreateItemAction : public DtpAction {
 
 public:
   CreateItemAction(
-      DtpDocumentManager *documentManager, QString id, QString idQualifier,
-      QIcon icon, QString text);
+      DtpDocumentManager *documentManager, QString idQualifier, QIcon icon,
+      QString text, QObject *parent);
   CreateItemAction(
-      DtpDocumentManager *documentManager, QString id, QString idQualifier,
+      DtpDocumentManager *documentManager, QString idQualifier,
       QIcon icon = QIcon(":fa/plus_sign.svg"))
-    : CreateItemAction(documentManager, id, idQualifier, icon,
-                       "Create "+idQualifier) { }
+    : CreateItemAction(documentManager, idQualifier, icon,
+                       "Create "+idQualifier, documentManager) { }
+  CreateItemAction(
+      DtpDocumentManager *documentManager, QString idQualifier,
+      QIcon icon, QObject *parent)
+    : CreateItemAction(documentManager, idQualifier, icon,
+                       "Create "+idQualifier, parent) { }
 };
 
 #endif // CREATEITEMACTION_H

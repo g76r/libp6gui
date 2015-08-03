@@ -173,7 +173,7 @@ void ToolButton::mouseMoveEvent(QMouseEvent *e) {
     QDrag d(this);
     QMimeData *md = new QMimeData;
     md->setText(_tool.data()->text());
-    md->setData(MIMETYPE_TOOL_ID, _tool.data()->id().toUtf8());
+    //md->setData(MIMETYPE_TOOL_ID, _tool.data()->id().toUtf8());
     d.setMimeData(md);
     QPixmap pm = _tool.data()->icon().pixmap(iconSize().width());
     d.setPixmap(pm);
@@ -189,10 +189,10 @@ void ToolButton::mouseMoveEvent(QMouseEvent *e) {
 }
 
 void ToolButton::dragEnterEvent(QDragEnterEvent *e) {
-  if (e->mimeData()->hasFormat(MIMETYPE_TOOL_ID)) {
-    e->accept();
-  } else
-    e->ignore();
+  //if (e->mimeData()->hasFormat(MIMETYPE_TOOL_ID)) {
+  //  e->accept();
+  //} else
+  e->ignore();
 }
 
 void ToolButton::dragMoveEvent(QDragMoveEvent *e) {
@@ -216,9 +216,9 @@ void ToolButton::dropEvent(QDropEvent *e) {
   }
   QPointer<DtpAction> tool;
   if (_documentManager) {
-    QString id = QString::fromUtf8(e->mimeData()->data(MIMETYPE_TOOL_ID));
-    if (!id.isEmpty())
-      tool = _documentManager.data()->actionById(id);
+    //QString id = QString::fromUtf8(e->mimeData()->data(MIMETYPE_TOOL_ID));
+    //if (!id.isEmpty())
+    //  tool = _documentManager.data()->actionById(id);
   }
   if (tool.isNull()) {
     e->ignore();

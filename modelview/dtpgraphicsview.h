@@ -4,6 +4,7 @@
 #include "libh6ncsu_global.h"
 #include "enhancedgraphicsview.h"
 #include "dtp/perspectivewidget.h"
+#include <QPointer>
 
 class LIBH6NCSUSHARED_EXPORT DtpGraphicsView : public EnhancedGraphicsView {
   Q_OBJECT

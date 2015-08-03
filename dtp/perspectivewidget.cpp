@@ -15,7 +15,7 @@ void PerspectiveWidget::setDocumentManager(DtpDocumentManager *documentManager) 
     qWarning() << "PerspectiveWidget::setDocumentManager(0)";
 }
 
-QPointer<DtpDocumentManager> PerspectiveWidget::documentManager() const {
+DtpDocumentManager *PerspectiveWidget::documentManager() const {
   return _documentManager;
 }
 
@@ -43,7 +43,7 @@ PerspectiveWidget *PerspectiveWidget::popClone() {
 TargetManager *PerspectiveWidget::targetManager(
     PerspectiveWidget *perspectiveWidget) {
   if (perspectiveWidget) {
-    QPointer<DtpDocumentManager> dm = perspectiveWidget->documentManager();
+    DtpDocumentManager *dm = perspectiveWidget->documentManager();
     if (dm)
       return dm->targetManager();
   }
