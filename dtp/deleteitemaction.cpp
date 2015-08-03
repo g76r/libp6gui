@@ -10,6 +10,7 @@ DeleteItemAction::DeleteItemAction(DtpDocumentManager *documentManager)
   connect(this, &DeleteItemAction::triggered, [=]() {
     if (!documentManager)
       return;
+    //qDebug() << "DeleteItemAction" << documentManager->targetManager()->targetItems();
     foreach (const QString &qualifiedId,
              documentManager->targetManager()->targetItems())
       documentManager->changeItem(SharedUiItem(),
