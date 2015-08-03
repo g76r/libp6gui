@@ -53,6 +53,7 @@ SOURCES += \
     modelview/dtpgraphicsscene.cpp \
     modelview/dtpgraphicsview.cpp \
     modelview/dtptreeview.cpp \
+    dtp/deleteitemaction.cpp \
     dtp/dtpdocumentmanagerwrapper.cpp
 
 HEADERS +=\
@@ -82,6 +83,7 @@ HEADERS +=\
     modelview/dtptreeview.h \
     modelview/dtpgraphicsscene.h \
     modelview/dtpgraphicsview.h \
+    dtp/deleteitemaction.h \
     dtp/dtpdocumentmanagerwrapper.h
 
 unix {
