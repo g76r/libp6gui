@@ -12,11 +12,3 @@ DtpDocumentManager::DtpDocumentManager(QObject *parent)
   connect(this, &DtpDocumentManager::itemChanged,
           _targetManager, &TargetManager::itemChanged);
 }
-
-//void DtpDocumentManager::addAction(DtpAction *action){
-//  if (!action) {
-//    qDebug() << "DtpDocumentManager::addAction called with null pointer";
-//    return;
-//  }
-//  _actions.insert(action->id(), action);
-//}

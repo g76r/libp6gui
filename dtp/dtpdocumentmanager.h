@@ -26,22 +26,15 @@ class PerspectiveWidget;
  */
 class LIBH6NCSUSHARED_EXPORT DtpDocumentManager
     : public SharedUiItemDocumentManager {
-  //friend class DtpAction;
   Q_OBJECT
   Q_DISABLE_COPY(DtpDocumentManager)
   TargetManager *_targetManager;
   QUndoStack *_undoStack;
-  QHash<QString,DtpAction*> _actions;
 
 public:
   explicit DtpDocumentManager(QObject *parent = 0);
   TargetManager *targetManager() { return _targetManager; }
   QUndoStack *undoStack() { return _undoStack; }
-  const QList<DtpAction*> actionsList() { return _actions.values(); }
-  DtpAction *actionById(const QString id) { return _actions.value(id); }
-
-private:
-  //void addAction(DtpAction* action);
 };
 
 #endif // DTPDOCUMENTMANAGER_H
