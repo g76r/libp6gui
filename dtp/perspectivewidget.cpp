@@ -31,8 +31,7 @@ PerspectiveWidget *PerspectiveWidget::popClone() {
     if (pw) {
       pw->setAttribute(Qt::WA_QuitOnClose, false);
       pw->setAttribute(Qt::WA_DeleteOnClose);
-      pw->setDocumentManager(documentManager());
-      pw->setWindowIcon(window()->windowIcon());
+      copyCloneSharedData(pw);
       pw->show();
       return pw;
     }
@@ -48,4 +47,10 @@ TargetManager *PerspectiveWidget::targetManager(
       return dm->targetManager();
   }
   return 0;
+}
+
+void PerspectiveWidget::copyCloneSharedData(
+    PerspectiveWidget *newWidget) const {
+  newWidget->setDocumentManager(documentManager());
+  newWidget->setWindowIcon(window()->windowIcon());
 }

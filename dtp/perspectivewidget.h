@@ -40,13 +40,22 @@ public slots:
     * a new instance, set the new instance to the same DocumentManager,
     * set Qt::WA_DeleteOnClose attribute, unset Qt::WA_QuitOnClose attribute
     * and show the widget (as a top level window).
-    * @return a pointer on new widget */
+    * @return a pointer on new widget
+    * @see copyCloneSharedData() */
   virtual PerspectiveWidget *popClone();
   /** If item found: ensure visible and focus it. If item writeable: start
     * editing it.
     * This method is called e.g. when an item has just been added interactively.
     */
   virtual void startItemEdition(QString itemId);
+
+protected:
+  /** Copy data shared among cloned perspectives. Called by popClone().
+   * Default impl: copy document manager and window icon.
+   * Can be extended to copy additionnal data/resources before or after.
+   * @param newWidget newly created widget, not yet shown.
+   * @see popClone() */
+  virtual void copyCloneSharedData(PerspectiveWidget *newWidget) const;
 };
 
 #endif // PERSPECTIVEWIDGET_H
