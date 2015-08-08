@@ -2,7 +2,6 @@
 #define DTPMAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPointer>
 #include "libh6ncsu_global.h"
 
 class DtpDocumentManager;

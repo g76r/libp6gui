@@ -3,7 +3,6 @@
 
 #include <QGraphicsScene>
 #include "dtp/perspectivewidget.h"
-#include <QPointer>
 
 /** FIXME doc
  *
@@ -15,14 +14,13 @@
 class LIBH6NCSUSHARED_EXPORT DtpGraphicsScene : public QGraphicsScene {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsScene)
-  QPointer<PerspectiveWidget> _perspectiveWidget;
+  PerspectiveWidget *_perspectiveWidget;
   QStringList _selectedItemsIds, _mouseoverItemsIds;
 
 public:
   explicit DtpGraphicsScene(QObject *parent = 0);
   void setPerspectiveWidget(PerspectiveWidget *widget);
-  PerspectiveWidget *perspectiveWidget() const {
-    return _perspectiveWidget.data(); }
+  PerspectiveWidget *perspectiveWidget() const { return _perspectiveWidget; }
   QStringList selectedItemsIds() const { return _selectedItemsIds; } // FIXME must recompute from indexes since an item id can change
   QStringList mouseoverItemsIds() const { return _mouseoverItemsIds; }
 

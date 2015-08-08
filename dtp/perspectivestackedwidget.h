@@ -2,7 +2,6 @@
 #define PERSPECTIVESTACKEDWIDGET_H
 
 #include <QStackedWidget>
-#include <QPointer>
 #include "perspectivewidget.h"
 #include "libh6ncsu_global.h"
 
@@ -13,7 +12,7 @@ class DtpDocumentManager;
   * widget. Nothing more. */
 class LIBH6NCSUSHARED_EXPORT PerspectiveStackedWidget : public QStackedWidget {
   Q_OBJECT
-  QPointer<PerspectiveWidget> _perspectiveWidget;
+  PerspectiveWidget *_perspectiveWidget;
 
 public:
   explicit PerspectiveStackedWidget(PerspectiveWidget *parent);

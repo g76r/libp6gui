@@ -46,43 +46,21 @@ public:
   /** Must be called each time perspectiveWidget changes or switch to a new
     * perspective and each time targeted items change. */
   void setTarget(TargetType targetType,
-                 QPointer<PerspectiveWidget> perspectiveWidget
-                 = QPointer<PerspectiveWidget>(),
+                 PerspectiveWidget *perspectiveWidget = 0,
                  QStringList itemsIds = QStringList());
   /** Syntaxic sugar. */
-  void setTarget(TargetType targetType, PerspectiveWidget* perspectiveWidget,
-                 QStringList itemsIds = QStringList()) {
-    setTarget(targetType, QPointer<PerspectiveWidget>(perspectiveWidget),
-              itemsIds); }
-  /** Syntaxic sugar. */
-  void setTarget(QPointer<PerspectiveWidget> perspectiveWidget
-                 = QPointer<PerspectiveWidget>(),
+  void setTarget(PerspectiveWidget *perspectiveWidget = 0,
                  QStringList itemsIds = QStringList()) {
     setTarget(PrimaryTarget, perspectiveWidget, itemsIds); }
   /** Syntaxic sugar. */
-  void setTarget(PerspectiveWidget* perspectiveWidget,
-                 QStringList itemsIds = QStringList()) {
-    setTarget(PrimaryTarget, QPointer<PerspectiveWidget>(perspectiveWidget),
-              itemsIds); }
-  /** Syntaxic sugar. */
   void setTarget(TargetType targetType,
-                 QPointer<PerspectiveWidget> perspectiveWidget,
+                 PerspectiveWidget *perspectiveWidget,
                  QString itemId) {
     setTarget(targetType, perspectiveWidget,
               itemId.isNull() ? QStringList() : QStringList(itemId)); }
   /** Syntaxic sugar. */
-  void setTarget(TargetType targetType, PerspectiveWidget* perspectiveWidget,
-                 QString itemId) {
-    setTarget(targetType, QPointer<PerspectiveWidget>(perspectiveWidget),
-              itemId.isNull() ? QStringList() : QStringList(itemId)); }
-  /** Syntaxic sugar. */
-  void setTarget(QPointer<PerspectiveWidget> perspectiveWidget,
-                 QString itemId) {
-    setTarget(PrimaryTarget, perspectiveWidget,
-              itemId.isNull() ? QStringList() : QStringList(itemId)); }
-  /** Syntaxic sugar. */
   void setTarget(PerspectiveWidget* perspectiveWidget, QString itemId) {
-    setTarget(PrimaryTarget, QPointer<PerspectiveWidget>(perspectiveWidget),
+    setTarget(PrimaryTarget, perspectiveWidget,
               itemId.isNull() ? QStringList() : QStringList(itemId)); }
   /** All existing target types, as a set. */
   static QSet<TargetManager::TargetType> targetTypes();

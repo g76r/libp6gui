@@ -3,7 +3,6 @@
 
 #include <QSet>
 #include "targetmanager.h"
-#include <QPointer>
 #include "dtpaction.h"
 #include "libh6ncsu_global.h"
 #include "toolbutton.h"

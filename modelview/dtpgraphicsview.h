@@ -4,12 +4,11 @@
 #include "libh6ncsu_global.h"
 #include "enhancedgraphicsview.h"
 #include "dtp/perspectivewidget.h"
-#include <QPointer>
 
 class LIBH6NCSUSHARED_EXPORT DtpGraphicsView : public EnhancedGraphicsView {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsView)
-  QPointer<PerspectiveWidget> _perspectiveWidget;
+  PerspectiveWidget *_perspectiveWidget;
 
 public:
   explicit DtpGraphicsView(QWidget *parent = 0);

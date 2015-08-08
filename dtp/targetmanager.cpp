@@ -7,7 +7,7 @@ TargetManager::TargetManager(QObject *parent) : QObject(parent) {
 }
 
 void TargetManager::setTarget(TargetType targetType,
-    QPointer<PerspectiveWidget> perspectiveWidget,
+    PerspectiveWidget *perspectiveWidget,
     QStringList itemsIds) {
   switch (targetType) {
   case MouseOverTarget:
@@ -23,7 +23,7 @@ void TargetManager::setTarget(TargetType targetType,
   }
   _targetWidgets[targetType] = perspectiveWidget;
   _targetItems[targetType] = itemsIds;
-  emit targetChanged(targetType, perspectiveWidget.data(), itemsIds);
+  emit targetChanged(targetType, perspectiveWidget, itemsIds);
   // TODO is it useful to notify previous target ? is previous target even useful ? since one can remember it if needed
   if (targetType == PrimaryTarget)
     emit targetChanged(PreviousPrimaryTarget,

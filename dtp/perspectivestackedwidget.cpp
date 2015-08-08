@@ -22,7 +22,7 @@ void PerspectiveStackedWidget::perspectiveChanged() {
 
 void PerspectiveStackedWidget::setMouseoverTarget(bool set) {
   if (_perspectiveWidget) {
-    DtpDocumentManager *manager = _perspectiveWidget.data()->documentManager();
+    DtpDocumentManager *manager = _perspectiveWidget->documentManager();
     if (manager) {
       if (set)
         manager->targetManager()->setTarget(TargetManager::MouseOverTarget,

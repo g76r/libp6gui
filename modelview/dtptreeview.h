@@ -6,7 +6,6 @@
 #include "modelview/shareduiitem.h"
 #include <QPersistentModelIndex>
 #include "modelview/shareduiitemsmodel.h"
-#include <QPointer>
 
 class TargetManager;
 
@@ -15,7 +14,7 @@ class TargetManager;
 class LIBH6NCSUSHARED_EXPORT DtpTreeView : public EnhancedTreeView {
   Q_OBJECT
   Q_DISABLE_COPY(DtpTreeView)
-  QPointer<PerspectiveWidget> _perspectiveWidget;
+  PerspectiveWidget *_perspectiveWidget;
   QPersistentModelIndex _mousePosition;
   QStringList _selectedItemsIds;
   SharedUiItemsProxyModelHelper _proxyModelHelper;
