@@ -56,7 +56,8 @@ SOURCES += \
     dtp/deleteitemaction.cpp \
     dtp/dtpdocumentmanagerwrapper.cpp \
     dtp/createitemaction.cpp \
-    dtp/popcloneaction.cpp
+    dtp/popcloneaction.cpp \
+    modelview/shareduiitemproxymodel.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -88,7 +89,8 @@ HEADERS +=\
     dtp/deleteitemaction.h \
     dtp/dtpdocumentmanagerwrapper.h \
     dtp/createitemaction.h \
-    dtp/popcloneaction.h
+    dtp/popcloneaction.h \
+    modelview/shareduiitemproxymodel.h
 
 unix {
     target.path = /usr/lib
