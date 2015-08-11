@@ -1,6 +1,5 @@
 #include "deleteitemaction.h"
 #include "dtpdocumentmanager.h"
-#include "modelview/genericshareduiitem.h"
 #include <QtDebug>
 
 DeleteItemAction::DeleteItemAction(
@@ -11,11 +10,13 @@ DeleteItemAction::DeleteItemAction(
   connect(this, &DeleteItemAction::triggered, [=]() {
     if (!documentManager)
       return;
-    //qDebug() << "DeleteItemAction" << documentManager->targetManager()->targetItems();
     foreach (const QString &qualifiedId,
-             documentManager->targetManager()->targetItems())
-      documentManager->changeItem(SharedUiItem(),
-                                  GenericSharedUiItem(qualifiedId));
+             documentManager->targetManager()->targetItems()) {
+      SharedUiItem oldItem = documentManager->itemById(qualifiedId);
+      if (!oldItem.isNull())
+        documentManager->changeItem(SharedUiItem(), oldItem,
+                                    oldItem.idQualifier());
+    }
   });
 }
 
