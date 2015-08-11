@@ -42,7 +42,8 @@ public slots:
     * and show the widget (as a top level window).
     * @return a pointer on new widget
     * @see copyCloneSharedData() */
-  virtual PerspectiveWidget *popClone();
+  // LATER remove virtual and final keywords
+  virtual PerspectiveWidget *popClone() final;
   /** If item found: ensure visible and focus it. If item writeable: start
     * editing it.
     * This method is called e.g. when an item has just been added interactively.
