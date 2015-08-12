@@ -36,15 +36,18 @@ public:
    * object must live longer that wrapper. */
   explicit DtpDocumentManagerWrapper(
       SharedUiItemDocumentManager *wrapped, QObject *parent = 0);
-  SharedUiItem itemById(QString idQualifier, QString id) const;
-  SharedUiItem itemById(QString qualifiedId) const;
-  SharedUiItemList<SharedUiItem> itemsByIdQualifier(QString idQualifier) const;
-  SharedUiItem createNewItem(QString idQualifier);
-  bool changeItemByUiData(SharedUiItem oldItem, int section,
-                          const QVariant &value);
+  SharedUiItem itemById(QString idQualifier, QString id) const override;
+  SharedUiItem itemById(QString qualifiedId) const override;
+  SharedUiItemList<SharedUiItem> itemsByIdQualifier(
+      QString idQualifier) const override;
+  SharedUiItem createNewItem(
+      QString idQualifier, QString *errorString = 0) override;
+  bool changeItemByUiData(
+      SharedUiItem oldItem, int section, const QVariant &value,
+      QString *errorString = 0) override;
   bool changeItem(SharedUiItem newItem, SharedUiItem oldItem,
-                  QString idQualifier);
-  void reorderedItems(QList<SharedUiItem> items);
+                  QString idQualifier, QString *errorString = 0) override;
+  void reorderedItems(QList<SharedUiItem> items) override;
 
 private:
   void doChangeItem(SharedUiItem newItem, SharedUiItem oldItem,

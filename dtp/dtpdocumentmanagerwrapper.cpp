@@ -1,6 +1,8 @@
 #include "dtpdocumentmanagerwrapper.h"
 #include <QtDebug>
 #include "modelview/inmemoryshareduiitemdocumentmanager.h"
+#include <QMessageBox>
+#include "dtpmainwindow.h"
 
 DtpDocumentManagerWrapper::DtpDocumentManagerWrapper(
     SharedUiItemDocumentManager *wrapped, QObject *parent)
@@ -9,8 +11,11 @@ DtpDocumentManagerWrapper::DtpDocumentManagerWrapper(
           this, &DtpDocumentManagerWrapper::itemChanged);
 }
 
-SharedUiItem DtpDocumentManagerWrapper::createNewItem(QString idQualifier) {
-  SharedUiItem newItem = _wrapped->createNewItem(idQualifier);
+SharedUiItem DtpDocumentManagerWrapper::createNewItem(
+    QString idQualifier, QString *errorString) {
+  SharedUiItem newItem = _wrapped->createNewItem(idQualifier, errorString);
+  if (newItem.isNull())
+    return SharedUiItem();
   auto *imsuidm =
       qobject_cast<InMemorySharedUiItemDocumentManager*>(_wrapped);
   if (imsuidm) {
@@ -21,23 +26,43 @@ SharedUiItem DtpDocumentManagerWrapper::createNewItem(QString idQualifier) {
 }
 
 bool DtpDocumentManagerWrapper::changeItemByUiData(
-    SharedUiItem oldItem, int section, const QVariant &value) {
+    SharedUiItem oldItem, int section, const QVariant &value,
+    QString *errorString) {
+  if (oldItem.uiData(section, Qt::EditRole) == value) // nothing changed
+    return true;
   auto *imsuidm = qobject_cast<InMemorySharedUiItemDocumentManager*>(_wrapped);
+  bool successful = false;
+  QString reason;
   if (imsuidm) {
     SharedUiItem newItem;
-    if (imsuidm->changeItemByUiData(oldItem, section, value, &newItem)) {
+    if (imsuidm->changeItemByUiData(oldItem, section, value, &newItem,
+                                    &reason)) {
       undoStack()->push(new ChangeItemCommand(this, newItem, oldItem,
                                               oldItem.idQualifier()));
       return true;
     }
-    return false;
+  } else {
+    successful = _wrapped->changeItemByUiData(oldItem, section, value,
+                                              &reason);
   }
-  return _wrapped->changeItemByUiData(oldItem, section, value);
+  if (!successful) {
+    QMessageBox::warning(
+          DtpMainWindow::instance(),
+          tr("Cannot change %1 \"%2\"").arg(oldItem.idQualifier())
+          .arg(oldItem.id()),
+          tr("Cannot change %1 \"%2\".\n\n%3").arg(oldItem.idQualifier())
+          .arg(oldItem.id()).arg(reason));
+    if (errorString)
+      *errorString = reason;
+  }
+  return successful;
 }
 
 bool DtpDocumentManagerWrapper::changeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier) {
-  if (_wrapped->changeItem(newItem, oldItem, idQualifier)) {
+    SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
+    QString *errorString) {
+  QString reason;
+  if (_wrapped->changeItem(newItem, oldItem, idQualifier, &reason)) {
     auto *imsuidm =
         qobject_cast<InMemorySharedUiItemDocumentManager*>(_wrapped);
     if (imsuidm) {
@@ -46,6 +71,13 @@ bool DtpDocumentManagerWrapper::changeItem(
     }
     return true;
   }
+  QMessageBox::warning(
+        DtpMainWindow::instance(),
+        tr("Cannot change %1 \"%2\"").arg(idQualifier).arg(oldItem.id()),
+        tr("Cannot change %1 \"%2\".\n\n%3").arg(idQualifier)
+        .arg(oldItem.id()).arg(reason));
+  if (errorString)
+    *errorString = reason;
   return false;
 }
 
