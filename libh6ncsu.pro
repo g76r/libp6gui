@@ -13,6 +13,9 @@ exists(/usr/bin/ccache):QMAKE_CXXFLAGS += -fdiagnostics-color=always
 QMAKE_CXXFLAGS += -Wextra
 unix:debug:QMAKE_CXXFLAGS += -ggdb
 unix {
+  UI_DIR = ../build-libh6ncsu-unix/ui
+  UI_HEADERS_DIR = ../build-libh6ncsu-unix/ui/include
+  UI_SOURCES_DIR = ../build-libh6ncsu-unix/ui/src
   OBJECTS_DIR = ../build-libh6ncsu-unix/obj
   RCC_DIR = ../build-libh6ncsu-unix/rcc
   MOC_DIR = ../build-libh6ncsu-unix/moc
