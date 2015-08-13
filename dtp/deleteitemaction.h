@@ -12,6 +12,11 @@ public:
   DeleteItemAction(DtpDocumentManager *documentManager, QObject *parent);
   explicit DeleteItemAction(DtpDocumentManager *documentManager)
     : DeleteItemAction(documentManager, documentManager) { }
+
+private:
+  void targetChanged(TargetManager::TargetType targetType,
+                     PerspectiveWidget *perspectiveWidget,
+                     QStringList itemIds);
 };
 
 #endif // DELETEITEMACTION_H

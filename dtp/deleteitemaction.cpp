@@ -8,8 +8,6 @@ DeleteItemAction::DeleteItemAction(
   setIcon(QIcon(":fa/trash.svg"));
   setText("Delete Item");
   connect(this, &DeleteItemAction::triggered, [=]() {
-    if (!documentManager)
-      return;
     foreach (const QString &qualifiedId,
              documentManager->targetManager()->targetItems()) {
       SharedUiItem oldItem = documentManager->itemById(qualifiedId);
@@ -18,5 +16,16 @@ DeleteItemAction::DeleteItemAction(
                                     oldItem.idQualifier());
     }
   });
+  connect(documentManager->targetManager(), &TargetManager::targetChanged,
+          this, &DeleteItemAction::targetChanged);
+  setEnabled(!documentManager->targetManager()->targetItems().isEmpty());
+}
+
+void DeleteItemAction::targetChanged(
+    TargetManager::TargetType targetType, PerspectiveWidget *perspectiveWidget,
+    QStringList itemIds) {
+  Q_UNUSED(perspectiveWidget)
+  if (targetType == TargetManager::PrimaryTarget)
+    setEnabled(!itemIds.isEmpty());
 }
 
