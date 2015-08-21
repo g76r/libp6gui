@@ -2,6 +2,7 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include <QTabWidget>
+#include <QToolBox>
 
 void WidgetUtils::activateAndShowWindow(QWidget *widget) {
   Q_ASSERT(widget != 0);
@@ -16,6 +17,7 @@ void WidgetUtils::ensureWidgetIsVisible(QWidget *widget) {
   Q_ASSERT(widget != 0);
   for (QWidget *child = widget, *parent = widget->parentWidget(); parent;
        child = parent, parent = parent->parentWidget()) {
+    parent->setHidden(false); // includes collapsed CollapsibleGroupBox
     auto *stackedWidget = qobject_cast<QStackedWidget*>(parent);
     if (stackedWidget) {
       stackedWidget->setCurrentWidget(child);
@@ -26,7 +28,12 @@ void WidgetUtils::ensureWidgetIsVisible(QWidget *widget) {
       tabWidget->setCurrentWidget(child);
       continue;
     }
-    // LATER support other containers: QToolbox, disabled QGroupBox, folded QSplitter
+    auto *toolbox = qobject_cast<QToolBox*>(parent);
+    if (toolbox) {
+      toolbox->setCurrentWidget(child);
+      continue;
+    }
+    // LATER support folded QSplitter
   }
   activateAndShowWindow(widget);
 }
