@@ -62,7 +62,8 @@ SOURCES += \
     dtp/popcloneaction.cpp \
     modelview/shareduiitemproxymodel.cpp \
     widget/enhancedtoolbutton.cpp \
-    dtp/targetkeepingmenu.cpp
+    dtp/targetkeepingmenu.cpp \
+    widget/widgetutils.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -97,7 +98,8 @@ HEADERS +=\
     dtp/popcloneaction.h \
     modelview/shareduiitemproxymodel.h \
     widget/enhancedtoolbutton.h \
-    dtp/targetkeepingmenu.h
+    dtp/targetkeepingmenu.h \
+    widget/widgetutils.h
 
 unix {
     target.path = /usr/lib
