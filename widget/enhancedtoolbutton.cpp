@@ -3,6 +3,7 @@
 #include <QTimer>
 
 EnhancedToolButton::EnhancedToolButton(QWidget *parent) : QToolButton(parent) {
+  setFocusPolicy(Qt::NoFocus);
 }
 
 void EnhancedToolButton::setDefaultAction(

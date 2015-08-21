@@ -7,6 +7,9 @@
 
 /** Enhanced QToolButton
  *
+ * Changed default behavior:
+ * - default focus policy is Qt::NoFocus instead of Qt::TabFocus
+ *
  * Additionnal features:
  * - append action shortcut to tooltip by default
  * - animate button on action trigger, even if it has not been triggered through
