@@ -46,17 +46,37 @@ public slots:
   virtual PerspectiveWidget *popClone() final;
   /** If item found: ensure visible and focus it. If item writeable: start
     * editing it.
+    * In this widget or, if not found, recursively within its children, or, if
+    * still not found, recursively within its ancestors and siblings.
     * This method is called e.g. when an item has just been added interactively.
     */
-  virtual void startItemEdition(QString itemId);
+  // LATER remove virtual and final keywords
+  virtual bool startItemEdition(QString qualifiedId) final;
 
 protected:
+  /** If item found: ensure visible and focus it. If item writeable: start
+    * editing it.
+    * This method is called e.g. when an item has just been added interactively,
+    * through startItemEdition().
+    * Implementation must not recursively try to call children or parent widgets
+    * since this is already done by startItemEdition().
+    */
+  virtual bool startItemEditionHere(QString qualifiedId);
   /** Copy data shared among cloned perspectives. Called by popClone().
    * Default impl: copy document manager and window icon.
    * Can be extended to copy additionnal data/resources before or after.
    * @param newWidget newly created widget, not yet shown.
    * @see popClone() */
   virtual void copyCloneSharedData(PerspectiveWidget *newWidget) const;
+
+private:
+  /** Used internally by startItemEdition() */
+  inline bool recursiveStartItemEdition(
+      QString qualifiedId, PerspectiveWidget *callingChild = 0);
+  /** Used by recursiveStartItemEdition to find PerspectiveWidget within
+   * non-PerspectiveWidget descendants. */
+  static inline bool recursiveStartItemEditionThroughNonPW(
+      QString qualifiedId, QWidget *widget);
 };
 
 #endif // PERSPECTIVEWIDGET_H

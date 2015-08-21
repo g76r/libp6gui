@@ -27,13 +27,14 @@ public:
   void focusOutEvent(QFocusEvent *event);
   //QStringList selectedItemsIds() const { return _selectedItemsIds; }
   //QPersistentModelIndex mousePosition() const { return _mousePosition; }
+  bool startItemEdition(QString qualifiedId);
 
 signals:
   void selectedItemsChanged(QStringList selectedItemsIds);
 
 protected:
   void selectionChanged(const QItemSelection &selected,
-                        const QItemSelection &deselected);
+                        const QItemSelection &deselected) override;
 
 private slots:
   void itemHovered(const QModelIndex &index);

@@ -58,3 +58,20 @@ void DtpMainWindow::addDocumentManager(DtpDocumentManager *documentManager) {
 DtpMainWindow *DtpMainWindow::instance() {
   return singletonInstance;
 }
+
+static bool startItemEditionAmongChildren(
+    QString qualifiedId, QWidget *widget) {
+  auto *pw = qobject_cast<PerspectiveWidget*>(widget);
+  if (pw)
+    return pw->startItemEdition(qualifiedId);
+  foreach (QObject *child, widget->children()) {
+    auto *widget = qobject_cast<QWidget*>(child);
+    if (widget && startItemEditionAmongChildren(qualifiedId, widget))
+      return true;
+  }
+  return false;
+}
+
+bool DtpMainWindow::startItemEdition(QString qualifiedId) {
+  return startItemEditionAmongChildren(qualifiedId, this);
+}

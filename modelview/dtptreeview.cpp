@@ -142,3 +142,19 @@ QString DtpTreeView::mouseoverItemId() const {
       ? _mousePosition.data(SharedUiItem::QualifiedIdRole).toString()
       : QString();
 }
+
+bool DtpTreeView::startItemEdition(QString qualifiedId) {
+  SharedUiItemsProxyModelHelper helper(model());
+  SharedUiItemsModel *m = helper.realModel();
+  if (!m)
+    return false;
+  QModelIndex index = helper.indexOf(qualifiedId);
+  if (!index.isValid())
+    return false;
+  scrollTo(index);
+  clearSelection();
+  setCurrentIndex(index);
+  // LATER should test model & view are r/w before ?
+  edit(index);
+  return true;
+}
