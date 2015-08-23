@@ -44,7 +44,7 @@ public slots:
     * @see copyCloneSharedData() */
   // LATER remove virtual and final keywords
   virtual PerspectiveWidget *popClone() final;
-  /** If item found: ensure visible and focus it. If item writeable: start
+  /** If item found: ensure visible and set it current. If item writeable: start
     * editing it.
     * In this widget or, if not found, recursively within its children, or, if
     * still not found, recursively within its ancestors and siblings.
@@ -54,12 +54,14 @@ public slots:
   virtual bool startItemEdition(QString qualifiedId) final;
 
 protected:
-  /** If item found: ensure visible and focus it. If item writeable: start
+  /** If item found: ensure visible and set it current. If item writeable: start
     * editing it.
-    * This method is called e.g. when an item has just been added interactively,
-    * through startItemEdition().
+    * This method is called through startItemEdition() e.g. when an item has
+    * just been added interactively.
     * Implementation must not recursively try to call children or parent widgets
-    * since this is already done by startItemEdition().
+    * since this is already done by startItemEdition(), it must only start
+    * edition on one of its item views, e.g. calling startItemEdition on the
+    * right DtpTreeView depending on item's id qualifier.
     */
   virtual bool startItemEditionHere(QString qualifiedId);
   /** Copy data shared among cloned perspectives. Called by popClone().
