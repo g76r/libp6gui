@@ -7,7 +7,10 @@
 static DtpMainWindow *singletonInstance = 0;
 
 DtpMainWindow::DtpMainWindow(QWidget *parent) : QMainWindow(parent) {
+  Q_ASSERT(singletonInstance == 0); // only one DtpMainWindow instance at a time
   singletonInstance = this;
+  connect((QApplication*)QApplication::instance(), &QApplication::focusChanged,
+          this, &DtpMainWindow::focusChanged);
 }
 
 DtpMainWindow::DtpMainWindow(DtpDocumentManager *documentManager,
@@ -74,4 +77,59 @@ static bool startItemEditionAmongChildren(
 
 bool DtpMainWindow::startItemEdition(QString qualifiedId) {
   return startItemEditionAmongChildren(qualifiedId, this);
+}
+
+// This method set the perspective target when a widget get focus.
+// For naive (non dtp-aware) widgets, ascendant widgets are searched until
+// either a dtp-aware view or a PerspectiveWidget is found, e.g. when a plain
+// QLineEdit is a child of a PerspectiveWidget form, when the QLineEdit get
+// focused its parent will be targeted.
+// In the other hand, dtp-aware widgets (e.g. DtpTreeView) expose properties
+// that are used to set the new target (perspectiveWidget and primaryItemsIds).
+void DtpMainWindow::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
+  //qDebug() << "DtpMainWindow::focusChanged" << oldWidget << newWidget;
+  // reset target on old dm (needed if it was not the same than new one)
+  while (oldWidget) {
+    auto *pw =
+        oldWidget->property("perspectiveWidget").value<PerspectiveWidget*>();
+    //if (pw)
+    //  qDebug() << "  old pw by prop" << oldWidget << pw;
+    if (!pw) {
+      pw = qobject_cast<PerspectiveWidget*>(oldWidget);
+      //if (pw)
+      //  qDebug() << "  old pw by cast" << oldWidget << pw;
+    }
+    if (pw) {
+      auto *oldDm = pw->documentManager();
+      if (oldDm) {
+        oldDm->targetManager()->setTarget();
+        //qDebug() << "  found old pw" << pw << oldDm;
+        break;
+      }
+    }
+    oldWidget = oldWidget->parentWidget();
+  }
+  // set new widget target on new dm
+  while (newWidget) {
+    auto *pw =
+        newWidget->property("perspectiveWidget").value<PerspectiveWidget*>();
+    //if (pw)
+    //  qDebug() << "  new pw by prop" << newWidget << pw;
+    if (!pw) {
+      pw = qobject_cast<PerspectiveWidget*>(newWidget);
+      //if (pw)
+      //  qDebug() << "  new pw by cast" << newWidget << pw;
+    }
+    if (pw) {
+      auto *newDm = pw->documentManager();
+      if (newDm) {
+        auto primaryItemsIds =
+            newWidget->property("primaryItemsIds").toStringList();
+        //qDebug() << "  found new pw" << pw << newDm << primaryItemsIds;
+        newDm->targetManager()->setTarget(pw, primaryItemsIds);
+        break;
+      }
+    }
+    newWidget = newWidget->parentWidget();
+  }
 }

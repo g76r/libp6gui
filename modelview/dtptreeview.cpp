@@ -7,8 +7,8 @@
 DtpTreeView::DtpTreeView(QWidget *parent) : EnhancedTreeView(parent) {
   connect(this, &QAbstractItemView::entered,
           this, &DtpTreeView::itemHovered);
-  connect(this, SIGNAL(viewportEntered()),
-          this, SLOT(setMouseoverTarget()));
+  connect(this, &DtpTreeView::viewportEntered,
+          this, &DtpTreeView::setEmptyMouseoverTarget);
   connect(this, &EnhancedTreeView::leaved,
           this, &DtpTreeView::clearMouseoverTarget);
 }
@@ -32,7 +32,7 @@ void DtpTreeView::setModel(QAbstractItemModel *newModel) {
   }
   setMouseTracking(newModel);
   if (underMouse())
-    setMouseoverTarget();
+    setEmptyMouseoverTarget();
 }
 
 void DtpTreeView::itemHovered(const QModelIndex &index) {
@@ -91,19 +91,6 @@ void DtpTreeView::selectionChanged(const QItemSelection &selected,
   }
 }
 
-void DtpTreeView::focusInEvent(QFocusEvent *event) {
-  EnhancedTreeView::focusInEvent(event);
-  TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
-  if (tm) {
-    tm->setTarget(_perspectiveWidget, _selectedItemsIds);
-    // set mouseover target in case overed item's id has just changed (which is
-    // the case when focus in event is received just after an item id widget
-    // editor has been closed)
-    QString id = mouseoverItemId();
-    tm->setTarget(TargetManager::MouseOverTarget, _perspectiveWidget, id);
-  }
-}
-
 void DtpTreeView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
   // Update current selection when an item id changes.
   if (!oldItem.isNull()) { // new items cannot already be targeted
@@ -119,6 +106,7 @@ void DtpTreeView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
           }
         }
       }
+      emit selectedItemsChanged(_selectedItemsIds);
     }
   }
   // ensure new or modified item is visible
@@ -129,18 +117,12 @@ void DtpTreeView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
   }
 }
 
-void DtpTreeView::focusOutEvent(QFocusEvent *event) {
-  EnhancedTreeView::focusOutEvent(event);
-  TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
-  if (tm)
-    tm->setTarget();
-}
-
-QString DtpTreeView::mouseoverItemId() const {
+QStringList DtpTreeView::mouseoverItemsIds() const {
   QAbstractItemModel *m = model();
   return _mousePosition.isValid() && m
-      ? _mousePosition.data(SharedUiItem::QualifiedIdRole).toString()
-      : QString();
+      ? QStringList(_mousePosition.data(SharedUiItem::QualifiedIdRole)
+                    .toString())
+      : QStringList();
 }
 
 bool DtpTreeView::startItemEdition(QString qualifiedId) {
@@ -157,4 +139,12 @@ bool DtpTreeView::startItemEdition(QString qualifiedId) {
   // LATER should test model & view are r/w before ?
   edit(index);
   return true;
+}
+
+void DtpTreeView::commitData(QWidget *editor) {
+  EnhancedTreeView::commitData(editor);
+  // when edition ends, data under mouse can have change because of sorting
+  // and in this case no itemHovered() is not called, therefore mouseover
+  // target is not updated
+  clearMouseoverTarget(); // LATER item under mouse rather than no item
 }

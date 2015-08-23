@@ -43,6 +43,9 @@ public:
     * Call recursively PerspectiveWidget::startItemEdition() among direct
     * PerspectiveWidget children if any. */
   bool startItemEdition(QString qualifiedId);
+
+private:
+  void focusChanged(QWidget *oldWidget, QWidget *newWidget);
 };
 
 #endif // DTPMAINWINDOW_H

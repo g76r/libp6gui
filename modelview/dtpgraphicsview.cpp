@@ -27,13 +27,6 @@ void DtpGraphicsView::focusInEvent(QFocusEvent *event) {
     tm->setTarget(_perspectiveWidget, dgs->selectedItemsIds());
 }
 
-void DtpGraphicsView::focusOutEvent(QFocusEvent *event) {
-  EnhancedGraphicsView::focusOutEvent(event);
-  TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
-  if (tm)
-    tm->setTarget();
-}
-
 void DtpGraphicsView::enterEvent(QEvent *event) {
   EnhancedGraphicsView::enterEvent(event);
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);

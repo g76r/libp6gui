@@ -13,7 +13,6 @@ class LIBH6NCSUSHARED_EXPORT DtpGraphicsView : public EnhancedGraphicsView {
 public:
   explicit DtpGraphicsView(QWidget *parent = 0);
   void focusInEvent(QFocusEvent *event);
-  void focusOutEvent(QFocusEvent *event);
   void enterEvent(QEvent *event);
   void leaveEvent(QEvent *event);
   void setScene(QGraphicsScene *scene);
