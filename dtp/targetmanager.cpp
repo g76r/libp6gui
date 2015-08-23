@@ -13,8 +13,11 @@ void TargetManager::setTarget(TargetType targetType,
   case MouseOverTarget:
     break;
   case PrimaryTarget:
-    _targetWidgets[PreviousPrimaryTarget] = _targetWidgets[PrimaryTarget];
-    _targetItems[PreviousPrimaryTarget] = _targetItems[PrimaryTarget];
+    if (_targetWidgets[PrimaryTarget]
+        || !_targetItems[PrimaryTarget].isEmpty()) {
+      _targetWidgets[PreviousPrimaryTarget] = _targetWidgets[PrimaryTarget];
+      _targetItems[PreviousPrimaryTarget] = _targetItems[PrimaryTarget];
+    }
     break;
   default:
     qDebug() << "TargetManager::setTarget() called with an invalid targetType"
