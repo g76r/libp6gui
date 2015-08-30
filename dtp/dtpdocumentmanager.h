@@ -7,6 +7,7 @@
 #include "libh6ncsu_global.h"
 #include "toolbutton.h"
 #include "modelview/shareduiitemdocumentmanager.h"
+#include <QUndoCommand>
 
 class QUndoStack;
 class PerspectiveWidget;
@@ -30,10 +31,40 @@ class LIBH6NCSUSHARED_EXPORT DtpDocumentManager
   TargetManager *_targetManager;
   QUndoStack *_undoStack;
 
+protected:
+  class LIBH6NCSUSHARED_EXPORT ChangeItemCommand : public QUndoCommand {
+    QPointer<DtpDocumentManager> _dm;
+    SharedUiItem _newItem, _oldItem;
+    QString _idQualifier;
+    bool _ignoreFirstRedo;
+
+  public:
+    ChangeItemCommand(DtpDocumentManager *dm, SharedUiItem newItem,
+                      SharedUiItem oldItem, QString idQualifier,
+                      QUndoCommand *parent, bool ignoreFirstRedo = false);
+    void redo();
+    void undo();
+  };
+  friend class ChangeItemCommand;
+
 public:
   explicit DtpDocumentManager(QObject *parent = 0);
   TargetManager *targetManager() { return _targetManager; }
   QUndoStack *undoStack() { return _undoStack; }
+  /** Create a global QUndoCommand and call prepareChangeItem(). */
+  bool changeItemByUiData(SharedUiItem oldItem, int section,
+                          const QVariant &value,
+                          QString *errorString = 0);
+  /** Create a global QUndoCommand and call prepareChangeItem(). */
+  bool changeItem(SharedUiItem newItem, SharedUiItem oldItem,
+                  QString idQualifier, QString *errorString = 0);
+
+protected:
+  virtual bool prepareChangeItem(QUndoCommand *command, SharedUiItem newItem,
+                                 SharedUiItem oldItem, QString idQualifier,
+                                 QString *errorString) = 0;
+  virtual void commitChangeItem(SharedUiItem newItem, SharedUiItem oldItem,
+                                QString idQualifier) = 0;
 };
 
 #endif // DTPDOCUMENTMANAGER_H
