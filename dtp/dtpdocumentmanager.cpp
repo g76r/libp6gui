@@ -15,63 +15,72 @@ DtpDocumentManager::DtpDocumentManager(QObject *parent)
           _targetManager, &TargetManager::itemChanged);
 }
 
-bool DtpDocumentManager::changeItemByUiData(
-    SharedUiItem oldItem, int section, const QVariant &value,
-    QString *errorString) {
-  //if (oldItem.uiData(section, Qt::EditRole) == value)
-  //  return true; // nothing to do
+namespace {
+
+class UndoCommandAdapter : public QUndoCommand {
+  Q_DISABLE_COPY(UndoCommandAdapter)
+  CoreUndoCommand *_wrapped;
+
+public:
+  UndoCommandAdapter(CoreUndoCommand *wrapped) : _wrapped(wrapped) {
+    setText(_wrapped->text()); }
+  ~UndoCommandAdapter() { delete _wrapped; }
+  void undo() { _wrapped->undo(); }
+  void redo() { _wrapped->redo(); }
+};
+
+} // unnamed namespace
+
+SharedUiItem DtpDocumentManager::createNewItem(
+    QString idQualifier, QString *errorString) {
   QString reason;
   if (!errorString)
     errorString = &reason;
-  bool result = SharedUiItemDocumentManager::changeItemByUiData(
-        oldItem, section, value, errorString);
-  if (!result)
-    QMessageBox::warning(DtpMainWindow::instance(),
-                         "Cannot change item",
-                         "Cannot change item: "+*errorString);
-  return result;
+  SharedUiItem newItem;
+  CoreUndoCommand *command =
+      internalCreateNewItem(&newItem, idQualifier, errorString);
+  if (command) {
+    undoStack()->push(new UndoCommandAdapter(command));
+    return newItem;
+  }
+  return SharedUiItem();
+}
+
+bool DtpDocumentManager::changeItemByUiData(
+    SharedUiItem oldItem, int section, const QVariant &value,
+    QString *errorString) {
+  QString reason;
+  if (!errorString)
+    errorString = &reason;
+  CoreUndoCommand *command =
+      internalChangeItemByUiData(oldItem, section, value, errorString);
+  if (command) {
+    undoStack()->push(new UndoCommandAdapter(command));
+    return true;
+  }
+  QMessageBox::warning(DtpMainWindow::instance(),
+                       "Cannot change item",
+                       "Cannot change item: "+*errorString);
+  return false;
 }
 
 bool DtpDocumentManager::changeItem(
     SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
     QString *errorString) {
-  QUndoCommand *command = new QUndoCommand;
-  QString reason;
-  if (!errorString)
-    errorString = &reason;
-  // FIXME check constraints and apply triggers
-  // LATER simplify constraints processing when called through changeItemByUiData()
-  if (prepareChangeItem(command, newItem, oldItem, idQualifier, errorString)) {
-    undoStack()->push(command);
+  Q_ASSERT(newItem.isNull() || newItem.idQualifier() == idQualifier);
+  Q_ASSERT(oldItem.isNull() || oldItem.idQualifier() == idQualifier);
+  // support for transforming into update an createOrUpdate call
+  // and ensure that, on update or delete, oldItem is the real one, not a
+  // placeholder only bearing ids
+  oldItem = itemById(idQualifier, oldItem.id());
+  if (oldItem.isNull() && newItem.isNull())
+    return true; // nothing to do (support deleteIfExists on inexistent item)
+  CoreUndoCommand *command =
+      internalChangeItem(newItem, oldItem, idQualifier, errorString);
+  //qDebug() << "DtpDocumentManager::changeItem" << command;
+  if (command) {
+    undoStack()->push(new UndoCommandAdapter(command));
     return true;
   }
-  delete command;
-  //QMessageBox::warning(DtpMainWindow::instance(),
-  //                     "Cannot change item",
-  //                     "Cannot change item: "+*errorString);
   return false;
-}
-
-DtpDocumentManager::ChangeItemCommand::ChangeItemCommand(
-    DtpDocumentManager *dm, SharedUiItem newItem, SharedUiItem oldItem,
-    QString idQualifier, QUndoCommand *parent, bool ignoreFirstRedo)
-  : QUndoCommand(parent), _dm(dm), _newItem(newItem), _oldItem(oldItem),
-    _idQualifier(idQualifier), _ignoreFirstRedo(ignoreFirstRedo) {
-  // LATER: compose a textual description of command and call setText
-}
-
-void DtpDocumentManager::ChangeItemCommand::redo() {
-  //qDebug() << "DtpDocumentManagerWrapper::ChangeItemCommand::redo()"
-  //         << _dm << _firstRedo << _newItem << _oldItem;
-  if (_dm && !_ignoreFirstRedo)
-    _dm->commitChangeItem(_newItem, _oldItem, _idQualifier);
-  else
-    _ignoreFirstRedo = false;
-}
-
-void DtpDocumentManager::ChangeItemCommand::undo() {
-  //qDebug() << "DtpDocumentManagerWrapper::ChangeItemCommand::undo()"
-  //         << _dm << _newItem << _oldItem;
-  if (_dm)
-    _dm->commitChangeItem(_oldItem, _newItem, _idQualifier);
 }

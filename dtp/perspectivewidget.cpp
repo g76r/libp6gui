@@ -5,6 +5,7 @@
 #include <QtDebug>
 #include <QMetaObject>
 #include "widget/widgetutils.h"
+#include <QIcon>
 
 PerspectiveWidget::PerspectiveWidget(QWidget *parent)
   : QWidget(parent), _documentManager(0) {

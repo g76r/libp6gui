@@ -6,9 +6,6 @@
 
 /** Wrap any SharedUiItemDocumentManager to give it the properties of a
  * DtpDocumentManager.
- *
- * If wrapped DM inherits from InMemorySharedUiItemDocumentManager, it will
- * have all its change operations recorded in the undo stack.
  */
 class LIBH6NCSUSHARED_EXPORT DtpDocumentManagerWrapper
     : public DtpDocumentManager {
@@ -26,18 +23,24 @@ public:
   SharedUiItemList<SharedUiItem> itemsByIdQualifier(
       QString idQualifier) const override;
   void reorderItems(QList<SharedUiItem> items) override;
-  SharedUiItem createNewItem(QString idQualifier, QString *errorString = 0);
-  bool changeItem(SharedUiItem newItem, SharedUiItem oldItem,
-                  QString idQualifier, QString *errorString = 0);
-  bool changeItemByUiData(SharedUiItem oldItem, int section,
-                          const QVariant &value, QString *errorString = 0);
+  void registerItemType(QString idQualifier, Setter setter,
+                        Creator creator) = delete;
 
 protected:
   bool prepareChangeItem(
-      QUndoCommand *command, SharedUiItem newItem, SharedUiItem oldItem,
+      CoreUndoCommand *command, SharedUiItem newItem, SharedUiItem oldItem,
       QString idQualifier, QString *errorString) override;
   void commitChangeItem(SharedUiItem newItem, SharedUiItem oldItem,
                         QString idQualifier) override;
+  CoreUndoCommand *internalCreateNewItem(
+      SharedUiItem *newItem, QString idQualifier,
+      QString *errorString) override;
+  CoreUndoCommand *internalChangeItem(
+      SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
+      QString *errorString) override;
+  CoreUndoCommand *internalChangeItemByUiData(
+      SharedUiItem oldItem, int section, const QVariant &value,
+      QString *errorString) override;
 };
 
 #endif // DTPDOCUMENTMANAGERWRAPPER_H
