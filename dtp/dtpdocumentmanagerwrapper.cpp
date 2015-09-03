@@ -11,19 +11,21 @@ DtpDocumentManagerWrapper::DtpDocumentManagerWrapper(
           this, &DtpDocumentManagerWrapper::itemChanged);
 }
 
-CoreUndoCommand *DtpDocumentManagerWrapper::internalCreateNewItem(
+SharedUiItemDocumentTransaction
+*DtpDocumentManagerWrapper::internalCreateNewItem(
     SharedUiItem *newItem, QString idQualifier, QString *errorString) {
   return _wrapped->internalCreateNewItem(newItem, idQualifier, errorString);
 }
 
-CoreUndoCommand *DtpDocumentManagerWrapper::internalChangeItem(
+SharedUiItemDocumentTransaction *DtpDocumentManagerWrapper::internalChangeItem(
     SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
     QString *errorString) {
   return _wrapped->internalChangeItem(newItem, oldItem, idQualifier,
                                       errorString);
 }
 
-CoreUndoCommand *DtpDocumentManagerWrapper::internalChangeItemByUiData(
+SharedUiItemDocumentTransaction
+*DtpDocumentManagerWrapper::internalChangeItemByUiData(
     SharedUiItem oldItem, int section, const QVariant &value,
     QString *errorString) {
   return _wrapped->internalChangeItemByUiData(oldItem, section, value,
@@ -31,9 +33,9 @@ CoreUndoCommand *DtpDocumentManagerWrapper::internalChangeItemByUiData(
 }
 
 bool DtpDocumentManagerWrapper::prepareChangeItem(
-    CoreUndoCommand *command, SharedUiItem newItem, SharedUiItem oldItem,
-    QString idQualifier, QString *errorString) {
-  Q_UNUSED(command)
+    SharedUiItemDocumentTransaction *transaction, SharedUiItem newItem,
+    SharedUiItem oldItem, QString idQualifier, QString *errorString) {
+  Q_UNUSED(transaction)
   Q_UNUSED(newItem)
   Q_UNUSED(oldItem)
   Q_UNUSED(idQualifier)

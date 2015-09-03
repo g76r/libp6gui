@@ -2,7 +2,6 @@
 #define DTPDOCUMENTMANAGERWRAPPER_H
 
 #include "dtpdocumentmanager.h"
-#include <QUndoCommand>
 
 /** Wrap any SharedUiItemDocumentManager to give it the properties of a
  * DtpDocumentManager.
@@ -28,17 +27,17 @@ public:
 
 protected:
   bool prepareChangeItem(
-      CoreUndoCommand *command, SharedUiItem newItem, SharedUiItem oldItem,
-      QString idQualifier, QString *errorString) override;
+      SharedUiItemDocumentTransaction *transaction, SharedUiItem newItem,
+      SharedUiItem oldItem, QString idQualifier, QString *errorString) override;
   void commitChangeItem(SharedUiItem newItem, SharedUiItem oldItem,
                         QString idQualifier) override;
-  CoreUndoCommand *internalCreateNewItem(
+  SharedUiItemDocumentTransaction *internalCreateNewItem(
       SharedUiItem *newItem, QString idQualifier,
       QString *errorString) override;
-  CoreUndoCommand *internalChangeItem(
+  SharedUiItemDocumentTransaction *internalChangeItem(
       SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
       QString *errorString) override;
-  CoreUndoCommand *internalChangeItemByUiData(
+  SharedUiItemDocumentTransaction *internalChangeItemByUiData(
       SharedUiItem oldItem, int section, const QVariant &value,
       QString *errorString) override;
 };
