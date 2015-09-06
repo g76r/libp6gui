@@ -60,7 +60,7 @@ bool DtpDocumentManager::changeItemByUiData(
   }
   QMessageBox::warning(DtpMainWindow::instance(),
                        "Cannot change item",
-                       "Cannot change item: "+*errorString);
+                       "Cannot change item.\n\n"+*errorString);
   return false;
 }
 
