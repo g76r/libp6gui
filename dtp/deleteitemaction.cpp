@@ -24,7 +24,7 @@ DeleteItemAction::DeleteItemAction(
           QMessageBox::warning(
                 (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
                 tr("Cannot delete %1").arg(idQualifier),
-                tr("Cannot delete %1.\n\n%2").arg(idQualifier).arg(reason));
+                tr("Cannot delete %1.\n%2").arg(idQualifier).arg(reason));
           return;
         }
       }
