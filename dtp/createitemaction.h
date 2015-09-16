@@ -14,7 +14,7 @@ public:
       QString text, QObject *parent);
   CreateItemAction(
       DtpDocumentManager *documentManager, QString idQualifier,
-      QIcon icon = QIcon(":fa/plus_sign.svg"))
+      QIcon icon = QIcon(":fa/plus-circle.svg"))
     : CreateItemAction(documentManager, idQualifier, icon,
                        "Create "+idQualifier, documentManager) { }
   CreateItemAction(

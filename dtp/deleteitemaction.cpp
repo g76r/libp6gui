@@ -7,7 +7,7 @@
 DeleteItemAction::DeleteItemAction(
     DtpDocumentManager *documentManager, QObject *parent)
   : DtpAction(documentManager, parent) {
-  setIcon(QIcon(":fa/trash.svg"));
+  setIcon(QIcon(":fa/trash-o.svg"));
   setText("Delete Item");
   connect(this, &DeleteItemAction::triggered, [=]() {
     foreach (const QString &qualifiedId,
