@@ -43,7 +43,6 @@ SOURCES += \
     dtp/perspectivestackedwidget.cpp \
     modelview/shareduiitemwidgetmapper.cpp \
     widget/collapsiblegroupbox.cpp \
-    util/failsafeundocommand.cpp \
     widget/enhancedtextedit.cpp \
     widget/enhancedplaintextedit.cpp \
     graphics/graphvizedgegraphicsitem.cpp \
@@ -79,7 +78,6 @@ HEADERS +=\
     dtp/perspectivestackedwidget.h \
     modelview/shareduiitemwidgetmapper.h \
     widget/collapsiblegroupbox.h \
-    util/failsafeundocommand.h \
     widget/enhancedtextedit.h \
     widget/enhancedplaintextedit.h \
     graphics/graphvizedgegraphicsitem.h \
