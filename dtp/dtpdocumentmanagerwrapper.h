@@ -26,10 +26,15 @@ class LIBH6NCSUSHARED_EXPORT DtpDocumentManagerWrapper
   SharedUiItemDocumentManager *_wrapped;
 
 public:
+  explicit DtpDocumentManagerWrapper(QObject *parent = 0);
   /** Do not take ownership of wrapped document manager, beware that wrapped
    * object must live longer that wrapper. */
   explicit DtpDocumentManagerWrapper(
       SharedUiItemDocumentManager *wrapped, QObject *parent = 0);
+  SharedUiItemDocumentManager *wrapped() const { return _wrapped; }
+  /** Do not take ownership of wrapped document manager, beware that wrapped
+   * object must live longer that wrapper. */
+  void setWrapped(SharedUiItemDocumentManager *wrapped);
   SharedUiItem itemById(QString idQualifier, QString id) const override;
   SharedUiItem itemById(QString qualifiedId) const override;
   SharedUiItemList<SharedUiItem> itemsByIdQualifier(
@@ -37,6 +42,12 @@ public:
   void reorderItems(QList<SharedUiItem> items) override;
   void registerItemType(QString idQualifier, Setter setter,
                         Creator creator) = delete;
+  void addForeignKey(QString sourceQualifier, int sourceSection,
+                     QString referenceQualifier, int referenceSection,
+                     OnChangePolicy onUpdatePolicy,
+                     OnChangePolicy onDeletePolicy) = delete;
+  void addChangeItemTrigger(QString idQualifier, TriggerFlags flags,
+                            ChangeItemTrigger trigger) = delete;
 
 protected:
   bool prepareChangeItem(

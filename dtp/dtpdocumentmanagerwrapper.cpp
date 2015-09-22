@@ -17,11 +17,25 @@
 #include <QMessageBox>
 #include "dtpmainwindow.h"
 
+DtpDocumentManagerWrapper::DtpDocumentManagerWrapper(QObject *parent)
+  : DtpDocumentManager(parent), _wrapped(0) {
+}
+
 DtpDocumentManagerWrapper::DtpDocumentManagerWrapper(
     SharedUiItemDocumentManager *wrapped, QObject *parent)
-  : DtpDocumentManager(parent), _wrapped(wrapped) {
-  connect(_wrapped, &SharedUiItemDocumentManager::itemChanged,
-          this, &DtpDocumentManagerWrapper::itemChanged);
+  : DtpDocumentManagerWrapper(parent) {
+  setWrapped(wrapped);
+}
+
+void DtpDocumentManagerWrapper::setWrapped(
+    SharedUiItemDocumentManager *wrapped) {
+  if (_wrapped)
+    disconnect(_wrapped, &SharedUiItemDocumentManager::itemChanged,
+               this, &DtpDocumentManagerWrapper::itemChanged);
+  _wrapped = wrapped;
+  if (_wrapped)
+    connect(_wrapped, &SharedUiItemDocumentManager::itemChanged,
+            this, &DtpDocumentManagerWrapper::itemChanged);
 }
 
 SharedUiItemDocumentTransaction
