@@ -92,6 +92,9 @@ PerspectiveWidget *PerspectiveWidget::popClone() {
       copyCloneSharedData(pw);
       pw->show();
       return pw;
+    } else {
+      qWarning() << "PerspectiveWidget::popClone() cannot create widget clone "
+                    "because it has no Q_INVOKABLE default constructor.";
     }
   }
   return 0;
