@@ -71,7 +71,8 @@ SOURCES += \
     modelview/shareduiitemproxymodel.cpp \
     widget/enhancedtoolbutton.cpp \
     dtp/targetkeepingmenu.cpp \
-    widget/widgetutils.cpp
+    widget/widgetutils.cpp \
+    modelview/paramsetview.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -106,7 +107,8 @@ HEADERS +=\
     modelview/shareduiitemproxymodel.h \
     widget/enhancedtoolbutton.h \
     dtp/targetkeepingmenu.h \
-    widget/widgetutils.h
+    widget/widgetutils.h \
+    modelview/paramsetview.h
 
 unix {
     target.path = /usr/lib
