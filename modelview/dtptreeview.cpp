@@ -17,7 +17,8 @@
 #include <QtDebug>
 #include "modelview/shareduiitemsmodel.h"
 
-DtpTreeView::DtpTreeView(QWidget *parent) : EnhancedTreeView(parent) {
+DtpTreeView::DtpTreeView(QWidget *parent)
+  : EnhancedTreeView(parent), _perspectiveWidget(0) {
   connect(this, &QAbstractItemView::entered,
           this, &DtpTreeView::itemHovered);
   connect(this, &DtpTreeView::viewportEntered,
@@ -27,6 +28,7 @@ DtpTreeView::DtpTreeView(QWidget *parent) : EnhancedTreeView(parent) {
 }
 
 void DtpTreeView::setPerspectiveWidget(PerspectiveWidget *widget) {
+  // TODO replace with setting by constructor, requiring parent is a PW
   _perspectiveWidget = widget;
 }
 
