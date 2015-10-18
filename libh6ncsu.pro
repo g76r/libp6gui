@@ -32,13 +32,11 @@ unix {
   MOC_DIR = ../build-libh6ncsu-unix/moc
 }
 
-INCLUDEPATH += ../qron/libqtpf ../qron/libqtssu
-win32:debug:LIBS += -L../build-libqtpf-windows/debug \
-  -L../build-libqtssu-windows/debug
-win32:release:LIBS += -L../build-libqtpf-windows/release \
-  -L../build-libqtssu-windows/release
-unix:LIBS += -L../qron/libqtpf -L../qron/libqtssu
-LIBS += -lqtpf -lqtssu
+INCLUDEPATH += ../libqtssu
+win32:debug:LIBS += -L../build-libqtssu-windows/debug
+win32:release:LIBS += -L../build-libqtssu-windows/release
+unix:LIBS += -L../libqtssu
+LIBS += -lqtssu
 
 SOURCES += \
     widget/dynamicstackedwidget.cpp \
