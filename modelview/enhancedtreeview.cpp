@@ -14,8 +14,7 @@
 #include "enhancedtreeview.h"
 #include <QKeyEvent>
 
-EnhancedTreeView::EnhancedTreeView(QWidget *parent) : QTreeView(parent),
-  _ignoreKeyboardInput(false), _expandToDepthOnChange(0) {
+EnhancedTreeView::EnhancedTreeView(QWidget *parent) : QTreeView(parent) {
 }
 
 void EnhancedTreeView::leaveEvent(QEvent *event) {
@@ -33,23 +32,30 @@ void EnhancedTreeView::keyPressEvent(QKeyEvent *event) {
 void EnhancedTreeView::setModel(QAbstractItemModel *model) {
   QAbstractItemModel *old = this->model();
   if (old) {
-    disconnect(model, SIGNAL(modelReset()),
-               this, SLOT(rowsAppeared()));
-    disconnect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
-               this, SLOT(rowsAppeared()));
-    disconnect(model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
-               this, SLOT(rowsAppeared()));
+    disconnect(model, &QAbstractItemModel::modelReset,
+               this, &EnhancedTreeView::rowsAppeared);
+    disconnect(model, &QAbstractItemModel::rowsInserted,
+               this, &EnhancedTreeView::rowsAppeared);
+    disconnect(model, &QAbstractItemModel::rowsMoved,
+               this, &EnhancedTreeView::rowsAppeared);
   }
   QTreeView::setModel(model);
   if (model) {
-    connect(model, SIGNAL(modelReset()),
-            this, SLOT(rowsAppeared()));
-    connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            this, SLOT(rowsAppeared()));
-    connect(model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
-            this, SLOT(rowsAppeared()));
+    connect(model, &QAbstractItemModel::modelReset,
+            this, &EnhancedTreeView::rowsAppeared);
+    connect(model, &QAbstractItemModel::rowsInserted,
+            this, &EnhancedTreeView::rowsAppeared);
+    connect(model, &QAbstractItemModel::rowsMoved,
+            this, &EnhancedTreeView::rowsAppeared);
     rowsAppeared();
   }
+}
+
+void EnhancedTreeView::dataChanged(
+    const QModelIndex &topLeft, const QModelIndex &bottomRight,
+    const QVector<int> &roles) {
+  QTreeView::dataChanged(topLeft, bottomRight, roles);
+  rowsAppearedOrChanged();
 }
 
 void EnhancedTreeView::rowsAppeared() {
@@ -57,4 +63,15 @@ void EnhancedTreeView::rowsAppeared() {
     expandToDepth(_expandToDepthOnChange);
   else
     expandAll();
+  rowsAppearedOrChanged();
+}
+
+void EnhancedTreeView::rowsAppearedOrChanged() {
+  if (_resizeColumnsToContentsOnChange) {
+    auto *m = model();
+    int count = m ? m->columnCount() : 0;
+    for (int i = 0; i < count; ++i)
+      if (!isColumnHidden(i))
+        resizeColumnToContents(i);
+  }
 }
