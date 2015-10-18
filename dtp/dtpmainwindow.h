@@ -47,7 +47,6 @@ public:
                          QWidget *parent = 0);
   ~DtpMainWindow();
   virtual void windowFocused();
-  void closeEvent(QCloseEvent *event);
   QList<DtpDocumentManager*> documentManagers() const;
   void addDocumentManager(DtpDocumentManager *documentManager);
   static DtpMainWindow *instance();
@@ -57,8 +56,14 @@ public:
     * PerspectiveWidget children if any. */
   bool startItemEdition(QString qualifiedId);
 
+protected:
+  void showEvent(QShowEvent *event) override;
+  void hideEvent(QHideEvent *event) override;
+  void closeEvent(QCloseEvent *event) override;
+
 private:
   void focusChanged(QWidget *oldWidget, QWidget *newWidget);
+  void screenChanged(QScreen *screen);
 };
 
 #endif // DTPMAINWINDOW_H

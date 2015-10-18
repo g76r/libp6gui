@@ -29,11 +29,13 @@ class LIBH6NCSUSHARED_EXPORT PerspectiveStackedWidget : public QStackedWidget {
 
 public:
   explicit PerspectiveStackedWidget(PerspectiveWidget *parent);
-  void enterEvent(QEvent *event);
-  void leaveEvent(QEvent *event);
 
 public slots:
   void perspectiveChanged();
+
+protected:
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 
 private:
   inline void setMouseoverTarget(bool set);

@@ -70,7 +70,8 @@ SOURCES += \
     widget/enhancedtoolbutton.cpp \
     dtp/targetkeepingmenu.cpp \
     widget/widgetutils.cpp \
-    modelview/paramsetview.cpp
+    modelview/paramsetview.cpp \
+    widget/responsiveapplication.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -106,7 +107,8 @@ HEADERS +=\
     widget/enhancedtoolbutton.h \
     dtp/targetkeepingmenu.h \
     widget/widgetutils.h \
-    modelview/paramsetview.h
+    modelview/paramsetview.h \
+    widget/responsiveapplication.h
 
 unix {
     target.path = /usr/lib

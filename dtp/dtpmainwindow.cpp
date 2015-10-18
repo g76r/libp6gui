@@ -15,7 +15,9 @@
 #include "dtpdocumentmanager.h"
 #include "dtpaction.h"
 #include <QLabel>
-#include <QApplication>
+#include <QWindow>
+#include <QScreen>
+#include "widget/responsiveapplication.h"
 
 static DtpMainWindow *singletonInstance = 0;
 
@@ -145,4 +147,24 @@ void DtpMainWindow::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
     }
     newWidget = newWidget->parentWidget();
   }
+}
+
+void DtpMainWindow::showEvent(QShowEvent *event) {
+  QMainWindow::showEvent(event);
+  connect(windowHandle(), &QWindow::screenChanged,
+          this, &DtpMainWindow::screenChanged);
+  // LATER also detect screen dpi change, in addition to screen change
+  screenChanged(windowHandle()->screen());
+}
+
+void DtpMainWindow::hideEvent(QHideEvent *event) {
+  disconnect(windowHandle(), &QWindow::screenChanged,
+             this, &DtpMainWindow::screenChanged);
+  QMainWindow::hideEvent(event);
+}
+
+void DtpMainWindow::screenChanged(QScreen *screen) {
+  auto *app = qobject_cast<ResponsiveApplication*>(QApplication::instance());
+  if (app)
+    emit app->toplevelWidgetChangedScreen(this, screen);
 }

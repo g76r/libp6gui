@@ -46,3 +46,4 @@ void PerspectiveStackedWidget::setMouseoverTarget(bool set) {
     }
   }
 }
+

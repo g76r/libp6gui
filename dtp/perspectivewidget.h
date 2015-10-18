@@ -83,6 +83,8 @@ protected:
    * @param newWidget newly created widget, not yet shown.
    * @see popClone() */
   virtual void copyCloneSharedData(PerspectiveWidget *newWidget) const;
+  void showEvent(QShowEvent *event) override;
+  void hideEvent(QHideEvent *event) override;
 
 private:
   /** Used internally by startItemEdition() */
@@ -92,6 +94,7 @@ private:
    * non-PerspectiveWidget descendants. */
   static inline bool recursiveStartItemEditionThroughNonPW(
       QString qualifiedId, QWidget *widget);
+  void screenChanged(QScreen *screen);
 };
 
 #endif // PERSPECTIVEWIDGET_H

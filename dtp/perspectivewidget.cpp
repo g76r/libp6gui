@@ -19,6 +19,9 @@
 #include <QMetaObject>
 #include "widget/widgetutils.h"
 #include <QIcon>
+#include "widget/responsiveapplication.h"
+#include <QWindow>
+#include <QScreen>
 
 PerspectiveWidget::PerspectiveWidget(QWidget *parent)
   : QWidget(parent), _documentManager(0) {
@@ -114,4 +117,28 @@ void PerspectiveWidget::copyCloneSharedData(
     PerspectiveWidget *newWidget) const {
   newWidget->setDocumentManager(documentManager());
   newWidget->setWindowIcon(window()->windowIcon());
+}
+
+void PerspectiveWidget::showEvent(QShowEvent *event) {
+  QWidget::showEvent(event);
+  if (isTopLevel()) {
+    connect(windowHandle(), &QWindow::screenChanged,
+            this, &PerspectiveWidget::screenChanged);
+    // LATER also detect screen dpi change, in addition to screen change
+    screenChanged(windowHandle()->screen());
+  }
+}
+
+void PerspectiveWidget::hideEvent(QHideEvent *event) {
+  if (isTopLevel()) {
+    disconnect(windowHandle(), &QWindow::screenChanged,
+               this, &PerspectiveWidget::screenChanged);
+  }
+  QWidget::hideEvent(event);
+}
+
+void PerspectiveWidget::screenChanged(QScreen *screen) {
+  auto *app = qobject_cast<ResponsiveApplication*>(QApplication::instance());
+  if (app)
+    emit app->toplevelWidgetChangedScreen(this, screen);
 }
