@@ -52,9 +52,9 @@ public:
   static DtpMainWindow *instance();
   /** If item found: ensure visible and focus it. If item writeable: start
     * editing it.
-    * Call recursively PerspectiveWidget::startItemEdition() among direct
+    * Default: call recursively PerspectiveWidget::startItemEdition() among
     * PerspectiveWidget children if any. */
-  bool startItemEdition(QString qualifiedId);
+  virtual bool startItemEdition(QString qualifiedId);
 
 protected:
   void showEvent(QShowEvent *event) override;
