@@ -22,6 +22,7 @@ class DocumentVersion;
 class Perspective;
 class ItemPosition;
 class TargetManager;
+class QTabWidget;
 
 /** Parent class for widgets/forms offering a GUI on the document through a
   * perspective.
@@ -65,6 +66,13 @@ public slots:
     */
   // LATER remove virtual and final keywords
   virtual bool startItemEdition(QString qualifiedId) final;
+  /** Helper for forms and windows that dispatch startItemEditionHere() among
+   * forms within a QTabWidget. Try to call recursiveStartItemEdition() for every
+   * PerspectiveWidget within the tab, starting with current one, then first one
+   * (index 0). If a call is successful, the tab is made current and true is
+   * returned. */
+  static bool startItemEditionInTabWidget(
+      QString qualifiedId, QTabWidget *tabWidget);
 
 protected:
   /** If item found: ensure visible and set it current. If item writeable: start

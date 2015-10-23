@@ -22,6 +22,7 @@
 #include "widget/responsiveapplication.h"
 #include <QWindow>
 #include <QScreen>
+#include <QTabWidget>
 
 PerspectiveWidget::PerspectiveWidget(QWidget *parent)
   : QWidget(parent), _documentManager(0) {
@@ -82,6 +83,22 @@ bool PerspectiveWidget::recursiveStartItemEdition(
 
 bool PerspectiveWidget::startItemEditionHere(QString qualifiedId) {
   Q_UNUSED(qualifiedId)
+  return false;
+}
+
+bool PerspectiveWidget::startItemEditionInTabWidget(
+    QString qualifiedId, QTabWidget *tabWidget) {
+  Q_ASSERT(tabWidget);
+  auto *pw = qobject_cast<PerspectiveWidget*>(tabWidget->currentWidget());
+  if (pw && pw->recursiveStartItemEdition(qualifiedId))
+    return true;
+  for (int i = 0; i < tabWidget->count(); ++i) {
+    pw = qobject_cast<PerspectiveWidget*>(tabWidget->widget(i));
+    if (pw && pw->recursiveStartItemEdition(qualifiedId)) {
+      tabWidget->setCurrentWidget(pw);
+      return true;
+    }
+  }
   return false;
 }
 
