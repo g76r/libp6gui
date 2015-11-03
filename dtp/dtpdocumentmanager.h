@@ -44,6 +44,7 @@ public:
   explicit DtpDocumentManager(QObject *parent = 0);
   TargetManager *targetManager() { return _targetManager; }
   QUndoStack *undoStack() { return _undoStack; }
+  using SharedUiItemDocumentManager::createNewItem;
   /** Override SharedUiItemDocumentManager::createNewItem() to push
    * QUndoCommand in QUndoStack when returning true. */
   SharedUiItem createNewItem(QString idQualifier, QString *errorString);
