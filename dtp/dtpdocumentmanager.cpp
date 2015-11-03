@@ -85,6 +85,9 @@ bool DtpDocumentManager::changeItem(
     QString *errorString) {
   Q_ASSERT(newItem.isNull() || newItem.idQualifier() == idQualifier);
   Q_ASSERT(oldItem.isNull() || oldItem.idQualifier() == idQualifier);
+  QString reason;
+  if (!errorString)
+    errorString = &reason;
   CoreUndoCommand *command =
       internalChangeItem(newItem, oldItem, idQualifier, errorString);
   //qDebug() << "DtpDocumentManager::changeItem" << command;
