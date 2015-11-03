@@ -30,12 +30,14 @@ DtpDocumentManagerWrapper::DtpDocumentManagerWrapper(
 void DtpDocumentManagerWrapper::setWrapped(
     SharedUiItemDocumentManager *wrapped) {
   if (_wrapped)
-    disconnect(_wrapped, &SharedUiItemDocumentManager::itemChanged,
-               this, &DtpDocumentManagerWrapper::itemChanged);
+    disconnect(_wrapped, 0, this, 0);
   _wrapped = wrapped;
-  if (_wrapped)
+  if (_wrapped) {
     connect(_wrapped, &SharedUiItemDocumentManager::itemChanged,
             this, &DtpDocumentManagerWrapper::itemChanged);
+    connect(_wrapped, &SharedUiItemDocumentManager::dataReset,
+            this, &DtpDocumentManagerWrapper::dataReset);
+  }
 }
 
 SharedUiItemDocumentTransaction

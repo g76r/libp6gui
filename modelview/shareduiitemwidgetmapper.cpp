@@ -170,6 +170,7 @@ void SharedUiItemWidgetMapper::widgetEdited() {
 
 void SharedUiItemWidgetMapper::setDocumentManager(
     SharedUiItemDocumentManager *documentManager) {
+  // TODO also connect and handle SUIDM::dataReset
   if (_documentManager) {
     disconnect(_documentManager, &SharedUiItemDocumentManager::itemChanged,
                this, &SharedUiItemWidgetMapper::itemChanged);

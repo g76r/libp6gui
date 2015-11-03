@@ -26,6 +26,9 @@ DtpDocumentManager::DtpDocumentManager(QObject *parent)
   new CloseAllPoppedWindowsAction(this);
   connect(this, &DtpDocumentManager::itemChanged,
           _targetManager, &TargetManager::itemChanged);
+  connect(this, &DtpDocumentManager::dataReset, [this]() {
+    _targetManager->setTarget(); // reset target on data reset
+  });
 }
 
 namespace {
