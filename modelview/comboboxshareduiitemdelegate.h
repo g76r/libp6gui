@@ -18,6 +18,7 @@
 #include "modelview/shareduiitemsmodel.h"
 #include "libh6ncsu_global.h"
 
+// TODO rename class (ComboBoxItemDelegate, no SUI dependency)
 /** Item delegate providing QComboBox based on SharedUiItemsModel for one or
  * several columns.
  * @see QComboBox
@@ -27,23 +28,27 @@ class LIBH6NCSUSHARED_EXPORT ComboBoxSharedUiItemDelegate
     : public QStyledItemDelegate {
   Q_OBJECT
   Q_DISABLE_COPY(ComboBoxSharedUiItemDelegate)
-  QHash<int,SharedUiItemsModel*> _models;
+  QHash<int,QAbstractItemModel*> _models;
   QHash<int,int> _modelColumns;
 
 public:
+  enum SpecialColumns { AllColumns = -2, NoColumn = -1 };
+
   explicit ComboBoxSharedUiItemDelegate(QObject *parent = 0)
     : QStyledItemDelegate(parent) { }
   /** Does not take ownership of model. */
   ComboBoxSharedUiItemDelegate(
-      int column, SharedUiItemsModel *model, int modelColumn,
+      int column, QAbstractItemModel *model, int modelColumn,
       QObject *parent = 0);
-  SharedUiItemsModel *model(int column) const { return _models.value(column); }
-  /** @return -1 if not set */
-  int modelColumn(int column) const { return _modelColumns.value(column, -1); }
+  QAbstractItemModel *model(int column) const { return _models.value(column); }
+  /** @return NoColumn if not set */
+  int modelColumn(int column) const {
+    return _modelColumns.value(column, NoColumn); }
   /** Does not take ownership of model.
    * Can be called seral time with different column numbers to set different
-   * (or same) models for different columns. */
-  void setModel(int column, SharedUiItemsModel *model, int modelColumn);
+   * (or same) models for different columns.
+   * Column number can also be AllColumns. */
+  void setModel(int column, QAbstractItemModel *model, int modelColumn);
   QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                         const QModelIndex &index) const;
   void setEditorData(QWidget *editor, const QModelIndex &index) const;

@@ -15,13 +15,13 @@
 #include <QComboBox>
 
 ComboBoxSharedUiItemDelegate::ComboBoxSharedUiItemDelegate(
-    int column, SharedUiItemsModel *model, int modelColumn,
+    int column, QAbstractItemModel *model, int modelColumn,
     QObject *parent) : ComboBoxSharedUiItemDelegate(parent) {
   setModel(column, model, modelColumn);
 }
 
 void ComboBoxSharedUiItemDelegate::setModel(
-    int column, SharedUiItemsModel *model, int modelColumn) {
+    int column, QAbstractItemModel *model, int modelColumn) {
   if (model) {
     _models.insert(column, model);
     _modelColumns.insert(column, modelColumn);
@@ -35,7 +35,9 @@ QWidget *ComboBoxSharedUiItemDelegate::createEditor(
     QWidget *parent, const QStyleOptionViewItem &option,
     const QModelIndex &index) const {
   int column = index.column();
-  SharedUiItemsModel *model = _models[column];
+  QAbstractItemModel *model = _models[column];
+  if (!model)
+    model = _models[column = AllColumns];
   if (!model)
     return QStyledItemDelegate::createEditor(parent, option, index);
   QComboBox *comboBox = new QComboBox(parent);
