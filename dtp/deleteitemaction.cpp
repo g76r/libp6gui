@@ -22,11 +22,11 @@ DeleteItemAction::DeleteItemAction(
   : DtpAction(documentManager, parent) {
   setIcon(QIcon(":fa/trash-o.svg"));
   setText("Delete Item");
-  connect(this, &DeleteItemAction::triggered, [=]() {
+  connect(this, &DeleteItemAction::triggered, [this,documentManager]() {
     foreach (const QString &qualifiedId,
              documentManager->targetManager()->targetItems()) {
       SharedUiItem oldItem = documentManager->itemById(qualifiedId);
-      if (!oldItem.isNull()) {
+      if (!oldItem.isNull() && isThisItemDeletable(oldItem)) {
         QString reason;
         QString idQualifier = oldItem.idQualifier();
         if (!documentManager->changeItem(
@@ -54,5 +54,9 @@ void DeleteItemAction::targetChanged(
   Q_UNUSED(perspectiveWidget)
   if (targetType == TargetManager::PrimaryTarget)
     setEnabled(!itemIds.isEmpty());
+}
+
+bool DeleteItemAction::isThisItemDeletable(SharedUiItem item) {
+  return true;
 }
 

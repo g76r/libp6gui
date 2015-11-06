@@ -26,6 +26,14 @@ public:
   explicit DeleteItemAction(DtpDocumentManager *documentManager)
     : DeleteItemAction(documentManager, documentManager) { }
 
+protected:
+  /** Subclasses can override this method to decide which items must not be
+   * deleted.
+   *
+   * Default implementation: always return true (and thus delete any item).
+   */
+  virtual bool isThisItemDeletable(SharedUiItem item);
+
 private:
   void targetChanged(TargetManager::TargetType targetType,
                      PerspectiveWidget *perspectiveWidget,
