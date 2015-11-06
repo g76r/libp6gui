@@ -72,7 +72,10 @@ SOURCES += \
     widget/widgetutils.cpp \
     modelview/paramsetview.cpp \
     widget/responsiveapplication.cpp \
-    modelview/comboboxshareduiitemdelegate.cpp
+    modelview/comboboxshareduiitemdelegate.cpp \
+    modelview/dtptableview.cpp \
+    modelview/enhancedtableview.cpp \
+    modelview/dtpmatrixview.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -110,7 +113,10 @@ HEADERS +=\
     widget/widgetutils.h \
     modelview/paramsetview.h \
     widget/responsiveapplication.h \
-    modelview/comboboxshareduiitemdelegate.h
+    modelview/comboboxshareduiitemdelegate.h \
+    modelview/dtptableview.h \
+    modelview/enhancedtableview.h \
+    modelview/dtpmatrixview.h
 
 unix {
     target.path = /usr/lib
