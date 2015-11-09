@@ -57,6 +57,7 @@ void DeleteItemAction::targetChanged(
 }
 
 bool DeleteItemAction::isThisItemDeletable(SharedUiItem item) {
+  Q_UNUSED(item)
   return true;
 }
 
