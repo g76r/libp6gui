@@ -69,6 +69,12 @@ private:
   void setEmptyMouseoverTarget() { setMouseoverTarget(QString()); }
   void clearMouseoverTarget();
   QStringList mouseoverItemsIds() const;
+  void headerBinded(int section, Qt::Orientation orientation,
+                    SharedUiItem newItem, SharedUiItem oldItem,
+                    QString newFormula);
+  void cellBinded(int row, int column, SharedUiItem newItem,
+                  SharedUiItem oldItem, QString newFormula,
+                  int newEditableSection);
 };
 
 #endif // DTPMATRIXVIEW_H

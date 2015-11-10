@@ -16,9 +16,9 @@
 #include "modelview/shareduiitem.h"
 #include <QtDebug>
 #include "modelview/shareduiitemsmodel.h"
+#include "modelview/shareduiitemsmatrixmodel.h"
 
 // TODO factorize code with DtpTreeView
-
 
 DtpMatrixView::DtpMatrixView(QWidget *parent)
   : EnhancedTableView(parent), _perspectiveWidget(0) {
@@ -37,16 +37,21 @@ void DtpMatrixView::setPerspectiveWidget(PerspectiveWidget *widget) {
 
 void DtpMatrixView::setModel(QAbstractItemModel *newModel) {
   SharedUiItemsModel *m = _proxyModelHelper.realModel();
-  if (m) {
-    disconnect(m, &SharedUiItemsModel::itemChanged,
-               this, &DtpMatrixView::itemChanged);
-  }
+  if (m)
+    disconnect(m, 0, this, 0);
   EnhancedTableView::setModel(newModel);
   _proxyModelHelper.setApparentModel(newModel);
   m = _proxyModelHelper.realModel();
   if (m) {
     connect(m, &SharedUiItemsModel::itemChanged,
             this, &DtpMatrixView::itemChanged);
+  }
+  auto *mm = qobject_cast<SharedUiItemsMatrixModel*>(m);
+  if (mm) {
+    connect(mm, &SharedUiItemsMatrixModel::headerBinded,
+            this, &DtpMatrixView::headerBinded);
+    connect(mm, &SharedUiItemsMatrixModel::cellBinded,
+            this, &DtpMatrixView::cellBinded);
   }
   setMouseTracking(newModel);
   if (underMouse())
@@ -133,6 +138,25 @@ void DtpMatrixView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
     if (index.isValid())
       scrollTo(index);
   }
+}
+
+void DtpMatrixView::headerBinded(int section, Qt::Orientation orientation,
+                  SharedUiItem newItem, SharedUiItem oldItem,
+                  QString newFormula) {
+  Q_UNUSED(section)
+  Q_UNUSED(orientation)
+  Q_UNUSED(newFormula)
+  itemChanged(newItem, oldItem);
+}
+
+void DtpMatrixView::cellBinded(int row, int column, SharedUiItem newItem,
+                SharedUiItem oldItem, QString newFormula,
+                int newEditableSection) {
+  Q_UNUSED(row)
+  Q_UNUSED(column)
+  Q_UNUSED(newFormula)
+  Q_UNUSED(newEditableSection)
+  itemChanged(newItem, oldItem);
 }
 
 QStringList DtpMatrixView::mouseoverItemsIds() const {
