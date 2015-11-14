@@ -75,3 +75,68 @@ void EnhancedTreeView::rowsAppearedOrChanged() {
         resizeColumnToContents(i);
   }
 }
+
+inline static QItemSelectionModel::SelectionFlags selectionBehaviorFlags(
+    QAbstractItemView::SelectionBehavior selectionBehavior) {
+  switch (selectionBehavior) {
+  case QAbstractItemView::SelectRows:
+    return QItemSelectionModel::Rows;
+  case QAbstractItemView::SelectColumns:
+    return QItemSelectionModel::Columns;
+  case QAbstractItemView::SelectItems:
+    ;
+  }
+  return QItemSelectionModel::NoUpdate;
+}
+
+void EnhancedTreeView::openNextEditor(CursorAction direction) {
+  QModelIndex current = currentIndex(), next;
+  if (_editNextMeansEditRight) {
+    QAbstractItemModel *m = model();
+    if (m) {
+      int col = current.column();
+      do {
+        if (direction == MovePrevious)
+          --col;
+        else
+          ++col;
+        next = m->index(current.row(), col, current.parent());
+      } while (next.isValid() && isColumnHidden(col));
+    }
+  } else {
+    next = moveCursor(direction, Qt::NoModifier);
+  }
+  if (next.isValid()) {
+    QPersistentModelIndex persistent(next);
+    QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::NoUpdate;
+    QItemSelectionModel *sm = selectionModel();
+    if (sm) {
+      if (selectionMode() != NoSelection)
+        flags = QItemSelectionModel::ClearAndSelect
+            | selectionBehaviorFlags(selectionBehavior());
+      sm->setCurrentIndex(persistent, flags);
+    }
+    if (next.flags() & Qt::ItemIsEditable
+        && (!(editTriggers() & QAbstractItemView::CurrentChanged)))
+      edit(persistent);
+  } else {
+    setCurrentIndex(current);
+  }
+}
+
+void EnhancedTreeView::closeEditor(
+    QWidget *editor, QAbstractItemDelegate::EndEditHint hint) {
+  switch (hint) {
+  case QAbstractItemDelegate::EditNextItem:
+    QTreeView::closeEditor(editor, QAbstractItemDelegate::NoHint);
+    openNextEditor(MoveNext);
+    return;
+  case QAbstractItemDelegate::EditPreviousItem:
+    QTreeView::closeEditor(editor, QAbstractItemDelegate::NoHint);
+    openNextEditor(MovePrevious);
+    return;
+  default:
+    ;
+  }
+  QTreeView::closeEditor(editor, hint);
+}

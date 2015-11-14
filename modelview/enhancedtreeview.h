@@ -30,6 +30,10 @@
  *   convenient to display data without previous action from the user
  * - bool resizeColumnsToContentsOnChange: call resizeColumnToContents() on
  *   change
+ * - bool editNextMeansEditRight: when editor is closed with EditNextItem or
+ *   EditPreviousItem hint (typically when the user press Tab or Backtab), open
+ *   a new editor on item on the right/left rather than below/above (a.k.a.
+ *   behave like QTableView not QTreeView).
  */
 class LIBH6NCSUSHARED_EXPORT EnhancedTreeView : public QTreeView {
   Q_OBJECT
@@ -40,9 +44,13 @@ class LIBH6NCSUSHARED_EXPORT EnhancedTreeView : public QTreeView {
   Q_PROPERTY(bool resizeColumnsToContentsOnChange
              READ resizeColumnsToContentsOnChange
              WRITE setResizeColumnsToContentsOnChange)
+  Q_PROPERTY(bool editNextMeansEditRight
+             READ editNextMeansEditRight
+             WRITE setEditNextMeansEditRight)
   bool _ignoreKeyboardInput = false;
   int _expandToDepthOnChange = 0;
   bool _resizeColumnsToContentsOnChange = false;
+  bool _editNextMeansEditRight = false;
 
 public:
   explicit EnhancedTreeView(QWidget *parent = 0);
@@ -58,6 +66,9 @@ public:
     return _resizeColumnsToContentsOnChange; }
   void setResizeColumnsToContentsOnChange(bool enable = true) {
     _resizeColumnsToContentsOnChange = enable; }
+  bool editNextMeansEditRight() const { return _editNextMeansEditRight; }
+  void setEditNextMeansEditRight(bool enable = true) {
+    _editNextMeansEditRight = enable; }
   void setModel(QAbstractItemModel *model);
 
 signals:
@@ -66,10 +77,12 @@ signals:
 protected:
   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
                    const QVector<int> &roles) override;
+  void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint);
 
 private:
   void rowsAppeared();
   void rowsAppearedOrChanged();
+  void openNextEditor(CursorAction direction);
 };
 
 #endif // ENHANCEDTREEVIEW_H
