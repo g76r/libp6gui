@@ -31,7 +31,7 @@ class TargetManager;
  * @see SharedUiItemsMatrixModel
  * @see DtpTableView
  */
-class LIBH6NCSUSHARED_EXPORT  DtpMatrixView : public EnhancedTableView {
+class LIBH6NCSUSHARED_EXPORT DtpMatrixView : public EnhancedTableView {
   Q_OBJECT
   Q_DISABLE_COPY(DtpMatrixView)
   Q_PROPERTY(QStringList primaryItemsIds READ selectedItemsIds
@@ -71,9 +71,9 @@ private:
   QStringList mouseoverItemsIds() const;
   void headerBinded(int section, Qt::Orientation orientation,
                     SharedUiItem newItem, SharedUiItem oldItem,
-                    QString newFormula);
+                    QString newFormula, QString newTooltip);
   void cellBinded(int row, int column, SharedUiItem newItem,
-                  SharedUiItem oldItem, QString newFormula,
+                  SharedUiItem oldItem, QString newFormula, QString newTooltip,
                   int newEditableSection);
 };
 

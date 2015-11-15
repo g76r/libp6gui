@@ -142,19 +142,21 @@ void DtpMatrixView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
 
 void DtpMatrixView::headerBinded(int section, Qt::Orientation orientation,
                   SharedUiItem newItem, SharedUiItem oldItem,
-                  QString newFormula) {
+                  QString newFormula, QString newTooltip) {
   Q_UNUSED(section)
   Q_UNUSED(orientation)
   Q_UNUSED(newFormula)
+  Q_UNUSED(newTooltip)
   itemChanged(newItem, oldItem);
 }
 
 void DtpMatrixView::cellBinded(int row, int column, SharedUiItem newItem,
-                SharedUiItem oldItem, QString newFormula,
+                SharedUiItem oldItem, QString newFormula, QString newTooltip,
                 int newEditableSection) {
   Q_UNUSED(row)
   Q_UNUSED(column)
   Q_UNUSED(newFormula)
+  Q_UNUSED(newTooltip)
   Q_UNUSED(newEditableSection)
   itemChanged(newItem, oldItem);
 }
