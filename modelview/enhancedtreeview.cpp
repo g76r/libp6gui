@@ -94,13 +94,22 @@ void EnhancedTreeView::openNextEditor(CursorAction direction) {
   if (_editNextMeansEditRight) {
     QAbstractItemModel *m = model();
     if (m) {
-      int col = current.column();
+      int row = current.row(), col = current.column();
       do {
-        if (direction == MovePrevious)
-          --col;
-        else
-          ++col;
-        next = m->index(current.row(), col, current.parent());
+        if (direction == MovePrevious) {
+          if (col == 0) {
+            --row;
+            col = m->columnCount(current.parent())-1;
+          } else
+            --col;
+        } else {
+          if (col == m->columnCount(current.parent())-1) {
+            ++row;
+            col = 0;
+          } else
+            ++col;
+        }
+        next = m->index(row, col, current.parent());
       } while (next.isValid() && isColumnHidden(col));
     }
   } else {

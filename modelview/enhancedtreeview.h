@@ -33,7 +33,8 @@
  * - bool editNextMeansEditRight: when editor is closed with EditNextItem or
  *   EditPreviousItem hint (typically when the user press Tab or Backtab), open
  *   a new editor on item on the right/left rather than below/above (a.k.a.
- *   behave like QTableView not QTreeView).
+ *   behave like QTableView not QTreeView), true by default (which is not
+ *   QTreeView behaviour).
  */
 class LIBH6NCSUSHARED_EXPORT EnhancedTreeView : public QTreeView {
   Q_OBJECT
@@ -50,7 +51,7 @@ class LIBH6NCSUSHARED_EXPORT EnhancedTreeView : public QTreeView {
   bool _ignoreKeyboardInput = false;
   int _expandToDepthOnChange = 0;
   bool _resizeColumnsToContentsOnChange = false;
-  bool _editNextMeansEditRight = false;
+  bool _editNextMeansEditRight = true;
 
 public:
   explicit EnhancedTreeView(QWidget *parent = 0);
