@@ -56,7 +56,12 @@ SharedUiItem DtpDocumentManager::createNewItem(
   CoreUndoCommand *command =
       internalCreateNewItem(&newItem, idQualifier, errorString);
   if (command) {
-    undoStack()->push(new UndoCommandAdapter(command));
+    if (_pushChangesToUndoStack)
+      undoStack()->push(new UndoCommandAdapter(command));
+    else {
+      command->redo();
+      delete command;
+    }
     return newItem;
   }
   return SharedUiItem();
@@ -71,7 +76,12 @@ bool DtpDocumentManager::changeItemByUiData(
   CoreUndoCommand *command =
       internalChangeItemByUiData(oldItem, section, value, errorString);
   if (command) {
-    undoStack()->push(new UndoCommandAdapter(command));
+    if (_pushChangesToUndoStack)
+      undoStack()->push(new UndoCommandAdapter(command));
+    else {
+      command->redo();
+      delete command;
+    }
     return true;
   }
   QMessageBox::warning(DtpMainWindow::instance(),
@@ -95,7 +105,12 @@ bool DtpDocumentManager::changeItem(
     // commands w/o children do nothing (e.g. deleteIfExists on inexistent item)
     // and therefore must not be pushed on undo stack but are not errors
     if (command->childCount() > 0)
-      undoStack()->push(new UndoCommandAdapter(command));
+      if (_pushChangesToUndoStack)
+        undoStack()->push(new UndoCommandAdapter(command));
+      else {
+        command->redo();
+        delete command;
+      }
     return true;
   }
   return false;

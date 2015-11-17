@@ -39,6 +39,7 @@ class LIBH6NCSUSHARED_EXPORT DtpDocumentManager
   Q_DISABLE_COPY(DtpDocumentManager)
   TargetManager *_targetManager;
   QUndoStack *_undoStack;
+  bool _pushChangesToUndoStack = true;
 
 public:
   explicit DtpDocumentManager(QObject *parent = 0);
@@ -59,6 +60,13 @@ public:
   bool changeItem(
       SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
       QString *errorString) override;
+  bool pushChangesToUndoStack() const { return _pushChangesToUndoStack; }
+  /** Push further changes to the undo stack.
+   * Enabled by default.
+   * Can be disabled e.g. when a change should not be made visible/undoable
+   * to the user. */
+  void setPushChangesToUndoStack(bool enable = true) {
+    _pushChangesToUndoStack = enable; }
 };
 
 #endif // DTPDOCUMENTMANAGER_H
