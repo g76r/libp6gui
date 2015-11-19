@@ -104,13 +104,14 @@ bool DtpDocumentManager::changeItem(
   if (command) {
     // commands w/o children do nothing (e.g. deleteIfExists on inexistent item)
     // and therefore must not be pushed on undo stack but are not errors
-    if (command->childCount() > 0)
+    if (command->childCount() > 0) {
       if (_pushChangesToUndoStack)
         undoStack()->push(new UndoCommandAdapter(command));
       else {
         command->redo();
         delete command;
       }
+    }
     return true;
   }
   return false;
