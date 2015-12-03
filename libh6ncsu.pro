@@ -30,6 +30,8 @@ unix {
   OBJECTS_DIR = ../build-libh6ncsu-unix/obj
   RCC_DIR = ../build-libh6ncsu-unix/rcc
   MOC_DIR = ../build-libh6ncsu-unix/moc
+  #QMAKE_CXXFLAGS += -O0 -pg -fprofile-arcs -ftest-coverage
+  #QMAKE_LFLAGS += -pg -fprofile-arcs
 }
 
 INCLUDEPATH += ../libqtssu
