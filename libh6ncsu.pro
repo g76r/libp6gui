@@ -21,7 +21,7 @@ DEFINES += LIBH6NCSU_LIBRARY
 
 exists(/usr/bin/ccache):QMAKE_CXX = ccache g++
 exists(/usr/bin/ccache):QMAKE_CXXFLAGS += -fdiagnostics-color=always
-QMAKE_CXXFLAGS += -Wextra
+QMAKE_CXXFLAGS += -Wextra -Woverloaded-virtual
 unix:debug:QMAKE_CXXFLAGS += -ggdb
 unix {
   UI_DIR = ../build-libh6ncsu-unix/ui
@@ -77,7 +77,8 @@ SOURCES += \
     modelview/comboboxshareduiitemdelegate.cpp \
     modelview/dtptableview.cpp \
     modelview/enhancedtableview.cpp \
-    modelview/dtpmatrixview.cpp
+    modelview/dtpmatrixview.cpp \
+    modelview/copyviewashtmlaction.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -118,7 +119,8 @@ HEADERS +=\
     modelview/comboboxshareduiitemdelegate.h \
     modelview/dtptableview.h \
     modelview/enhancedtableview.h \
-    modelview/dtpmatrixview.h
+    modelview/dtpmatrixview.h \
+    modelview/copyviewashtmlaction.h
 
 unix {
     target.path = /usr/lib
