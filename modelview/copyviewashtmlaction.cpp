@@ -26,9 +26,10 @@
 // LATER add vertical (left) headers, especially for QTableView
 
 CopyViewAsHtmlAction::CopyViewAsHtmlAction(
-    QAbstractItemView *view, QObject *parent)
+    QAbstractItemView *view, bool ignoreSelection, QObject *parent)
   : QAction(QIcon(":fa/copy.svg"), tr("Copy"), parent), _view(view),
-    _indentationPlaceholder("&nbsp;&nbsp;&nbsp;") {
+    _indentationPlaceholder("&nbsp;&nbsp;&nbsp;"),
+    _ignoreSelection(ignoreSelection) {
   connect(this, &QAction::triggered, [this]() {
     //qDebug() << "CopyViewAsHtmlAction";
     QClipboard *clipboard = QApplication::clipboard();
@@ -83,7 +84,8 @@ void CopyViewAsHtmlAction::recursiveCopy(
   for (int row = 0; row < rowCount; ++row) {
     // LATER also select parents of selected rows
     // LATER also hide invisible rows for QTableView
-    if (sm && sm->hasSelection() && !sm->isRowSelected(row, parent))
+    if (!_ignoreSelection && sm && sm->hasSelection()
+        && !sm->isRowSelected(row, parent))
       continue;
     html.append("<tr>");
     int columnCount = m->columnCount(parent);

@@ -30,14 +30,23 @@ class LIBH6NCSUSHARED_EXPORT CopyViewAsHtmlAction : public QAction {
   Q_DISABLE_COPY(CopyViewAsHtmlAction)
   QPointer<QAbstractItemView> _view;
   QString _indentationPlaceholder;
+  bool _ignoreSelection;
 
 public:
   CopyViewAsHtmlAction(QObject *parent = 0)
-    : CopyViewAsHtmlAction(0, parent) { }
-  CopyViewAsHtmlAction(QAbstractItemView *view, QObject *parent = 0);
+    : CopyViewAsHtmlAction(0, false, parent) { }
+  CopyViewAsHtmlAction(QAbstractItemView *view, QObject *parent = 0)
+    : CopyViewAsHtmlAction(view, false, parent) { }
+  CopyViewAsHtmlAction(bool ignoreSelection, QObject *parent = 0)
+    : CopyViewAsHtmlAction(0, ignoreSelection, parent) { }
+  CopyViewAsHtmlAction(QAbstractItemView *view, bool ignoreSelection,
+                       QObject *parent = 0);
   QString indentationPlaceholder() const { return _indentationPlaceholder; }
   void setIndentationPlaceholder(QString indentationPlaceholder) {
     _indentationPlaceholder = indentationPlaceholder; }
+  void setView(QAbstractItemView *view) { _view = view; }
+
+private:
   void recursiveCopy(
       QString &html, QSet<int> &visibleColumns, QAbstractItemView *v,
       QAbstractItemModel *m, QModelIndex parent, QString indentation);
