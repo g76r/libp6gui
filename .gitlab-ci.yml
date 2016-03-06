@@ -6,7 +6,7 @@ build_main:
   script:
     - git clone https://gitlab.com/g76r/libqtssu.git
     - cd libqtssu && qmake && make && cd ..
-    - qmake INCLUDEPATH+=libqtssu LIBS+=libqtssu
+    - qmake INCLUDEPATH+=libqtssu LIBS+=-Llibqtssu
     - make
   tags:
     - qt
