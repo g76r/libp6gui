@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Hallowyn and others.
+# Copyright 2014-2016 Hallowyn and others.
 # This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
 # Libh6ncsu is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -22,7 +22,7 @@ DEFINES += LIBH6NCSU_LIBRARY
 exists(/usr/bin/ccache):QMAKE_CXX = ccache g++
 exists(/usr/bin/ccache):QMAKE_CXXFLAGS += -fdiagnostics-color=always
 QMAKE_CXXFLAGS += -Wextra -Woverloaded-virtual
-unix:debug:QMAKE_CXXFLAGS += -ggdb
+unix:CONFIG(debug,debug|release):QMAKE_CXXFLAGS += -ggdb
 unix {
   UI_DIR = ../build-libh6ncsu-unix/ui
   UI_HEADERS_DIR = ../build-libh6ncsu-unix/ui/include
@@ -35,8 +35,8 @@ unix {
 }
 
 INCLUDEPATH += ../libqtssu
-win32:debug:LIBS += -L../build-libqtssu-windows/debug
-win32:release:LIBS += -L../build-libqtssu-windows/release
+win32:CONFIG(debug,debug|release):LIBS += -L../build-libqtssu-windows/debug
+win32:CONFIG(release,debug|release):LIBS += -L../build-libqtssu-windows/release
 unix:LIBS += -L../libqtssu
 LIBS += -lqtssu
 
