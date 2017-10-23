@@ -16,7 +16,7 @@
 #include "dtpgraphicsscene.h"
 
 DtpGraphicsView::DtpGraphicsView(QWidget *parent)
-  : EnhancedGraphicsView(parent) {
+  : EnhancedGraphicsView(parent), _perspectiveWidget(0) {
   setFocusPolicy(Qt::StrongFocus);
 }
 
