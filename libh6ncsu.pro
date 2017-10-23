@@ -1,4 +1,4 @@
-# Copyright 2014-2016 Hallowyn and others.
+# Copyright 2014-2017 Hallowyn and others.
 # This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
 # Libh6ncsu is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -34,11 +34,15 @@ unix {
   #QMAKE_LFLAGS += -pg -fprofile-arcs
 }
 
-INCLUDEPATH += ../libqtssu
-win32:CONFIG(debug,debug|release):LIBS += -L../build-libqtssu-windows/debug
-win32:CONFIG(release,debug|release):LIBS += -L../build-libqtssu-windows/release
-unix:LIBS += -L../libqtssu
-LIBS += -lqtssu
+INCLUDEPATH += ../p6core ../qtpf
+win32:CONFIG(debug,debug|release): \
+  LIBS += -L../build-p6core-win32/debug \
+          -L../build-qtpf-win32/debug
+win32:CONFIG(release,debug|release): \
+  LIBS += -L../build-p6core-win32/release \
+          -L../build-qtpf-win32/release
+unix:LIBS += -L../p6core -L../qtpf
+LIBS += -lp6core -lqtpf
 
 SOURCES += \
     widget/dynamicstackedwidget.cpp \
