@@ -34,14 +34,14 @@ unix {
   #QMAKE_LFLAGS += -pg -fprofile-arcs
 }
 
-INCLUDEPATH += ../p6core ../qtpf
+INCLUDEPATH += ../libp6core ../libqtpf
 win32:CONFIG(debug,debug|release): \
   LIBS += -L../build-p6core-win32/debug \
           -L../build-qtpf-win32/debug
 win32:CONFIG(release,debug|release): \
   LIBS += -L../build-p6core-win32/release \
           -L../build-qtpf-win32/release
-unix:LIBS += -L../p6core -L../qtpf
+unix:LIBS += -L../libp6core -L../libqtpf
 LIBS += -lp6core -lqtpf
 
 SOURCES += \
