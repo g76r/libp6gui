@@ -1,4 +1,4 @@
-/* Copyright 2014-2015 Hallowyn and others.
+/* Copyright 2014-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -35,6 +35,7 @@ class LIBH6NCSUSHARED_EXPORT PerspectiveWidget : public QWidget {
   Q_OBJECT
 private:
   DtpDocumentManager *_documentManager;
+  QString _perspectiveItemQualifiedId;
 
 public:
   explicit PerspectiveWidget(QWidget *parent);
@@ -46,6 +47,22 @@ public:
   TargetManager *targetManager() {return targetManager(this); }
   /** Convenience method */
   static TargetManager *targetManager(PerspectiveWidget *pw);
+  /** Return id of an item that is associated to the perspective, i.e.
+   * if the perspective is viewing the document through this item point
+   * of view, for instance by editing only this item and its children/
+   * relatives. Can be left empty forever by any implementation. */
+  QString perspectiveItemQualifiedId() const {
+    return _perspectiveItemQualifiedId; }
+  void setPerspectiveItemQualifiedId(QString qualifiedId = QString()) {
+    _perspectiveItemQualifiedId = qualifiedId; }
+  /** Mouse position within the model.
+   * Can be usefull to decide an item position within the model when
+   * creating it.
+   * Position can be screen or widget coordinates or any other coordinates
+   * system that fit better the model (more or less than 2 dimensions, etc.)
+   * hence the QVariant.
+   * Default implementation always return QVariant() */
+  virtual QVariant mouseOverPosition() const;
 
 public slots:
   /** Create and a new identical widget (clone) showing same perspective and
