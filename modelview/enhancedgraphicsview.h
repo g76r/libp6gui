@@ -1,4 +1,4 @@
-/* Copyright 2014-2015 Hallowyn and others.
+/* Copyright 2014-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -32,18 +32,25 @@ class LIBH6NCSUSHARED_EXPORT EnhancedGraphicsView : public QGraphicsView {
 private:
   bool _mouseDragScrolling, _mouseMoved;
   QPoint _lastPos;
+  QPointF _mouseOverPosition;
 
 public:
   explicit EnhancedGraphicsView(QWidget *parent);
-  void wheelEvent(QWheelEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
-  void mouseMoveEvent(QMouseEvent *event);
+  /** @return mouse position in scene coordinates, when mouse is overring,
+   * tracking must be enabled, otherwise return QPointF() */
+  QPointF mouseOverPosition() const { return _mouseOverPosition; }
 
 public slots:
   void fitAllInView();
   void zoomIn();
   void zoomOut();
+
+protected:
+  void wheelEvent(QWheelEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void leaveEvent(QEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
 };
 
 #endif // ENHANCEDGRAPHICSVIEW_H

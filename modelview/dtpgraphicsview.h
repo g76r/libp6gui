@@ -1,4 +1,4 @@
-/* Copyright 2014-2015 Hallowyn and others.
+/* Copyright 2014-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -25,15 +25,17 @@ class LIBH6NCSUSHARED_EXPORT DtpGraphicsView : public EnhancedGraphicsView {
 
 public:
   explicit DtpGraphicsView(QWidget *parent = 0);
-  void focusInEvent(QFocusEvent *event);
-  void enterEvent(QEvent *event);
-  void leaveEvent(QEvent *event);
   void setScene(QGraphicsScene *scene);
 
 signals:
   /** Same as DtpGraphicsScene::selectedItemsChanged() but only emited when
    * this view has focus */
   void selectedItemsChanged(QStringList selectedItemsIds);
+
+protected:
+  void focusInEvent(QFocusEvent *event) override;
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 #endif // DTPGRAPHICSVIEW_H
