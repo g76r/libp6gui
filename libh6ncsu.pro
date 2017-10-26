@@ -82,7 +82,8 @@ SOURCES += \
     modelview/dtptableview.cpp \
     modelview/enhancedtableview.cpp \
     modelview/dtpmatrixview.cpp \
-    modelview/copyviewashtmlaction.cpp
+    modelview/copyviewashtmlaction.cpp \
+    graphics/dtpgraphicsitem.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -124,7 +125,8 @@ HEADERS +=\
     modelview/dtptableview.h \
     modelview/enhancedtableview.h \
     modelview/dtpmatrixview.h \
-    modelview/copyviewashtmlaction.h
+    modelview/copyviewashtmlaction.h \
+    graphics/dtpgraphicsitem.h
 
 unix {
     target.path = /usr/lib
