@@ -12,9 +12,11 @@
  * along with libh6ncsu.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "dtpgraphicsitem.h"
+#include "modelview/dtpgraphicsscene.h"
+//#include <QtDebug>
 
 DtpGraphicsItem::DtpGraphicsItem(QGraphicsItem *parent)
-  : QGraphicsObject(parent), _documentManager(0) {
+  : QGraphicsObject(parent) {
   connect(this, &DtpGraphicsItem::xChanged,
           this, &DtpGraphicsItem::persistPosition);
   connect(this, &DtpGraphicsItem::yChanged,
@@ -35,18 +37,25 @@ void DtpGraphicsItem::setUiItem(SharedUiItem uiItem) {
   update();
 }
 
-void DtpGraphicsItem::setDocumentManager(DtpDocumentManager *documentManager) {
-  _documentManager = documentManager;
-  update();
+DtpDocumentManager *DtpGraphicsItem::documentManager() const {
+  auto s = qobject_cast<DtpGraphicsScene*>(scene());
+  auto pw = s ? s->perspectiveWidget() : 0;
+  return  pw ? pw->documentManager() : 0;
 }
 
 void DtpGraphicsItem::persistPosition() {
-  if (!_documentManager || !_uiItem)
+  auto dm = documentManager();
+  if (!dm || !_uiItem)
     return;
   int section = _positionSection;
   if (section < 0)
     section = _uiItem.uiSectionByName(_positionSectionName);
-  if (section >= 0)
-    _documentManager->changeItemByUiData(_uiItem, section, pos());
+  if (section >= 0) {
+    QPointF oldPos = _uiItem.uiData(section).toPointF();
+    QPointF newPos = pos();
+    //qDebug() << "persistPosition" << section << oldPos << newPos;
+    if (newPos != oldPos)
+      dm->changeItemByUiData(_uiItem, section, pos());
+  }
    // TODO merge move transactions
 }

@@ -26,7 +26,6 @@ class LIBH6NCSUSHARED_EXPORT DtpGraphicsItem : public QGraphicsObject {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsItem)
   SharedUiItem _uiItem;
-  DtpDocumentManager *_documentManager;
   int _positionSection = -1;
   QString _positionSectionName = "position";
 
@@ -34,8 +33,7 @@ public:
   DtpGraphicsItem(QGraphicsItem *parent = 0);
   SharedUiItem uiItem() const { return _uiItem; }
   virtual void setUiItem(SharedUiItem uiItem);
-  DtpDocumentManager *documentManager() const { return _documentManager; }
-  virtual void setDocumentManager(DtpDocumentManager *documentManager);
+  DtpDocumentManager *documentManager() const;
   /** SharedUiItem section used to track position, default to "position" */
   void setPositionSection(const QString &sectionName) {
     _positionSectionName = sectionName; _positionSection = -1; }
