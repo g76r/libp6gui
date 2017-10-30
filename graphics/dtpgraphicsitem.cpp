@@ -55,13 +55,13 @@ void DtpGraphicsItem::itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
       //qDebug() << "DtpGraphicsItem::itemChanged" << newItem.id() << oldItem.id()
       //         << idQualifier;
       if (newItem.isNull()) {
-        _uiItems.removeAll(item); // safe because we break the loop just after
-        auto dtpScene = qobject_cast<DtpGraphicsScene*>(scene());
-        if (_uiItems.isEmpty() && dtpScene) {
-          qDebug() << "  no more ui items -> self destructing";
-          dtpScene->removeItem(this);
+        auto graphicsScene = scene();
+        if (graphicsScene && (_uiItems.isEmpty() || _uiItems.first() == item)) {
+          //qDebug() << "  main ui item deleted -> self destructing";
+          graphicsScene->removeItem(this);
           deleteLater();
         }
+        _uiItems.removeAll(item); // safe because we break the loop just after
       } else {
         item = newItem;
         emit uiItemsChanged();
