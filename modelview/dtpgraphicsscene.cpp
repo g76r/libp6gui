@@ -1,4 +1,4 @@
-/* Copyright 2014-2015 Hallowyn and others.
+/* Copyright 2014-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -18,10 +18,12 @@
 #include "dtpgraphicsview.h"
 #include <QGraphicsItem>
 #include "modelview/shareduiitem.h"
+#include <QMultiHash>
+#include <QtDebug>
 
 DtpGraphicsScene::DtpGraphicsScene(QObject *parent) : QGraphicsScene(parent) {
-  connect(this, SIGNAL(selectionChanged()),
-          this, SLOT(propagateSelectionChanged()));
+  connect(this, &DtpGraphicsScene::selectionChanged,
+          this, &DtpGraphicsScene::propagateSelectionChanged);
 }
 
 void DtpGraphicsScene::setPerspectiveWidget(PerspectiveWidget *widget) {
@@ -51,7 +53,34 @@ void DtpGraphicsScene::propagateSelectionChanged() {
   }
 }
 
-void DtpGraphicsScene::setMouseOverItem(QStringList ids) {
+void DtpGraphicsScene::registerDtpGraphicsItem(DtpGraphicsItem *graphicsItem,
+                                               SharedUiItemList<> uiItems) {
+  bool first = true;
+  for (const SharedUiItem &sui : uiItems) {
+    if (first) {
+      _itemsByMainUiItem.insert(sui.qualifiedId(), graphicsItem);
+      first = false;
+    }
+    _registeredItems.insert(sui.qualifiedId(), graphicsItem);
+  }
+}
+
+void DtpGraphicsScene::itemChanged(
+    SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier) {
+  if (!_itemQualifierFilter.isEmpty()
+      && !_itemQualifierFilter.contains(idQualifier))
+    return;
+  _registeredItems.remove(oldItem.qualifiedId(), nullptr);
+  if (_itemsByMainUiItem.value(oldItem.qualifiedId()).isNull())
+    _itemsByMainUiItem.remove(oldItem.qualifiedId());
+  auto items = _registeredItems.values(oldItem.qualifiedId());
+  for (DtpGraphicsItem *dgi : items) {
+    Q_ASSERT(dgi); // should always be true since 0 have been removed before
+    dgi->itemChanged(newItem, oldItem, idQualifier);
+  }
+}
+
+/*void DtpGraphicsScene::setMouseOverItem(QStringList ids) {
   _mouseoverItemsIds = ids;
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm) {
@@ -61,4 +90,4 @@ void DtpGraphicsScene::setMouseOverItem(QStringList ids) {
         break;
       }
   }
-}
+}*/

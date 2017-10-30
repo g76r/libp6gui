@@ -13,7 +13,8 @@
  */
 #include "dtpgraphicsitem.h"
 #include "modelview/dtpgraphicsscene.h"
-//#include <QtDebug>
+#include <QtDebug>
+#include "modelview/dtpgraphicsscene.h"
 
 DtpGraphicsItem::DtpGraphicsItem(QGraphicsItem *parent)
   : QGraphicsObject(parent) {
@@ -23,39 +24,93 @@ DtpGraphicsItem::DtpGraphicsItem(QGraphicsItem *parent)
           this, &DtpGraphicsItem::persistPosition);
 }
 
-void DtpGraphicsItem::setUiItem(SharedUiItem uiItem) {
-  _uiItem = uiItem;
-  setData(SharedUiItem::QualifiedIdRole, _uiItem.qualifiedId());
+void DtpGraphicsItem::setUiItems(SharedUiItemList<> uiItems) {
+  // LATER support being called twice or more: unregister, etc.
+  _uiItems = uiItems;
+  if (uiItems.size())
+    setData(SharedUiItem::QualifiedIdRole, uiItems.first().qualifiedId());
   //  qDebug() << "setting initial position" << uiData("position")
   //           << uiData("position").toPointF() << uiItem.uiData(4)
   //           << uiItem.uiData(4).toPointF() << uiItem.uiData(4).toString();
-  int section = _positionSection;
-  if (section < 0)
-    section = _uiItem.uiSectionByName(_positionSectionName);
-  if (section >= 0)
-    setPos(_uiItem.uiData(section).toPointF());
+  QPointF pos = uiData(_positionSectionName).toPointF();
+  if (!pos.isNull())
+    setPos(pos);
+  auto dtpScene = qobject_cast<DtpGraphicsScene*>(scene());
+  if (dtpScene) {
+    dtpScene->registerDtpGraphicsItem(this, _uiItems);
+  } else {
+    qWarning() << "DtpGraphicsItem::setUiItems() called before the item is "
+                  "added to a DtpGraphicsScene, this will disable automatic "
+                  "update of its SharedUiItems";
+  }
+  emit uiItemsChanged();
   update();
 }
 
+void DtpGraphicsItem::itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
+                                  QString idQualifier) {
+  Q_UNUSED(idQualifier)
+  for (SharedUiItem &item : _uiItems) {
+    if (item.qualifiedId() == oldItem.qualifiedId()) {
+      //qDebug() << "DtpGraphicsItem::itemChanged" << newItem.id() << oldItem.id()
+      //         << idQualifier;
+      if (newItem.isNull()) {
+        _uiItems.removeAll(item); // safe because we break the loop just after
+        auto dtpScene = qobject_cast<DtpGraphicsScene*>(scene());
+        if (_uiItems.isEmpty() && dtpScene) {
+          qDebug() << "  no more ui items -> self destructing";
+          dtpScene->removeItem(this);
+          deleteLater();
+        }
+      } else {
+        item = newItem;
+        emit uiItemsChanged();
+        update();
+      }
+      break;
+    }
+  }
+}
+
 DtpDocumentManager *DtpGraphicsItem::documentManager() const {
-  auto s = qobject_cast<DtpGraphicsScene*>(scene());
-  auto pw = s ? s->perspectiveWidget() : 0;
-  return  pw ? pw->documentManager() : 0;
+  auto dtpScene = qobject_cast<DtpGraphicsScene*>(scene());
+  auto pw = dtpScene ? dtpScene->perspectiveWidget() : 0;
+  return pw ? pw->documentManager() : 0;
 }
 
 void DtpGraphicsItem::persistPosition() {
   auto dm = documentManager();
-  if (!dm || !_uiItem)
+  if (!dm || _uiItems.isEmpty())
     return;
-  int section = _positionSection;
+  SharedUiItem &sui = _uiItems[0];
+  int section = sui.uiSectionByName(_positionSectionName);
   if (section < 0)
-    section = _uiItem.uiSectionByName(_positionSectionName);
-  if (section >= 0) {
-    QPointF oldPos = _uiItem.uiData(section).toPointF();
-    QPointF newPos = pos();
-    //qDebug() << "persistPosition" << section << oldPos << newPos;
-    if (newPos != oldPos)
-      dm->changeItemByUiData(_uiItem, section, pos());
+    return;
+  QPointF oldPos = uiData(section).toPointF();
+  QPointF newPos = pos();
+  if (newPos == oldPos)
+    return;
+  //qDebug() << "persistPosition" << sui.qualifiedId() << section << oldPos << newPos;
+  dm->changeItemByUiData(sui, section, pos());
+  // TODO merge move transactions
+}
+
+QVariant DtpGraphicsItem::uiData(const QString &section, int role) const {
+  QVariant v;
+  for (const SharedUiItem &item : _uiItems) {
+    v = item.uiDataBySectionName(section, role);
+    if (!v.isNull())
+      break;
   }
-   // TODO merge move transactions
+  return v;
+}
+
+QVariant DtpGraphicsItem::uiData(int section, int role) const {
+  QVariant v;
+  for (const SharedUiItem &item : _uiItems) {
+    v = item.uiData(section, role);
+    if (!v.isNull())
+      break;
+  }
+  return v;
 }

@@ -25,22 +25,29 @@
 class LIBH6NCSUSHARED_EXPORT DtpGraphicsItem : public QGraphicsObject {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsItem)
-  SharedUiItem _uiItem;
-  int _positionSection = -1;
+  SharedUiItemList<> _uiItems;
   QString _positionSectionName = "position";
 
 public:
   DtpGraphicsItem(QGraphicsItem *parent = 0);
-  SharedUiItem uiItem() const { return _uiItem; }
-  virtual void setUiItem(SharedUiItem uiItem);
+  SharedUiItemList<> uiItems() const { return _uiItems; }
+  virtual void setUiItems(SharedUiItemList<> uiItems = { });
   DtpDocumentManager *documentManager() const;
   /** SharedUiItem section used to track position, default to "position" */
   void setPositionSection(const QString &sectionName) {
-    _positionSectionName = sectionName; _positionSection = -1; }
-  /** SharedUiItem section used to track position, default to "position".
-   * Disable the feature if section is -1 */
-  void setPositionSection(int section = -1) {
-    _positionSectionName = QString(); _positionSection = section; }
+    _positionSectionName = sectionName; }
+  QVariant uiData(const QString &section, int role = Qt::DisplayRole) const;
+  QVariant uiData(int section, int role = Qt::DisplayRole) const;
+  QString uiString(const QString &section, int role = Qt::DisplayRole) const {
+    return uiData(section, role).toString(); }
+  QString uiString(int section, int role = Qt::DisplayRole) const {
+    return uiData(section, role).toString(); }
+  void itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
+                   QString idQualifier);
+
+signals:
+  /** emitted whenever at less one of the ui items changes */
+  void uiItemsChanged();
 
 private:
   void persistPosition();

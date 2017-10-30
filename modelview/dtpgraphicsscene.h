@@ -1,4 +1,4 @@
-/* Copyright 2014-2015 Hallowyn and others.
+/* Copyright 2014-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,6 +16,8 @@
 
 #include <QGraphicsScene>
 #include "dtp/perspectivewidget.h"
+#include "graphics/dtpgraphicsitem.h"
+#include "modelview/shareduiitemlist.h"
 
 /** FIXME doc
  *
@@ -28,7 +30,9 @@ class LIBH6NCSUSHARED_EXPORT DtpGraphicsScene : public QGraphicsScene {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsScene)
   PerspectiveWidget *_perspectiveWidget;
-  QStringList _selectedItemsIds, _mouseoverItemsIds;
+  QStringList _selectedItemsIds, _mouseoverItemsIds, _itemQualifierFilter;
+  QMultiHash<QString,QPointer<DtpGraphicsItem>> _registeredItems; // qualifiedid -> graphics item
+  QHash<QString,QPointer<DtpGraphicsItem>> _itemsByMainUiItem; // qualifiedid -> graphics item
 
 public:
   explicit DtpGraphicsScene(QObject *parent = 0);
@@ -36,18 +40,46 @@ public:
   PerspectiveWidget *perspectiveWidget() const { return _perspectiveWidget; }
   QStringList selectedItemsIds() const { return _selectedItemsIds; } // FIXME must recompute from indexes since an item id can change
   QStringList mouseoverItemsIds() const { return _mouseoverItemsIds; }
+  /** Set which items types can be holded by the scene depending on their id
+   * qualifier.
+   * This is used to filter changes received by changeItem(). */
+  void setItemQualifierFilter(QStringList acceptedQualifiers) {
+    _itemQualifierFilter = acceptedQualifiers; }
+  void setItemQualifierFilter(
+      std::initializer_list<QString> acceptedQualifiers) {
+    _itemQualifierFilter = QStringList(acceptedQualifiers); }
+  void setItemQualifierFilter(QString acceptedQualifier) {
+    _itemQualifierFilter = QStringList(acceptedQualifier); }
+  void clearItemQualifierFilter() { _itemQualifierFilter.clear(); }
+  QStringList itemQualifierFilter() const { return _itemQualifierFilter; }
+
+public slots:
+  /** Calls itemChanged() on every registered DtpGraphicsItem and unregister
+   * those who have been deleted meanwhile.
+   * Should be overriden by subclasses to create new graphics items when
+   * needed. */
+  virtual void itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
+                           QString idQualifier);
 
 signals:
   void selectedItemsChanged(QStringList selectedItemsIds);
+
+protected:
+  /** @return items by their main (first) registered ui item */
+  QHash<QString,QPointer<DtpGraphicsItem>> itemsByMainUiItem() const {
+    return _itemsByMainUiItem; }
 
 private slots:
   void propagateSelectionChanged();
 
 private:
-  friend class SharedUiGraphicsItem;
-  void setMouseOverItem(QStringList ids);
+  friend class DtpGraphicsItem;
+  /** called by DtpGraphicsItem::setUiItems() */
+  void registerDtpGraphicsItem(DtpGraphicsItem *graphicsItem,
+                               SharedUiItemList<> uiItems);
+  /*void setMouseOverItem(QStringList ids);
   void setMouseOverItem(QString id) { setMouseOverItem(QStringList(id)); }
-  void clearMouseOverItem() { setMouseOverItem(QStringList()); }
+  void clearMouseOverItem() { setMouseOverItem(QStringList()); }*/
 };
 
 #endif // DTPGRAPHICSSCENE_H
