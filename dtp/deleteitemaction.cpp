@@ -1,4 +1,4 @@
-/* Copyright 2015 Hallowyn and others.
+/* Copyright 2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,6 +16,7 @@
 #include <QtDebug>
 #include <QMessageBox>
 #include "dtpmainwindow.h"
+#include <QUndoStack>
 
 DeleteItemAction::DeleteItemAction(
     DtpDocumentManager *documentManager, QObject *parent)
@@ -23,6 +24,10 @@ DeleteItemAction::DeleteItemAction(
   setIcon(QIcon(":fa/trash-o.svg"));
   setText("Delete Item");
   connect(this, &DeleteItemAction::triggered, [this,documentManager]() {
+    int count = documentManager->targetManager()->targetItems().size();
+    if (count > 1)
+      documentManager->undoStack()->beginMacro(
+            tr("Deleting %1 items.").arg(count));
     foreach (const QString &qualifiedId,
              documentManager->targetManager()->targetItems()) {
       SharedUiItem oldItem = documentManager->itemById(qualifiedId);
@@ -38,10 +43,16 @@ DeleteItemAction::DeleteItemAction(
                 (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
                 tr("Cannot delete %1").arg(idQualifier),
                 tr("Cannot delete %1.\n%2").arg(idQualifier).arg(reason));
+          if (count > 1) {
+            documentManager->undoStack()->endMacro();
+            documentManager->undoStack()->undo();
+          }
           return;
         }
       }
     }
+    if (count > 1)
+      documentManager->undoStack()->endMacro();
   });
   connect(documentManager->targetManager(), &TargetManager::targetChanged,
           this, &DeleteItemAction::targetChanged);
