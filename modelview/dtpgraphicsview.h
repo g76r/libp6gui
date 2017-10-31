@@ -26,6 +26,7 @@ class LIBH6NCSUSHARED_EXPORT DtpGraphicsView : public EnhancedGraphicsView {
 public:
   explicit DtpGraphicsView(QWidget *parent = 0);
   void setScene(QGraphicsScene *scene);
+  QStringList selectedItemsIds() const;
 
 signals:
   /** Same as DtpGraphicsScene::selectedItemsChanged() but only emited when

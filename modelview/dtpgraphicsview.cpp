@@ -41,6 +41,11 @@ void DtpGraphicsView::focusInEvent(QFocusEvent *event) {
     tm->setTarget(_perspectiveWidget, dgs->selectedItemsIds());
 }
 
+QStringList DtpGraphicsView::selectedItemsIds() const {
+  DtpGraphicsScene *dgs = qobject_cast<DtpGraphicsScene*>(scene());
+  return dgs ? dgs->selectedItemsIds() : QStringList();
+}
+
 void DtpGraphicsView::enterEvent(QEvent *event) {
   EnhancedGraphicsView::enterEvent(event);
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
