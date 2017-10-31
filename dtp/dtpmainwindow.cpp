@@ -1,4 +1,4 @@
-/* Copyright 2014-2015 Hallowyn and others.
+/* Copyright 2014-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -104,6 +104,7 @@ bool DtpMainWindow::startItemEdition(QString qualifiedId) {
 void DtpMainWindow::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
   //qDebug() << "DtpMainWindow::focusChanged" << oldWidget << newWidget;
   // reset target on old dm (needed if it was not the same than new one)
+  DtpDocumentManager *oldDm = 0, *newDm = 0;
   while (oldWidget) {
     auto *pw =
         oldWidget->property("perspectiveWidget").value<PerspectiveWidget*>();
@@ -115,9 +116,8 @@ void DtpMainWindow::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
       //  qDebug() << "  old pw by cast" << oldWidget << pw;
     }
     if (pw) {
-      auto *oldDm = pw->documentManager();
+      oldDm = pw->documentManager();
       if (oldDm) {
-        oldDm->targetManager()->setTarget();
         //qDebug() << "  found old pw" << pw << oldDm;
         break;
       }
@@ -136,7 +136,7 @@ void DtpMainWindow::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
       //  qDebug() << "  new pw by cast" << newWidget << pw;
     }
     if (pw) {
-      auto *newDm = pw->documentManager();
+      newDm = pw->documentManager();
       if (newDm) {
         auto primaryItemsIds =
             newWidget->property("primaryItemsIds").toStringList();
@@ -147,6 +147,8 @@ void DtpMainWindow::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
     }
     newWidget = newWidget->parentWidget();
   }
+  if (oldDm && oldDm != newDm)
+    oldDm->targetManager()->setTarget();
 }
 
 void DtpMainWindow::showEvent(QShowEvent *event) {
