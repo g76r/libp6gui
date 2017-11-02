@@ -1,4 +1,4 @@
-/* Copyright 2015 Hallowyn and others.
+/* Copyright 2015-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,6 +16,7 @@
 #include "dtpmainwindow.h"
 #include "perspectivewidget.h"
 #include <QMessageBox>
+#include <QUndoStack>
 
 CreateItemAction::CreateItemAction(
     DtpDocumentManager *documentManager, QString idQualifier, QIcon icon,
@@ -23,8 +24,12 @@ CreateItemAction::CreateItemAction(
   : DtpAction(documentManager, parent) {
   setIcon(icon);
   setText(text);
-  connect(this, &CreateItemAction::triggered, [=]() {
+  connect(this, &CreateItemAction::triggered,
+          [this,documentManager,idQualifier]() {
     QString reason;
+    if (_modifier)
+      documentManager->undoStack()->beginMacro(
+            tr("Creating a new %1").arg(idQualifier));
     SharedUiItem newItem =
         documentManager->createNewItem(idQualifier, &reason);
     PerspectiveWidget *pw = documentManager->targetManager()->targetWidget();
@@ -34,7 +39,24 @@ CreateItemAction::CreateItemAction(
             (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
             tr("Cannot create %1").arg(idQualifier),
             tr("Cannot create %1.\n%2").arg(idQualifier).arg(reason));
+      if (_modifier)
+        documentManager->undoStack()->endMacro();
       return;
+    }
+    if (_modifier) {
+      SharedUiItem oldItem = newItem;
+      _modifier(&newItem);
+      if (!documentManager->changeItem(newItem, oldItem, idQualifier, &reason)) {
+        QMessageBox::warning(
+              (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
+              tr("Cannot create %1").arg(idQualifier),
+              tr("Cannot create %1.\n%2").arg(idQualifier).arg(reason));
+        if (_modifier)
+          documentManager->undoStack()->endMacro();
+        documentManager->undoStack()->undo();
+        return;
+      }
+      documentManager->undoStack()->endMacro();
     }
     // if a target PerspectiveWidget exists try to start item edition through it
     if (pw && pw->startItemEdition(newItem.qualifiedId()))

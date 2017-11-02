@@ -1,4 +1,4 @@
-/* Copyright 2015 Hallowyn and others.
+/* Copyright 2015-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,10 +16,17 @@
 
 #include "dtpaction.h"
 #include "dtpdocumentmanager.h"
+#include <functional>
 
 class LIBH6NCSUSHARED_EXPORT CreateItemAction : public DtpAction {
   Q_OBJECT
   Q_DISABLE_COPY(CreateItemAction)
+
+public:
+  using PostCreationModifier = std::function<void(SharedUiItem *newItem)>;
+
+private:
+  PostCreationModifier _modifier;
 
 public:
   CreateItemAction(
@@ -35,6 +42,8 @@ public:
       QIcon icon, QObject *parent)
     : CreateItemAction(documentManager, idQualifier, icon,
                        "Create "+idQualifier, parent) { }
+  void setPostCreationModifier(PostCreationModifier modifier) {
+    _modifier = modifier; }
 };
 
 #endif // CREATEITEMACTION_H
