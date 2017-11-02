@@ -33,6 +33,9 @@ class QTabWidget;
   * @see DocumentManager */
 class LIBH6NCSUSHARED_EXPORT PerspectiveWidget : public QWidget {
   Q_OBJECT
+  Q_PROPERTY(QString perspectiveItemQualifiedId READ perspectiveItemQualifiedId
+             WRITE setPerspectiveItemQualifiedId
+             NOTIFY perspectiveItemQualifiedIdChanged)
 private:
   DtpDocumentManager *_documentManager;
   QString _perspectiveItemQualifiedId;
@@ -54,7 +57,8 @@ public:
   QString perspectiveItemQualifiedId() const {
     return _perspectiveItemQualifiedId; }
   void setPerspectiveItemQualifiedId(QString qualifiedId = QString()) {
-    _perspectiveItemQualifiedId = qualifiedId; }
+    _perspectiveItemQualifiedId = qualifiedId;
+    emit perspectiveItemQualifiedIdChanged(qualifiedId); }
   /** Mouse position within the model.
    * Can be usefull to decide an item position within the model when
    * creating it.
@@ -90,6 +94,9 @@ public slots:
    * returned. */
   static bool startItemEditionInTabWidget(
       QString qualifiedId, QTabWidget *tabWidget);
+
+signals:
+  void perspectiveItemQualifiedIdChanged(QString perspectiveIdItemQualifiedId);
 
 protected:
   /** If item found: ensure visible and set it current. If item writeable: start
