@@ -27,11 +27,8 @@ CreateItemAction::CreateItemAction(
   connect(this, &CreateItemAction::triggered,
           [this,documentManager,idQualifier]() {
     QString reason;
-    if (_modifier)
-      documentManager->undoStack()->beginMacro(
-            tr("Creating a new %1").arg(idQualifier));
     SharedUiItem newItem =
-        documentManager->createNewItem(idQualifier, &reason);
+        documentManager->createNewItem(idQualifier, _modifier, &reason);
     PerspectiveWidget *pw = documentManager->targetManager()->targetWidget();
     // on error, warn user
     if (newItem.isNull()) {
@@ -39,24 +36,7 @@ CreateItemAction::CreateItemAction(
             (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
             tr("Cannot create %1").arg(idQualifier),
             tr("Cannot create %1.\n%2").arg(idQualifier).arg(reason));
-      if (_modifier)
-        documentManager->undoStack()->endMacro();
       return;
-    }
-    if (_modifier) {
-      SharedUiItem oldItem = newItem;
-      _modifier(&newItem);
-      if (!documentManager->changeItem(newItem, oldItem, idQualifier, &reason)) {
-        QMessageBox::warning(
-              (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
-              tr("Cannot create %1").arg(idQualifier),
-              tr("Cannot create %1.\n%2").arg(idQualifier).arg(reason));
-        if (_modifier)
-          documentManager->undoStack()->endMacro();
-        documentManager->undoStack()->undo();
-        return;
-      }
-      documentManager->undoStack()->endMacro();
     }
     // if a target PerspectiveWidget exists try to start item edition through it
     if (pw && pw->startItemEdition(newItem.qualifiedId()))

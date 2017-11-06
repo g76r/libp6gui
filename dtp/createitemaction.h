@@ -22,11 +22,8 @@ class LIBH6NCSUSHARED_EXPORT CreateItemAction : public DtpAction {
   Q_OBJECT
   Q_DISABLE_COPY(CreateItemAction)
 
-public:
-  using PostCreationModifier = std::function<void(SharedUiItem *newItem)>;
-
 private:
-  PostCreationModifier _modifier;
+  SharedUiItemDocumentManager::PostCreationModifier _modifier;
 
 public:
   CreateItemAction(
@@ -42,7 +39,8 @@ public:
       QIcon icon, QObject *parent)
     : CreateItemAction(documentManager, idQualifier, icon,
                        "Create "+idQualifier, parent) { }
-  void setPostCreationModifier(PostCreationModifier modifier) {
+  void setPostCreationModifier(
+      SharedUiItemDocumentManager::PostCreationModifier modifier) {
     _modifier = modifier; }
 };
 

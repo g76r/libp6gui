@@ -1,4 +1,4 @@
-/* Copyright 2014-2015 Hallowyn and others.
+/* Copyright 2014-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -56,7 +56,7 @@ protected:
   void commitChangeItem(SharedUiItem newItem, SharedUiItem oldItem,
                         QString idQualifier) override;
   SharedUiItemDocumentTransaction *internalCreateNewItem(
-      SharedUiItem *newItem, QString idQualifier,
+      SharedUiItem *newItem, QString idQualifier, PostCreationModifier modifier,
       QString *errorString) override;
   SharedUiItemDocumentTransaction *internalChangeItem(
       SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,

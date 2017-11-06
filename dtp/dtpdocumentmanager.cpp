@@ -1,4 +1,4 @@
-/* Copyright 2014-2015 Hallowyn and others.
+/* Copyright 2014-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -48,13 +48,13 @@ public:
 } // unnamed namespace
 
 SharedUiItem DtpDocumentManager::createNewItem(
-    QString idQualifier, QString *errorString) {
+    QString idQualifier, PostCreationModifier modifier, QString *errorString) {
   QString reason;
   if (!errorString)
     errorString = &reason;
   SharedUiItem newItem;
   CoreUndoCommand *command =
-      internalCreateNewItem(&newItem, idQualifier, errorString);
+      internalCreateNewItem(&newItem, idQualifier, modifier, errorString);
   if (command) {
     if (_pushChangesToUndoStack)
       undoStack()->push(new UndoCommandAdapter(command));
