@@ -57,6 +57,8 @@ public:
   QString perspectiveItemQualifiedId() const {
     return _perspectiveItemQualifiedId; }
   void setPerspectiveItemQualifiedId(QString qualifiedId = QString()) {
+    if (_perspectiveItemQualifiedId == qualifiedId)
+      return;
     _perspectiveItemQualifiedId = qualifiedId;
     emit perspectiveItemQualifiedIdChanged(qualifiedId); }
   /** Mouse position within the model.
@@ -96,7 +98,7 @@ public slots:
       QString qualifiedId, QTabWidget *tabWidget);
 
 signals:
-  void perspectiveItemQualifiedIdChanged(QString perspectiveIdItemQualifiedId);
+  void perspectiveItemQualifiedIdChanged(QString perspectiveItemQualifiedId);
 
 protected:
   /** If item found: ensure visible and set it current. If item writeable: start
