@@ -20,6 +20,7 @@
 /** Enhanced QListView
  *
  * Additionnal behaviours:
+ * - rubber band drag on left button by default (setDragMode(RubberBandDrag))
  * - bidirectional mouse grab scrolling on middle button
  * - zoom in and out on control + wheel up/wheel down
  *

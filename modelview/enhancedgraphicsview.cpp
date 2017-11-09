@@ -19,7 +19,10 @@
 
 EnhancedGraphicsView::EnhancedGraphicsView(QWidget *parent)
   : QGraphicsView(parent), _mouseDragScrolling(false), _mouseMoved(false) {
-  setDragMode(QGraphicsView::ScrollHandDrag);
+  setDragMode(QGraphicsView::RubberBandDrag);
+#if QT_VERSION >= 0x050200
+  setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents); // FIXME
+#endif
 }
 
 void EnhancedGraphicsView::fitAllInView() {
@@ -28,11 +31,17 @@ void EnhancedGraphicsView::fitAllInView() {
 }
 
 void EnhancedGraphicsView::zoomIn() {
+  auto anchor = transformationAnchor();
+  setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
   scale(1.2, 1.2);
+  setTransformationAnchor(anchor);
 }
 
 void EnhancedGraphicsView::zoomOut() {
+  auto anchor = transformationAnchor();
+  setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
   scale(1.0 / 1.2, 1.0 / 1.2);
+  setTransformationAnchor(anchor);
 }
 
 void EnhancedGraphicsView::wheelEvent(QWheelEvent *event) {
@@ -78,8 +87,9 @@ void EnhancedGraphicsView::mouseMoveEvent(QMouseEvent *event) {
       horizontalScrollBar()->setValue(horizontalScrollBar()->value()-delta.x());
       verticalScrollBar()->setValue(verticalScrollBar()->value()-delta.y());
     }
-  }else
+  } else {
     QGraphicsView::mouseMoveEvent(event);
+  }
   _mouseOverPosition = mapToScene(event->pos());
 }
 
