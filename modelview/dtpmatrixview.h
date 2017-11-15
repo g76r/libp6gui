@@ -1,4 +1,4 @@
-/* Copyright 2015 Hallowyn and others.
+/* Copyright 2015-2017 Hallowyn and others.
  * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
  * Libh6ncsu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -26,7 +26,7 @@ class TargetManager;
  * management according to widget focus, selection and mouse over.
  *
  * This class is designed for having one item per table cell. If your intend is
- * to have one item per cell, rather use DtpTableView.
+ * to have one item per row, rather use DtpTableView.
  *
  * @see SharedUiItemsMatrixModel
  * @see DtpTableView
