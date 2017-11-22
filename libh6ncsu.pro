@@ -88,7 +88,8 @@ SOURCES += \
     modelview/enhancedtableview.cpp \
     modelview/dtpmatrixview.cpp \
     modelview/copyviewashtmlaction.cpp \
-    graphics/dtpgraphicsitem.cpp
+    graphics/dtpgraphicsitem.cpp \
+    widget/multichoicecombobox.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -131,7 +132,8 @@ HEADERS +=\
     modelview/enhancedtableview.h \
     modelview/dtpmatrixview.h \
     modelview/copyviewashtmlaction.h \
-    graphics/dtpgraphicsitem.h
+    graphics/dtpgraphicsitem.h \
+    widget/multichoicecombobox.h
 
 unix {
     target.path = /usr/lib
