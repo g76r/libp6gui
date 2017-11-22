@@ -44,6 +44,7 @@ public:
   MultichoiceComboBox(QWidget *parent = 0);
   void replaceItems(const QList<QString> &items, const QSet<QString> &checked);
   void replaceItems(const QList<QString> &items);
+  void setCheckedItems(const QSet<QString> &checked);
   void appendItem(const QString &text, bool isChecked);
   void removeItem(const QString &text);
   void renameItem(const QString &newText, const QString &oldText);
@@ -57,6 +58,9 @@ signals:
 
 protected:
   void paintEvent(QPaintEvent *event);
+
+private:
+  void setCheckedStrings(const QSet<QString> &checked);
 };
 
 #endif // MULTICHOICECOMBOBOX_H

@@ -49,6 +49,38 @@ MultichoiceComboBox::MultichoiceComboBox(QWidget *parent)
   //  });
 }
 
+void MultichoiceComboBox::setCheckedStrings(const QSet<QString> &checked) {
+  if (_checked != checked) { // expensive (full comparison)
+    _isCheckedListDirty = true;
+    emit checkedStringsChanged(_checked = checked);
+  }
+}
+
+void MultichoiceComboBox::setCheckedItems(const QSet<QString> &checked) {
+  QSet<QString> newChecked; // in case 'checked' contains strings not in _model
+  bool changed = false;
+  int n = _model->rowCount();
+  for (int i = 0; i < n; ++i) {
+    auto item = _model->item(i);
+    QString text = item->text();
+    bool isAlreadyChecked = item->data(Qt::CheckStateRole) == Qt::Checked;
+    if (checked.contains(text)) {
+      if (!isAlreadyChecked) {
+        item->setData(Qt::Checked, Qt::CheckStateRole);
+        changed = true;
+      }
+      newChecked.insert(text);
+    } else {
+      if (isAlreadyChecked) {
+        item->setData(Qt::Unchecked, Qt::CheckStateRole);
+        changed = true;
+      }
+    }
+  }
+  if (changed)
+    setCheckedStrings(newChecked);
+}
+
 void MultichoiceComboBox::replaceItems(
     const QList<QString> &items, const QSet<QString> &checked) {
   _model->clear();
@@ -62,8 +94,7 @@ void MultichoiceComboBox::replaceItems(
     _model->setItem(row, 0, item);
     ++row;
   }
-  _isCheckedListDirty = true;
-  emit checkedStringsChanged(_checked = checked);
+  setCheckedStrings(checked);
 }
 
 void MultichoiceComboBox::replaceItems(const QList<QString> &items) {
@@ -77,9 +108,9 @@ void MultichoiceComboBox::appendItem(const QString &text, bool isChecked) {
   item->setData(isChecked ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
   _model->setItem(_model->rowCount(), 0, item);
   if (isChecked) {
-    _checked.insert(text);
-    _isCheckedListDirty = true;
-    emit checkedStringsChanged(_checked);
+    QSet<QString> newChecked = _checked;
+    newChecked.insert(text);
+    setCheckedStrings(newChecked);
   }
 }
 
@@ -94,9 +125,9 @@ void MultichoiceComboBox::removeItem(const QString &text) {
     }
   }
   if (isChecked) {
-    _checked.remove(text);
-    _isCheckedListDirty = true;
-    emit checkedStringsChanged(_checked);
+    QSet<QString> newChecked = _checked;
+    newChecked.remove(text);
+    setCheckedStrings(newChecked);
   }
 }
 
@@ -110,10 +141,10 @@ void MultichoiceComboBox::renameItem(
     }
   }
   if (isChecked) {
-    _checked.remove(oldText);
-    _checked.insert(newText);
-    _isCheckedListDirty = true;
-    emit checkedStringsChanged(_checked);
+    QSet<QString> newChecked = _checked;
+    newChecked.remove(oldText);
+    newChecked.insert(newText);
+    setCheckedStrings(newChecked);
   }
 }
 
@@ -148,10 +179,8 @@ void MultichoiceComboBox::hidePopup() {
         changed = true;
     }
   }
-  if (changed) {
-    _isCheckedListDirty = true;
-    emit checkedStringsChanged(_checked = newChecked);
-  }
+  if (changed)
+    setCheckedStrings(newChecked);
 }
 
 void MultichoiceComboBox::setButtonText(const QString &text) {
