@@ -44,6 +44,9 @@ public:
   MultichoiceComboBox(QWidget *parent = 0);
   void replaceItems(const QList<QString> &items, const QSet<QString> &checked);
   void replaceItems(const QList<QString> &items);
+  void appendItem(const QString &text, bool isChecked);
+  void removeItem(const QString &text);
+  void renameItem(const QString &newText, const QString &oldText);
   QSet<QString> checkedStrings() const;
   QStringList checkedStringsAsSortedList() const;
   void hidePopup();

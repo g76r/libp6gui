@@ -55,7 +55,7 @@ void MultichoiceComboBox::replaceItems(
   int row = 0;
   for (auto string : items) {
     auto item = new QStandardItem(string);
-    // add Qt::ItemIsUserCheckable and remove Qt::ItemIsUserSelectable
+    // must be checkable and not selectable
     item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
     item->setData(checked.contains(string) ? Qt::Checked : Qt::Unchecked,
                   Qt::CheckStateRole);
@@ -68,6 +68,53 @@ void MultichoiceComboBox::replaceItems(
 
 void MultichoiceComboBox::replaceItems(const QList<QString> &items) {
   replaceItems(items, _checked);
+}
+
+void MultichoiceComboBox::appendItem(const QString &text, bool isChecked) {
+  auto item = new QStandardItem(text);
+  // must be checkable and not selectable
+  item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+  item->setData(isChecked ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
+  _model->setItem(_model->rowCount(), 0, item);
+  if (isChecked) {
+    _checked.insert(text);
+    _isCheckedListDirty = true;
+    emit checkedStringsChanged(_checked);
+  }
+}
+
+void MultichoiceComboBox::removeItem(const QString &text) {
+  bool isChecked = _checked.contains(text);
+  for (int row = 0; row < _model->rowCount(); ) {
+    auto item = _model->item(row);
+    if (item && item->text() == text) {
+      _model->removeRow(row);
+    } else {
+      ++row;
+    }
+  }
+  if (isChecked) {
+    _checked.remove(text);
+    _isCheckedListDirty = true;
+    emit checkedStringsChanged(_checked);
+  }
+}
+
+void MultichoiceComboBox::renameItem(
+    const QString &newText, const QString &oldText) {
+  bool isChecked = _checked.contains(oldText);
+  for (int row = 0; row < _model->rowCount(); ++row) {
+    auto item = _model->item(row);
+    if (item && item->text() == oldText) {
+      item->setText(newText);
+    }
+  }
+  if (isChecked) {
+    _checked.remove(oldText);
+    _checked.insert(newText);
+    _isCheckedListDirty = true;
+    emit checkedStringsChanged(_checked);
+  }
 }
 
 QSet<QString> MultichoiceComboBox::checkedStrings() const {
