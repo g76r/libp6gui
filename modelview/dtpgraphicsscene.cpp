@@ -74,6 +74,19 @@ void DtpGraphicsScene::itemChanged(
   if (_itemsByMainUiItem.value(oldItem.qualifiedId()).isNull())
     _itemsByMainUiItem.remove(oldItem.qualifiedId());
   auto items = _registeredItems.values(oldItem.qualifiedId());
+  if (newItem.id() != oldItem.id()) {
+    if (!oldItem.isNull()) {
+      _registeredItems.remove(oldItem.qualifiedId());
+      QPointer<DtpGraphicsItem> mainItem =
+          _itemsByMainUiItem.take(oldItem.qualifiedId());
+      if (!newItem.isNull()) {
+        for (QPointer<DtpGraphicsItem> p : items)
+          _registeredItems.insert(newItem.qualifiedId(), p);
+        if (mainItem)
+          _itemsByMainUiItem.insert(newItem.qualifiedId(), mainItem);
+      }
+    }
+  }
   for (DtpGraphicsItem *dgi : items) {
     Q_ASSERT(dgi); // should always be true since 0 have been removed before
     dgi->itemChanged(newItem, oldItem, idQualifier);

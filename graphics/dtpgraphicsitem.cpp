@@ -64,6 +64,7 @@ void DtpGraphicsItem::itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
         _uiItems.removeAll(item); // safe because we break the loop just after
       } else {
         item = newItem;
+        setData(SharedUiItem::QualifiedIdRole, newItem.qualifiedId());
         emit uiItemsChanged();
         update();
       }
