@@ -18,6 +18,7 @@
 #include <QComboBox>
 #include <QList>
 #include <QString>
+#include <QSet>
 
 class QStandardItemModel;
 class QStyledItemDelegate;
