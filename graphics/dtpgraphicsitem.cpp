@@ -26,6 +26,7 @@ DtpGraphicsItem::DtpGraphicsItem(QGraphicsItem *parent)
 
 void DtpGraphicsItem::setUiItems(SharedUiItemList<> uiItems) {
   // LATER support being called twice or more: unregister, etc.
+  //qDebug() << "DtpGraphicsItem::setUiItems" << this << uiItems.join(',', true);
   _uiItems = uiItems;
   if (uiItems.size())
     setData(SharedUiItem::QualifiedIdRole, uiItems.first().qualifiedId());
@@ -50,9 +51,11 @@ void DtpGraphicsItem::setUiItems(SharedUiItemList<> uiItems) {
 void DtpGraphicsItem::itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
                                   QString idQualifier) {
   Q_UNUSED(idQualifier)
+  int i = 0;
   for (SharedUiItem &item : _uiItems) {
     if (item.qualifiedId() == oldItem.qualifiedId()) {
-      //qDebug() << "DtpGraphicsItem::itemChanged" << newItem.id() << oldItem.id()
+      //qDebug() << "DtpGraphicsItem::itemChanged" << this << i
+      //         << newItem.qualifiedId() << oldItem.qualifiedId()
       //         << idQualifier;
       if (newItem.isNull()) {
         auto graphicsScene = scene();
@@ -64,12 +67,14 @@ void DtpGraphicsItem::itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
         _uiItems.removeAll(item); // safe because we break the loop just after
       } else {
         item = newItem;
-        setData(SharedUiItem::QualifiedIdRole, newItem.qualifiedId());
+        if (!i)
+          setData(SharedUiItem::QualifiedIdRole, newItem.qualifiedId());
         emit uiItemsChanged();
         update();
       }
       break;
     }
+    ++i;
   }
 }
 
