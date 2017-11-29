@@ -21,6 +21,7 @@
 class LIBH6NCSUSHARED_EXPORT DtpGraphicsView : public EnhancedGraphicsView {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsView)
+  Q_PROPERTY(QStringList primaryItemsIds READ selectedItemsIds)
   PerspectiveWidget *_perspectiveWidget;
 
 public:
