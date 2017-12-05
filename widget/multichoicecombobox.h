@@ -46,8 +46,9 @@ public:
   void replaceItems(const QList<QString> &items, const QSet<QString> &checked);
   void replaceItems(const QList<QString> &items);
   void setCheckedItems(const QSet<QString> &checked);
-  void appendItem(const QString &text, bool isChecked);
+  void appendItem(const QString &text, bool isChecked = false);
   void removeItem(const QString &text);
+  void removeMatchingItem(const QRegularExpression &re);
   void renameItem(const QString &newText, const QString &oldText);
   QSet<QString> checkedStrings() const;
   QStringList checkedStringsAsSortedList() const;

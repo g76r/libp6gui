@@ -63,15 +63,15 @@ void MultichoiceComboBox::setCheckedItems(const QSet<QString> &checked) {
   for (int i = 0; i < n; ++i) {
     auto item = _model->item(i);
     QString text = item->text();
-    bool isAlreadyChecked = item->data(Qt::CheckStateRole) == Qt::Checked;
+    bool isCurrentlyChecked = item->data(Qt::CheckStateRole) == Qt::Checked;
     if (checked.contains(text)) {
-      if (!isAlreadyChecked) {
+      if (!isCurrentlyChecked) {
         item->setData(Qt::Checked, Qt::CheckStateRole);
         changed = true;
       }
       newChecked.insert(text);
     } else {
-      if (isAlreadyChecked) {
+      if (isCurrentlyChecked) {
         item->setData(Qt::Unchecked, Qt::CheckStateRole);
         changed = true;
       }
@@ -129,6 +129,21 @@ void MultichoiceComboBox::removeItem(const QString &text) {
     newChecked.remove(text);
     setCheckedStrings(newChecked);
   }
+}
+
+void MultichoiceComboBox::removeMatchingItem(const QRegularExpression &re) {
+  QSet<QString> newChecked = _checked;
+  for (int row = 0; row < _model->rowCount(); ) {
+    auto item = _model->item(row);
+    auto text = item->text();
+    if (item && re.match(text).hasMatch()) {
+      _model->removeRow(row);
+      _checked.remove(text);
+    } else {
+      ++row;
+    }
+  }
+  setCheckedStrings(newChecked);
 }
 
 void MultichoiceComboBox::renameItem(
