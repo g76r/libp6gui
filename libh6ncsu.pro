@@ -90,7 +90,8 @@ SOURCES += \
     modelview/copyviewashtmlaction.cpp \
     graphics/dtpgraphicsitem.cpp \
     widget/multichoicecombobox.cpp \
-    graphics/graphicsitemutils.cpp
+    graphics/graphicsitemutils.cpp \
+    modelview/decoratedstringlistdiffmodel.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -135,7 +136,8 @@ HEADERS +=\
     modelview/copyviewashtmlaction.h \
     graphics/dtpgraphicsitem.h \
     widget/multichoicecombobox.h \
-    graphics/graphicsitemutils.h
+    graphics/graphicsitemutils.h \
+    modelview/decoratedstringlistdiffmodel.h
 
 unix {
     target.path = /usr/lib
