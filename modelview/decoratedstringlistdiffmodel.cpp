@@ -26,6 +26,7 @@
 #define ADDED_ICON ":fa/plus.svg"
 #define REMOVED_ICON ":fa/minus.svg"
 #define MODIFIED_ICON ":fa/exchange.svg"
+#define NOCHANGE_ICON ":fa/check.svg"
 
 DecoratedStringListDiffModel::DecoratedStringListDiffModel(QObject *parent)
   : StringListDiffModel(parent) {
@@ -33,27 +34,22 @@ DecoratedStringListDiffModel::DecoratedStringListDiffModel(QObject *parent)
 
 QVariant DecoratedStringListDiffModel::data(
     const QModelIndex &index, int role) const {
+  int column = index.column();
   switch(role) {
   case Qt::BackgroundRole:
     switch (rowStatus(index.row())) {
     case Added:
-      if (index.column() == 1)
-        return QBrush(QColor(LIGHT_GREEN));
-      break;
+      return QBrush(QColor(LIGHT_GREEN));
     case Removed:
-      if (index.column() == 0)
-        return QBrush(QColor(LIGHT_LILA));
-      break;
+      return QBrush(QColor(LIGHT_LILA));
     case Modified:
-      if (index.column() == 0 || index.column() == 1)
-        return QBrush(QColor(LIGHT_ORANGE));
-      break;
+      return QBrush(QColor(LIGHT_ORANGE));
     case NoChange:
       ;
     }
     return QVariant();
   case Qt::DecorationRole:
-    if (index.column() == 2) {
+    if (column == 2) {
       switch (rowStatus(index.row())) {
       case Added:
         return QIcon(ADDED_ICON);
@@ -62,7 +58,7 @@ QVariant DecoratedStringListDiffModel::data(
       case Modified:
         return QIcon(MODIFIED_ICON);
       case NoChange:
-        ;
+        return QIcon(NOCHANGE_ICON);
       }
     }
     return QVariant();
