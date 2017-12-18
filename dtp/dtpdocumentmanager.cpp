@@ -93,11 +93,18 @@ bool DtpDocumentManager::changeItemByUiData(
 bool DtpDocumentManager::changeItem(
     SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
     QString *errorString) {
-  Q_ASSERT(newItem.isNull() || newItem.idQualifier() == idQualifier);
-  Q_ASSERT(oldItem.isNull() || oldItem.idQualifier() == idQualifier);
   QString reason;
   if (!errorString)
     errorString = &reason;
+  if ((!newItem.isNull() && newItem.idQualifier() != idQualifier)
+      || (!oldItem.isNull() && oldItem.idQualifier() != idQualifier)) {
+    *errorString =
+        tr("DtpDocumentManager::changeItem called with inconsistent "
+           "items id qualifiers: %1, %2, %3")
+        .arg(newItem.qualifiedId()).arg(oldItem.qualifiedId()).arg(idQualifier);
+    qWarning().noquote() << *errorString;
+    return false;
+  }
   CoreUndoCommand *command =
       internalChangeItem(newItem, oldItem, idQualifier, errorString);
   //qDebug() << "DtpDocumentManager::changeItem" << command;
