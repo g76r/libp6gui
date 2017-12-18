@@ -91,7 +91,8 @@ SOURCES += \
     graphics/dtpgraphicsitem.cpp \
     widget/multichoicecombobox.cpp \
     graphics/graphicsitemutils.cpp \
-    modelview/decoratedstringlistdiffmodel.cpp
+    modelview/decoratedstringlistdiffmodel.cpp \
+    util/undotransaction.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -137,7 +138,8 @@ HEADERS +=\
     graphics/dtpgraphicsitem.h \
     widget/multichoicecombobox.h \
     graphics/graphicsitemutils.h \
-    modelview/decoratedstringlistdiffmodel.h
+    modelview/decoratedstringlistdiffmodel.h \
+    util/undotransaction.h
 
 unix {
     target.path = /usr/lib
