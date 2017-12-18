@@ -37,6 +37,7 @@ public:
   void setWrapped(SharedUiItemDocumentManager *wrapped);
   SharedUiItem itemById(QString idQualifier, QString id) const override;
   SharedUiItem itemById(QString qualifiedId) const override;
+  using DtpDocumentManager::itemsByIdQualifier;
   SharedUiItemList<SharedUiItem> itemsByIdQualifier(
       QString idQualifier) const override;
   void reorderItems(QList<SharedUiItem> items) override;
