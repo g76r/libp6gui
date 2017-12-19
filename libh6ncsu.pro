@@ -92,7 +92,8 @@ SOURCES += \
     widget/multichoicecombobox.cpp \
     graphics/graphicsitemutils.cpp \
     modelview/decoratedstringlistdiffmodel.cpp \
-    util/undotransaction.cpp
+    util/undotransaction.cpp \
+    util/useractivitydetector.cpp
 
 HEADERS +=\
     libh6ncsu_global.h \
@@ -139,7 +140,8 @@ HEADERS +=\
     widget/multichoicecombobox.h \
     graphics/graphicsitemutils.h \
     modelview/decoratedstringlistdiffmodel.h \
-    util/undotransaction.h
+    util/undotransaction.h \
+    util/useractivitydetector.h
 
 unix {
     target.path = /usr/lib
