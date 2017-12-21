@@ -35,6 +35,7 @@ public:
   /** Do not take ownership of wrapped document manager, beware that wrapped
    * object must live longer that wrapper. */
   void setWrapped(SharedUiItemDocumentManager *wrapped);
+  using DtpDocumentManager::itemById;
   SharedUiItem itemById(QString idQualifier, QString id) const override;
   SharedUiItem itemById(QString qualifiedId) const override;
   using DtpDocumentManager::itemsByIdQualifier;
