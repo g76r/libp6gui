@@ -41,7 +41,8 @@ UndoTransaction::~UndoTransaction() {
   if (!_stack)
     return;
   _stack->endMacro();
-  _stack->undo();
+  if (_autoRollback)
+    _stack->undo();
 }
 
 void UndoTransaction::commit() {

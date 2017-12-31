@@ -22,12 +22,22 @@ class DtpDocumentManager;
 class PerspectiveWidget;
 
 /** RAII object around QUndoStack::{begin,end}Macro().
+ *
+ * Beware that even though {begin,end}Macro(), and thus UndoTransaction, are
+ * nestable, QUndoStack::undo() cannot be called within a macro, so a nested
+ * UndoTransaction cannot rollback. So when nesting UndoTransactions, one should
+ * handle rollback at toplevel (outermost transaction), by disabling auto
+ * rollback on inner transactions and not rollbacking them explicitely.
+ *
+ * In other words: like QUndoStack macros, UndoTransaction is mainly a top level
+ * UI slot object.
  */
 class LIBH6NCSUSHARED_EXPORT UndoTransaction {
   enum State { Free, Running };
-  QUndoStack *_stack;
+  QUndoStack *_stack = 0;
   State _state = Free;
   QString _text;
+  bool _autoRollback = true;
 
 public:
   UndoTransaction(QUndoStack *stack, const QString &text);
@@ -37,6 +47,9 @@ public:
   ~UndoTransaction();
   void commit();
   void rollback();
+  bool autoRollback() const { return _autoRollback; }
+  /** Default: true */
+  void setAutoRollback(bool enable = true) { _autoRollback = enable; }
 };
 
 #endif // UNDOTRANSACTION_H
