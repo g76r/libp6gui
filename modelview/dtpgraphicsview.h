@@ -21,19 +21,23 @@
 class LIBP6GUISHARED_EXPORT DtpGraphicsView : public EnhancedGraphicsView {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsView)
+  Q_PROPERTY(QStringList primaryItemsIds READ selectedItemsIds)
   PerspectiveWidget *_perspectiveWidget;
 
 public:
   explicit DtpGraphicsView(QWidget *parent = 0);
-  void focusInEvent(QFocusEvent *event);
-  void enterEvent(QEnterEvent *event);
-  void leaveEvent(QEvent *event);
   void setScene(QGraphicsScene *scene);
+  QStringList selectedItemsIds() const;
 
 signals:
   /** Same as DtpGraphicsScene::selectedItemsChanged() but only emited when
    * this view has focus */
   void selectedItemsChanged(QStringList selectedItemsIds);
+
+protected:
+  void focusInEvent(QFocusEvent *event) override;
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 #endif // DTPGRAPHICSVIEW_H

@@ -159,3 +159,7 @@ void PerspectiveWidget::screenChanged(QScreen *screen) {
   if (app)
     emit app->toplevelWidgetChangedScreen(this, screen);
 }
+
+QVariant PerspectiveWidget::mouseOverPosition() const {
+  return QVariant();
+}

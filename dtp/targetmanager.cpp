@@ -24,8 +24,14 @@ void TargetManager::setTarget(TargetType targetType,
     QStringList itemsIds) {
   switch (targetType) {
   case MouseOverTarget:
+    if (_targetWidgets[targetType] == perspectiveWidget
+        && _targetItems[targetType] == itemsIds) // expensive
+      return; // target did not actually change
     break;
   case PrimaryTarget:
+    if (_targetWidgets[targetType] == perspectiveWidget
+        && _targetItems[targetType] == itemsIds) // expensive
+      return; // target did not actually change
     if (_targetWidgets[PrimaryTarget]
         || !_targetItems[PrimaryTarget].isEmpty()) {
       _targetWidgets[PreviousPrimaryTarget] = _targetWidgets[PrimaryTarget];

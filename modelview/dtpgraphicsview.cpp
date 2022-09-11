@@ -14,9 +14,10 @@
 #include "dtpgraphicsview.h"
 #include "dtp/targetmanager.h"
 #include "dtpgraphicsscene.h"
+#include <QMouseEvent>
 
 DtpGraphicsView::DtpGraphicsView(QWidget *parent)
-  : EnhancedGraphicsView(parent) {
+  : EnhancedGraphicsView(parent), _perspectiveWidget(0) {
   setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -38,6 +39,11 @@ void DtpGraphicsView::focusInEvent(QFocusEvent *event) {
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (dgs && tm)
     tm->setTarget(_perspectiveWidget, dgs->selectedItemsIds());
+}
+
+QStringList DtpGraphicsView::selectedItemsIds() const {
+  DtpGraphicsScene *dgs = qobject_cast<DtpGraphicsScene*>(scene());
+  return dgs ? dgs->selectedItemsIds() : QStringList();
 }
 
 void DtpGraphicsView::enterEvent(QEnterEvent *event) {

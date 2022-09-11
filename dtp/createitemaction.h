@@ -16,10 +16,14 @@
 
 #include "dtpaction.h"
 #include "dtpdocumentmanager.h"
+#include <functional>
 
 class LIBP6GUISHARED_EXPORT CreateItemAction : public DtpAction {
   Q_OBJECT
   Q_DISABLE_COPY(CreateItemAction)
+
+private:
+  SharedUiItemDocumentManager::PostCreationModifier _modifier;
 
 public:
   CreateItemAction(
@@ -35,6 +39,9 @@ public:
       QIcon icon, QObject *parent)
     : CreateItemAction(documentManager, idQualifier, icon,
                        "Create "+idQualifier, parent) { }
+  void setPostCreationModifier(
+      SharedUiItemDocumentManager::PostCreationModifier modifier) {
+    _modifier = modifier; }
 };
 
 #endif // CREATEITEMACTION_H

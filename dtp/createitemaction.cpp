@@ -16,6 +16,7 @@
 #include "dtpmainwindow.h"
 #include "perspectivewidget.h"
 #include <QMessageBox>
+#include <QUndoStack>
 
 CreateItemAction::CreateItemAction(
     DtpDocumentManager *documentManager, QString idQualifier, QIcon icon,
@@ -23,10 +24,11 @@ CreateItemAction::CreateItemAction(
   : DtpAction(documentManager, parent) {
   setIcon(icon);
   setText(text);
-  connect(this, &CreateItemAction::triggered, [=]() {
+  connect(this, &CreateItemAction::triggered,
+          [this,documentManager,idQualifier]() {
     QString reason;
     SharedUiItem newItem =
-        documentManager->createNewItem(idQualifier, &reason);
+        documentManager->createNewItem(idQualifier, _modifier, &reason);
     PerspectiveWidget *pw = documentManager->targetManager()->targetWidget();
     // on error, warn user
     if (newItem.isNull()) {

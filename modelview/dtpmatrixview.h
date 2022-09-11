@@ -26,7 +26,7 @@ class TargetManager;
  * management according to widget focus, selection and mouse over.
  *
  * This class is designed for having one item per table cell. If your intend is
- * to have one item per cell, rather use DtpTableView.
+ * to have one item per row, rather use DtpTableView.
  *
  * @see SharedUiItemsMatrixModel
  * @see DtpTableView

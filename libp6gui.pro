@@ -92,7 +92,13 @@ SOURCES *= \
     modelview/dtptableview.cpp \
     modelview/enhancedtableview.cpp \
     modelview/dtpmatrixview.cpp \
-    modelview/copyviewashtmlaction.cpp
+    modelview/copyviewashtmlaction.cpp \
+    graphics/dtpgraphicsitem.cpp \
+    widget/multichoicecombobox.cpp \
+    graphics/graphicsitemutils.cpp \
+    modelview/decoratedstringlistdiffmodel.cpp \
+    util/undotransaction.cpp \
+    util/useractivitydetector.cpp
 
 HEADERS *=\
     libp6gui_global.h \
@@ -133,7 +139,13 @@ HEADERS *=\
     modelview/dtptableview.h \
     modelview/enhancedtableview.h \
     modelview/dtpmatrixview.h \
-    modelview/copyviewashtmlaction.h
+    modelview/copyviewashtmlaction.h \
+    graphics/dtpgraphicsitem.h \
+    widget/multichoicecombobox.h \
+    graphics/graphicsitemutils.h \
+    modelview/decoratedstringlistdiffmodel.h \
+    util/undotransaction.h \
+    util/useractivitydetector.h
 
 unix {
     target.path = /usr/lib

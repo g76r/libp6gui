@@ -20,6 +20,7 @@
 /** Enhanced QListView
  *
  * Additionnal behaviours:
+ * - rubber band drag on left button by default (setDragMode(RubberBandDrag))
  * - bidirectional mouse grab scrolling on middle button
  * - zoom in and out on control + wheel up/wheel down
  *
@@ -32,18 +33,25 @@ class LIBP6GUISHARED_EXPORT EnhancedGraphicsView : public QGraphicsView {
 private:
   bool _mouseDragScrolling, _mouseMoved;
   QPoint _lastPos;
+  QPointF _mouseOverPosition;
 
 public:
   explicit EnhancedGraphicsView(QWidget *parent);
-  void wheelEvent(QWheelEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
-  void mouseMoveEvent(QMouseEvent *event);
+  /** @return mouse position in scene coordinates, when mouse is overring,
+   * tracking must be enabled, otherwise return QPointF() */
+  QPointF mouseOverPosition() const { return _mouseOverPosition; }
 
 public slots:
   void fitAllInView();
   void zoomIn();
   void zoomOut();
+
+protected:
+  void wheelEvent(QWheelEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void leaveEvent(QEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
 };
 
 #endif // ENHANCEDGRAPHICSVIEW_H

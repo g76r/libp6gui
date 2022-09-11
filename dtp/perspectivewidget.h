@@ -33,8 +33,12 @@ class QTabWidget;
   * @see DocumentManager */
 class LIBP6GUISHARED_EXPORT PerspectiveWidget : public QWidget {
   Q_OBJECT
+  Q_PROPERTY(QString perspectiveItemQualifiedId READ perspectiveItemQualifiedId
+             WRITE setPerspectiveItemQualifiedId
+             NOTIFY perspectiveItemQualifiedIdChanged)
 private:
   DtpDocumentManager *_documentManager;
+  QString _perspectiveItemQualifiedId;
 
 public:
   explicit PerspectiveWidget(QWidget *parent);
@@ -46,6 +50,25 @@ public:
   TargetManager *targetManager() {return targetManager(this); }
   /** Convenience method */
   static TargetManager *targetManager(PerspectiveWidget *pw);
+  /** Return id of an item that is associated to the perspective, i.e.
+   * if the perspective is viewing the document through this item point
+   * of view, for instance by editing only this item and its children/
+   * relatives. Can be left empty forever by any implementation. */
+  QString perspectiveItemQualifiedId() const {
+    return _perspectiveItemQualifiedId; }
+  void setPerspectiveItemQualifiedId(QString qualifiedId = QString()) {
+    if (_perspectiveItemQualifiedId == qualifiedId)
+      return;
+    _perspectiveItemQualifiedId = qualifiedId;
+    emit perspectiveItemQualifiedIdChanged(qualifiedId); }
+  /** Mouse position within the model.
+   * Can be usefull to decide an item position within the model when
+   * creating it.
+   * Position can be screen or widget coordinates or any other coordinates
+   * system that fit better the model (more or less than 2 dimensions, etc.)
+   * hence the QVariant.
+   * Default implementation always return QVariant() */
+  virtual QVariant mouseOverPosition() const;
 
 public slots:
   /** Create and a new identical widget (clone) showing same perspective and
@@ -73,6 +96,9 @@ public slots:
    * returned. */
   static bool startItemEditionInTabWidget(
       QString qualifiedId, QTabWidget *tabWidget);
+
+signals:
+  void perspectiveItemQualifiedIdChanged(QString perspectiveItemQualifiedId);
 
 protected:
   /** If item found: ensure visible and set it current. If item writeable: start

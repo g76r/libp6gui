@@ -16,6 +16,7 @@
 #include <QtDebug>
 #include <QMessageBox>
 #include "dtpmainwindow.h"
+#include "util/undotransaction.h"
 
 DeleteItemAction::DeleteItemAction(
     DtpDocumentManager *documentManager, QObject *parent)
@@ -23,6 +24,11 @@ DeleteItemAction::DeleteItemAction(
   setIcon(QIcon(":fa/trash-o.svg"));
   setText("Delete Item");
   connect(this, &DeleteItemAction::triggered, [this,documentManager]() {
+    int count = documentManager->targetManager()->targetItems().size();
+    if (count < 1)
+      return;
+    UndoTransaction transaction(
+          documentManager, tr("Deleting %1 items.").arg(count));
     foreach (const QString &qualifiedId,
              documentManager->targetManager()->targetItems()) {
       SharedUiItem oldItem = documentManager->itemById(qualifiedId);
@@ -38,10 +44,11 @@ DeleteItemAction::DeleteItemAction(
                 (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
                 tr("Cannot delete %1").arg(idQualifier),
                 tr("Cannot delete %1.\n%2").arg(idQualifier).arg(reason));
-          return;
+          return; // implicit rollback
         }
       }
     }
+    transaction.commit();
   });
   connect(documentManager->targetManager(), &TargetManager::targetChanged,
           this, &DeleteItemAction::targetChanged);
