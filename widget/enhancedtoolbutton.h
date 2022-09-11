@@ -2,7 +2,7 @@
 #define ENHANCEDTOOLBUTTON_H
 
 #include <QToolButton>
-#include "libh6ncsu_global.h"
+#include "libp6gui_global.h"
 
 
 /** Enhanced QToolButton
@@ -15,7 +15,7 @@
  * - animate button on action trigger, even if it has not been triggered through
  *   this button (e.g. if it has been triggered through keyboard shortcut)
  */
-class LIBH6NCSUSHARED_EXPORT EnhancedToolButton : public QToolButton {
+class LIBP6GUISHARED_EXPORT EnhancedToolButton : public QToolButton {
   Q_OBJECT
   Q_DISABLE_COPY(EnhancedToolButton)
 

@@ -2,6 +2,6 @@
 *.o
 moc_*.cpp
 /Makefile
-/*libh6ncsu.so*
+/*libp6gui.so*
 /TODO
 .rsync-filter

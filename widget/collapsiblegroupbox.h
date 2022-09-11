@@ -2,9 +2,9 @@
 #define COLLAPSIBLEGROUPBOX_H
 
 #include <QGroupBox>
-#include "libh6ncsu_global.h"
+#include "libp6gui_global.h"
 
-class LIBH6NCSUSHARED_EXPORT CollapsibleGroupBox : public QGroupBox {
+class LIBP6GUISHARED_EXPORT CollapsibleGroupBox : public QGroupBox {
   Q_OBJECT
   Q_DISABLE_COPY(CollapsibleGroupBox)
 

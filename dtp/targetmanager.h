@@ -1,15 +1,15 @@
-/* Copyright 2014-2015 Hallowyn and others.
- * This file is part of libh6ncsu, see <https://gitlab.com/g76r/libh6ncsu>.
- * Libh6ncsu is free software: you can redistribute it and/or modify
+/* Copyright 2014-2022 Hallowyn and others.
+ * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
+ * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * Libh6ncsu is distributed in the hope that it will be useful,
+ * libpumpkin is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  * You should have received a copy of the GNU Affero General Public License
- * along with libh6ncsu.  If not, see <http://www.gnu.org/licenses/>.
+ * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #ifndef TARGETMANAGER_H
 #define TARGETMANAGER_H
@@ -18,7 +18,7 @@
 #include <QMap>
 #include <QStringList>
 #include <QPointer>
-#include "libh6ncsu_global.h"
+#include "libp6gui_global.h"
 #include "perspectivewidget.h"
 #include "modelview/shareduiitem.h"
 
@@ -28,7 +28,7 @@
   * acquired (it can be null whereas items list is not empty, if items are
   * targeted outside any perspective, e.g. through version management).
   */
-class LIBH6NCSUSHARED_EXPORT TargetManager : public QObject {
+class LIBP6GUISHARED_EXPORT TargetManager : public QObject {
   Q_OBJECT
   Q_DISABLE_COPY(TargetManager)
 

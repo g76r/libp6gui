@@ -2,9 +2,9 @@
 #define DYNAMICSTACKEDWIDGET_H
 
 #include <QStackedWidget>
-#include "libh6ncsu_global.h"
+#include "libp6gui_global.h"
 
-class LIBH6NCSUSHARED_EXPORT DynamicStackedWidget : public QStackedWidget {
+class LIBP6GUISHARED_EXPORT DynamicStackedWidget : public QStackedWidget {
   Q_OBJECT
   // these properties can be set in QtCreator as a "dynamic property"
   Q_PROPERTY(int expandedIndex READ expandedIndex WRITE setExpandedIndex)
@@ -25,7 +25,7 @@ private:
 
 public:
   explicit DynamicStackedWidget(QWidget *parent = 0);
-  void enterEvent(QEvent *event);
+  void enterEvent(QEnterEvent *event);
   void leaveEvent(QEvent *event);
   void showEvent(QShowEvent *event);
   int expandedIndex() const { return _expandedIndex; }

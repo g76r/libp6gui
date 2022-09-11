@@ -1,15 +1,12 @@
-LIBH6NCSU
-=========
+LIBP6GUI
+========
 
 ABOUT
 -----
 
-Libh6ncsu is a free software collection of tools for using Qt/C++ on
-the client side, as a complement of libqtssu
-(https://gitlab.com/g76r/libqtssu).
-
-Its name stands for library (lib) Hallowyn (h6n) and client-side
-utils (csu).
+libp6gui is part of libpumpkin (http://libpumpkin.g76r.eu/) which is a free
+software collection of tools for using Qt/C++ on the client side, as a
+complement of libp6core
 
 LICENSE
 -------

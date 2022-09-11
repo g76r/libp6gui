@@ -2,7 +2,7 @@
 #define INTERRUPTIBLEWAITWIDGET_H
 
 #include <QWidget>
-#include "libh6ncsu_global.h"
+#include "libp6gui_global.h"
 
 class QPropertyAnimation;
 
@@ -17,7 +17,7 @@ class InterruptibleWaitWidget;
  * interrupt button. Animation starts on widget show and stops when it's hidden.
  * Signal interruptRequested() is emitted when interrupt button is clicked.
  */
-class LIBH6NCSUSHARED_EXPORT InterruptibleWaitWidget : public QWidget {
+class LIBP6GUISHARED_EXPORT InterruptibleWaitWidget : public QWidget {
   Q_OBJECT
   Ui::InterruptibleWaitWidget *ui;
   QPropertyAnimation *_animation;

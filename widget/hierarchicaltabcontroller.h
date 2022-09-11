@@ -7,7 +7,7 @@
 #include <QList>
 #include <QHash>
 #include <QMap>
-#include "libh6ncsu_global.h"
+#include "libp6gui_global.h"
 
 class QPainter;
 class HierarchicalTabController;
@@ -30,7 +30,7 @@ inline uint qHash(QPoint p) {
   return p.x()+(p.y()<<16);
 }
 
-class LIBH6NCSUSHARED_EXPORT HierarchicalTabControllerItem {
+class LIBP6GUISHARED_EXPORT HierarchicalTabControllerItem {
   // TODO implicit sharing
   friend class HierarchicalTabController;
 private:
@@ -66,7 +66,7 @@ public:
   inline QBrush normalBg() const { return _normalBg; }
 };
 
-class LIBH6NCSUSHARED_EXPORT HierarchicalTabController : public QWidget {
+class LIBP6GUISHARED_EXPORT HierarchicalTabController : public QWidget {
   Q_OBJECT
 private:
   mutable QHash<int,HierarchicalTabControllerItem> _items;
