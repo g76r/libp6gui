@@ -169,8 +169,8 @@ QSet<QString> MultichoiceComboBox::checkedStrings() const {
 
 QStringList MultichoiceComboBox::checkedStringsAsSortedList() const {
   if (_isCheckedListDirty) {
-    QStringList list = _checked.toList();
-    qSort(list);
+    QStringList list(_checked.begin(), _checked.end());
+    std::sort(list.begin(), list.end());
     _checkedList = list;
     _isCheckedListDirty = false;
   }
@@ -200,7 +200,7 @@ void MultichoiceComboBox::hidePopup() {
 
 void MultichoiceComboBox::setButtonText(const QString &text) {
   _buttonText = text;
-  const int textWidth = fontMetrics().width(text);
+  const int textWidth = fontMetrics().boundingRect(text).width();
   setMinimumWidth(textWidth + 30);
   updateGeometry();
   repaint();
