@@ -1,4 +1,4 @@
-/* Copyright 2015-2022 Hallowyn and others.
+/* Copyright 2015-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * Libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -26,16 +26,15 @@ private:
   SharedUiItemDocumentManager::PostCreationModifier _modifier;
 
 public:
+  CreateItemAction(DtpDocumentManager *documentManager, QByteArray idQualifier,
+                   QIcon icon, QString text, QObject *parent);
   CreateItemAction(
-      DtpDocumentManager *documentManager, QString idQualifier, QIcon icon,
-      QString text, QObject *parent);
-  CreateItemAction(
-      DtpDocumentManager *documentManager, QString idQualifier,
+      DtpDocumentManager *documentManager, QByteArray idQualifier,
       QIcon icon = QIcon(":fa/plus-circle.svg"))
     : CreateItemAction(documentManager, idQualifier, icon,
                        "Create "+idQualifier, documentManager) { }
   CreateItemAction(
-      DtpDocumentManager *documentManager, QString idQualifier,
+      DtpDocumentManager *documentManager, QByteArray idQualifier,
       QIcon icon, QObject *parent)
     : CreateItemAction(documentManager, idQualifier, icon,
                        "Create "+idQualifier, parent) { }

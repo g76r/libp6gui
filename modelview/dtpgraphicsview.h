@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -21,22 +21,22 @@
 class LIBP6GUISHARED_EXPORT DtpGraphicsView : public EnhancedGraphicsView {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsView)
-  Q_PROPERTY(QStringList primaryItemsIds READ selectedItemsIds)
+  Q_PROPERTY(QByteArrayList primaryItemsIds READ selectedItemsIds)
   PerspectiveWidget *_perspectiveWidget;
 
 public:
   explicit DtpGraphicsView(QWidget *parent = 0);
   void setScene(QGraphicsScene *scene);
-  QStringList selectedItemsIds() const;
+  QByteArrayList selectedItemsIds() const;
 
 signals:
   /** Same as DtpGraphicsScene::selectedItemsChanged() but only emited when
    * this view has focus */
-  void selectedItemsChanged(QStringList selectedItemsIds);
+  void selectedItemsChanged(QByteArrayList selectedItemsIds);
 
 protected:
   void focusInEvent(QFocusEvent *event) override;
-  void enterEvent(QEvent *event) override;
+  void enterEvent(QEnterEvent *event) override;
   void leaveEvent(QEvent *event) override;
 };
 

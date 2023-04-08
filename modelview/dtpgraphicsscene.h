@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -30,28 +30,28 @@ class LIBP6GUISHARED_EXPORT DtpGraphicsScene : public QGraphicsScene {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsScene)
   PerspectiveWidget *_perspectiveWidget;
-  QStringList _selectedItemsIds, _mouseoverItemsIds, _itemQualifierFilter;
-  QMultiHash<QString,QPointer<DtpGraphicsItem>> _registeredItems; // qualifiedid -> graphics item
-  QHash<QString,QPointer<DtpGraphicsItem>> _itemsByMainUiItem; // qualifiedid -> graphics item
+  QByteArrayList _selectedItemsIds, _mouseoverItemsIds, _itemQualifierFilter;
+  QMultiHash<QByteArray,QPointer<DtpGraphicsItem>> _registeredItems; // qualifiedid -> graphics item
+  QHash<QByteArray,QPointer<DtpGraphicsItem>> _itemsByMainUiItem; // qualifiedid -> graphics item
 
 public:
   explicit DtpGraphicsScene(QObject *parent = 0);
   void setPerspectiveWidget(PerspectiveWidget *widget);
   PerspectiveWidget *perspectiveWidget() const { return _perspectiveWidget; }
-  QStringList selectedItemsIds() const { return _selectedItemsIds; } // FIXME must recompute from indexes since an item id can change
-  QStringList mouseoverItemsIds() const { return _mouseoverItemsIds; }
+  QByteArrayList selectedItemsIds() const { return _selectedItemsIds; } // FIXME must recompute from indexes since an item id can change
+  QByteArrayList mouseoverItemsIds() const { return _mouseoverItemsIds; }
   /** Set which items types can be holded by the scene depending on their id
    * qualifier.
    * This is used to filter changes received by changeItem(). */
-  void setItemQualifierFilter(QStringList acceptedQualifiers) {
+  void setItemQualifierFilter(QByteArrayList acceptedQualifiers) {
     _itemQualifierFilter = acceptedQualifiers; }
   void setItemQualifierFilter(
-      std::initializer_list<QString> acceptedQualifiers) {
-    _itemQualifierFilter = QStringList(acceptedQualifiers); }
-  void setItemQualifierFilter(QString acceptedQualifier) {
-    _itemQualifierFilter = QStringList(acceptedQualifier); }
+      std::initializer_list<QByteArray> acceptedQualifiers) {
+    _itemQualifierFilter = QByteArrayList(acceptedQualifiers); }
+  void setItemQualifierFilter(QByteArray acceptedQualifier) {
+    _itemQualifierFilter = {acceptedQualifier}; }
   void clearItemQualifierFilter() { _itemQualifierFilter.clear(); }
-  QStringList itemQualifierFilter() const { return _itemQualifierFilter; }
+  QByteArrayList itemQualifierFilter() const { return _itemQualifierFilter; }
 
 public slots:
   /** Calls itemChanged() on every registered DtpGraphicsItem and unregister
@@ -59,14 +59,14 @@ public slots:
    * Should be overriden by subclasses to create new graphics items when
    * needed. */
   virtual void itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
-                           QString idQualifier);
+                           QByteArray idQualifier);
 
 signals:
-  void selectedItemsChanged(QStringList selectedItemsIds);
+  void selectedItemsChanged(QByteArrayList selectedItemsIds);
 
 protected:
   /** @return items by their main (first) registered ui item */
-  QHash<QString,QPointer<DtpGraphicsItem>> itemsByMainUiItem() const {
+  QHash<QByteArray,QPointer<DtpGraphicsItem>> itemsByMainUiItem() const {
     return _itemsByMainUiItem; }
 
 private slots:
@@ -77,9 +77,9 @@ private:
   /** called by DtpGraphicsItem::setUiItems() */
   void registerDtpGraphicsItem(DtpGraphicsItem *graphicsItem,
                                SharedUiItemList<> uiItems);
-  /*void setMouseOverItem(QStringList ids);
-  void setMouseOverItem(QString id) { setMouseOverItem(QStringList(id)); }
-  void clearMouseOverItem() { setMouseOverItem(QStringList()); }*/
+  /*void setMouseOverItem(QByteArrayList ids);
+  void setMouseOverItem(QByteArray id) { setMouseOverItem(QByteArrayList(id)); }
+  void clearMouseOverItem() { setMouseOverItem(QByteArrayList()); }*/
 };
 
 #endif // DTPGRAPHICSSCENE_H

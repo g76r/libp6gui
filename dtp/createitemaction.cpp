@@ -1,4 +1,4 @@
-/* Copyright 2015-2022 Hallowyn and others.
+/* Copyright 2015-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -19,7 +19,7 @@
 #include <QUndoStack>
 
 CreateItemAction::CreateItemAction(
-    DtpDocumentManager *documentManager, QString idQualifier, QIcon icon,
+    DtpDocumentManager *documentManager, QByteArray idQualifier, QIcon icon,
     QString text, QObject *parent)
   : DtpAction(documentManager, parent) {
   setIcon(icon);

@@ -1,4 +1,4 @@
-/* Copyright 2015-2022 Hallowyn and others.
+/* Copyright 2015-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * Libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -37,7 +37,7 @@ protected:
 private:
   void targetChanged(TargetManager::TargetType targetType,
                      PerspectiveWidget *perspectiveWidget,
-                     QStringList itemIds);
+                     QByteArrayList itemIds);
 };
 
 #endif // DELETEITEMACTION_H

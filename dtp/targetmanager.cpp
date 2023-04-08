@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -21,7 +21,7 @@ TargetManager::TargetManager(QObject *parent) : QObject(parent) {
 
 void TargetManager::setTarget(TargetType targetType,
     PerspectiveWidget *perspectiveWidget,
-    QStringList itemsIds) {
+    QByteArrayList itemsIds) {
   switch (targetType) {
   case MouseOverTarget:
     if (_targetWidgets[targetType] == perspectiveWidget
@@ -75,18 +75,18 @@ void TargetManager::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
   //qDebug() << "***** TargetManager::itemChanged" << newItem << oldItem
   //         << _targetItems[PrimaryTarget];
   if (!oldItem.isNull()) { // new items cannot already be targeted
-    QString oldId = oldItem.qualifiedId();
-    QString newId = newItem.qualifiedId();
+    auto oldId = oldItem.qualifiedId();
+    auto newId = newItem.qualifiedId();
     if (oldId != newId) { // only handle events where id changed
       foreach (TargetType targetType, _targetItems.keys()) {
-        QStringList &itemsIds = _targetItems[targetType];
+        QByteArrayList &itemsIds = _targetItems[targetType];
         if (newItem.isNull()) { // item removed
           itemsIds.removeAll(oldId);
           emit targetChanged(targetType, _targetWidgets[targetType], itemsIds);
         } else { // item renamed
           //qDebug() << "*** item renamed" << newId << oldId << itemsIds;
           for (int i = 0; i < itemsIds.size(); ++i) {
-            QString &id = itemsIds[i];
+            QByteArray &id = itemsIds[i];
             if (id == oldId) {
               //qDebug() << "*** renaming at" << i;
               id = newId;

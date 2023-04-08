@@ -1,4 +1,4 @@
-/* Copyright 2015-2022 Hallowyn and others.
+/* Copyright 2015-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -26,7 +26,7 @@ class LIBP6GUISHARED_EXPORT TargetKeepingMenu : public QMenu {
   Q_DISABLE_COPY(TargetKeepingMenu)
   DtpDocumentManager *_documentManager = 0;
   PerspectiveWidget *_primaryWidget = 0;
-  QStringList _primaryItems;
+  QByteArrayList _primaryItems;
 
 public:
   TargetKeepingMenu(PerspectiveWidget *parent = 0);

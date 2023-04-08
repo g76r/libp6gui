@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -48,8 +48,9 @@ public:
   using SharedUiItemDocumentManager::createNewItem;
   /** Override SharedUiItemDocumentManager::createNewItem() to push
    * QUndoCommand in QUndoStack when returning true. */
-  SharedUiItem createNewItem(QString idQualifier, PostCreationModifier modifier,
-                             QString *errorString) override;
+  SharedUiItem createNewItem(
+      QByteArray idQualifier, PostCreationModifier modifier,
+      QString *errorString) override;
   /** Override SharedUiItemDocumentManager::changeItemByUiData() to push
    * QUndoCommand in QUndoStack when returning true and display error to the
    * user otherwise. */
@@ -59,7 +60,7 @@ public:
   /** Override SharedUiItemDocumentManager::changeItem() to push QUndoCommand in
    * QUndoStack when returning true. */
   bool changeItem(
-      SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
+      SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier,
       QString *errorString) override;
   bool pushChangesToUndoStack() const { return _pushChangesToUndoStack; }
   /** Push further changes to the undo stack.

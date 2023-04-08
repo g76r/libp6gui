@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -41,9 +41,9 @@ void DtpGraphicsView::focusInEvent(QFocusEvent *event) {
     tm->setTarget(_perspectiveWidget, dgs->selectedItemsIds());
 }
 
-QStringList DtpGraphicsView::selectedItemsIds() const {
+QByteArrayList DtpGraphicsView::selectedItemsIds() const {
   DtpGraphicsScene *dgs = qobject_cast<DtpGraphicsScene*>(scene());
-  return dgs ? dgs->selectedItemsIds() : QStringList();
+  return dgs ? dgs->selectedItemsIds() : QByteArrayList();
 }
 
 void DtpGraphicsView::enterEvent(QEnterEvent *event) {

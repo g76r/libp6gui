@@ -1,4 +1,4 @@
-/* Copyright 2015-2022 Hallowyn and others.
+/* Copyright 2015-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -54,22 +54,22 @@ void DtpTableView::setModel(QAbstractItemModel *newModel) {
 
 void DtpTableView::itemHovered(const QModelIndex &index) {
   QAbstractItemModel *m = model();
-  QString id;
+  QByteArray id;
   // FIXME qDebug() << "DtpTableView::itemHovered" << index << m
   //<< (m?m->data(index, SharedUiItem::QualifiedIdRole):QVariant());
   if (m) {
     _mousePosition = index;
-    id = m->data(index, SharedUiItem::QualifiedIdRole).toString();
+    id = m->data(index, SharedUiItem::QualifiedIdRole).toString().toUtf8();
   }
   setMouseoverTarget(id);
 }
 
-void DtpTableView::setMouseoverTarget(QString itemId)  {
+void DtpTableView::setMouseoverTarget(QByteArray itemId)  {
   if (itemId.isNull())
     _mousePosition = QPersistentModelIndex();
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm) {
-    QStringList itemIds;
+    QByteArrayList itemIds;
     if (!itemId.isNull())
       itemIds.append(itemId);
     tm->setTarget(TargetManager::MouseOverTarget, _perspectiveWidget, itemIds);
@@ -96,7 +96,7 @@ void DtpTableView::selectionChanged(const QItemSelection &selected,
       }
     }
     foreach(const QModelIndex &index, selected.indexes()) {
-      QString id = index.data(SharedUiItem::QualifiedIdRole).toString();
+      auto id = index.data(SharedUiItem::QualifiedIdRole).toString().toUtf8();
       if (index.column() == 0 && !_selectedItemsIds.contains(id)) {
         _selectedItemsIds.append(id);
       }
@@ -115,13 +115,13 @@ void DtpTableView::selectionChanged(const QItemSelection &selected,
 void DtpTableView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
   // Update current selection when an item id changes.
   if (!oldItem.isNull()) { // new items cannot already be targeted
-    QString newId = newItem.qualifiedId(), oldId = oldItem.qualifiedId();
+    auto newId = newItem.qualifiedId(), oldId = oldItem.qualifiedId();
     if (oldId != newId) { // only handle events where id changed
       if (newItem.isNull()) { // item removed
         _selectedItemsIds.removeAll(oldId);
       } else { // item renamed
         for (int i = 0; i < _selectedItemsIds.size(); ++i) {
-          QString &id = _selectedItemsIds[i];
+          QByteArray &id = _selectedItemsIds[i];
           if (id == oldId) {
             id = newId;
           }
@@ -138,15 +138,16 @@ void DtpTableView::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
   }
 }
 
-QStringList DtpTableView::mouseoverItemsIds() const {
+QByteArrayList DtpTableView::mouseoverItemsIds() const {
   QAbstractItemModel *m = model();
-  return _mousePosition.isValid() && m
-      ? QStringList(_mousePosition.data(SharedUiItem::QualifiedIdRole)
-                    .toString())
-      : QStringList();
+  return QByteArrayList{
+    _mousePosition.isValid() && m
+      ? _mousePosition.data(SharedUiItem::QualifiedIdRole).toString().toUtf8()
+      : QByteArray{}
+  };
 }
 
-bool DtpTableView::startItemEdition(QString qualifiedId) {
+bool DtpTableView::startItemEdition(QByteArray qualifiedId) {
   SharedUiItemsProxyModelHelper helper(model());
   SharedUiItemsModel *m = helper.realModel();
   if (!m)

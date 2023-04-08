@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -71,7 +71,7 @@ public:
 private slots:
   void targetChanged(TargetManager::TargetType targetType,
                      PerspectiveWidget *perspectiveWidget,
-                     QStringList itemIds);
+                     QByteArrayList itemIds);
   void toolChanged();
   void toolTriggered();
 };

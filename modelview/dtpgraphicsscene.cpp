@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -31,9 +31,10 @@ void DtpGraphicsScene::setPerspectiveWidget(PerspectiveWidget *widget) {
 }
 
 void DtpGraphicsScene::propagateSelectionChanged() {
-  QStringList ids;
+  QByteArrayList ids;
   foreach(QGraphicsItem *i, selectedItems()) {
-    QString qualifiedId = i->data(SharedUiItem::QualifiedIdRole).toString();
+    auto qualifiedId = i->data(SharedUiItem::QualifiedIdRole)
+        .toString().toUtf8();
     if (!qualifiedId.isEmpty()) {
       ids.append(qualifiedId);
     }
@@ -66,7 +67,7 @@ void DtpGraphicsScene::registerDtpGraphicsItem(DtpGraphicsItem *graphicsItem,
 }
 
 void DtpGraphicsScene::itemChanged(
-    SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier) {
+    SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier) {
   if (!_itemQualifierFilter.isEmpty()
       && !_itemQualifierFilter.contains(idQualifier))
     return;
@@ -93,7 +94,7 @@ void DtpGraphicsScene::itemChanged(
   }
 }
 
-/*void DtpGraphicsScene::setMouseOverItem(QStringList ids) {
+/*void DtpGraphicsScene::setMouseOverItem(QByteArrayList ids) {
   _mouseoverItemsIds = ids;
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm) {

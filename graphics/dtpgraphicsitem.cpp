@@ -1,4 +1,4 @@
-/* Copyright 2017-2022 Hallowyn and others.
+/* Copyright 2017-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -33,7 +33,7 @@ void DtpGraphicsItem::setUiItems(SharedUiItemList<> uiItems) {
   //  qDebug() << "setting initial position" << uiData("position")
   //           << uiData("position").toPointF() << uiItem.uiData(4)
   //           << uiItem.uiData(4).toPointF() << uiItem.uiData(4).toString();
-  QPointF pos = uiData(_positionSectionName).toPointF();
+  QPointF pos = uiDataBySectionName(_positionSectionName).toPointF();
   if (!pos.isNull())
     setPos(pos);
   auto dtpScene = qobject_cast<DtpGraphicsScene*>(scene());
@@ -49,7 +49,7 @@ void DtpGraphicsItem::setUiItems(SharedUiItemList<> uiItems) {
 }
 
 void DtpGraphicsItem::itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
-                                  QString idQualifier) {
+                                  QByteArray idQualifier) {
   Q_UNUSED(idQualifier)
   int i = 0;
   for (SharedUiItem &item : _uiItems) {
@@ -101,7 +101,8 @@ void DtpGraphicsItem::persistPosition() {
   // TODO merge move transactions
 }
 
-QVariant DtpGraphicsItem::uiData(const QString &section, int role) const {
+QVariant DtpGraphicsItem::uiDataBySectionName(
+    const QByteArray &section, int role) const {
   QVariant v;
   for (const SharedUiItem &item : _uiItems) {
     v = item.uiDataBySectionName(section, role);

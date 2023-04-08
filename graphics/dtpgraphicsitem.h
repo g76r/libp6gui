@@ -1,4 +1,4 @@
-/* Copyright 2017-2022 Hallowyn and others.
+/* Copyright 2017-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -26,7 +26,7 @@ class LIBP6GUISHARED_EXPORT DtpGraphicsItem : public QGraphicsObject {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsItem)
   SharedUiItemList<> _uiItems;
-  QString _positionSectionName = "position";
+  QByteArray _positionSectionName = "position";
 
 public:
   DtpGraphicsItem(QGraphicsItem *parent = 0);
@@ -34,16 +34,18 @@ public:
   virtual void setUiItems(SharedUiItemList<> uiItems = { });
   DtpDocumentManager *documentManager() const;
   /** SharedUiItem section used to track position, default to "position" */
-  void setPositionSection(const QString &sectionName) {
+  void setPositionSection(const QByteArray &sectionName) {
     _positionSectionName = sectionName; }
-  QVariant uiData(const QString &section, int role = Qt::DisplayRole) const;
+  QVariant uiDataBySectionName(
+      const QByteArray &section, int role = Qt::DisplayRole) const;
   QVariant uiData(int section, int role = Qt::DisplayRole) const;
-  QString uiString(const QString &section, int role = Qt::DisplayRole) const {
-    return uiData(section, role).toString(); }
+  QString uiStringBySectionName(
+      const QByteArray &section, int role = Qt::DisplayRole) const {
+    return uiDataBySectionName(section, role).toString(); }
   QString uiString(int section, int role = Qt::DisplayRole) const {
     return uiData(section, role).toString(); }
   void itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
-                   QString idQualifier);
+                   QByteArray idQualifier);
 
 signals:
   /** emitted whenever at less one of the ui items changes */

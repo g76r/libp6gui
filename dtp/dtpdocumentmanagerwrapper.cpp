@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -42,14 +42,14 @@ void DtpDocumentManagerWrapper::setWrapped(
 
 SharedUiItemDocumentTransaction
 *DtpDocumentManagerWrapper::internalCreateNewItem(
-    SharedUiItem *newItem, QString idQualifier, PostCreationModifier modifier,
-    QString *errorString) {
+    SharedUiItem *newItem, QByteArray idQualifier,
+    PostCreationModifier modifier, QString *errorString) {
   return _wrapped->internalCreateNewItem(newItem, idQualifier, modifier,
                                          errorString);
 }
 
 SharedUiItemDocumentTransaction *DtpDocumentManagerWrapper::internalChangeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
+    SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier,
     QString *errorString) {
   return _wrapped->internalChangeItem(newItem, oldItem, idQualifier,
                                       errorString);
@@ -65,7 +65,7 @@ SharedUiItemDocumentTransaction
 
 bool DtpDocumentManagerWrapper::prepareChangeItem(
     SharedUiItemDocumentTransaction *transaction, SharedUiItem newItem,
-    SharedUiItem oldItem, QString idQualifier, QString *errorString) {
+    SharedUiItem oldItem, QByteArray idQualifier, QString *errorString) {
   Q_UNUSED(transaction)
   Q_UNUSED(newItem)
   Q_UNUSED(oldItem)
@@ -78,7 +78,7 @@ bool DtpDocumentManagerWrapper::prepareChangeItem(
 }
 
 void DtpDocumentManagerWrapper::commitChangeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier) {
+    SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier) {
   Q_UNUSED(newItem)
   Q_UNUSED(oldItem)
   Q_UNUSED(idQualifier)
@@ -92,15 +92,15 @@ void DtpDocumentManagerWrapper::reorderItems(QList<SharedUiItem> items) {
 }
 
 SharedUiItem DtpDocumentManagerWrapper::itemById(
-    QString idQualifier, QString id) const {
+    QByteArray idQualifier, QByteArray id) const {
   return _wrapped->itemById(idQualifier, id);
 }
 
-SharedUiItem DtpDocumentManagerWrapper::itemById(QString qualifiedId) const {
+SharedUiItem DtpDocumentManagerWrapper::itemById(QByteArray qualifiedId) const {
   return _wrapped->itemById(qualifiedId);
 }
 
 SharedUiItemList<SharedUiItem> DtpDocumentManagerWrapper
-::itemsByIdQualifier(QString idQualifier) const {
+::itemsByIdQualifier(QByteArray idQualifier) const {
   return _wrapped->itemsByIdQualifier(idQualifier);
 }

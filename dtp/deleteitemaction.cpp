@@ -1,4 +1,4 @@
-/* Copyright 2015-2022 Hallowyn and others.
+/* Copyright 2015-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -29,12 +29,12 @@ DeleteItemAction::DeleteItemAction(
       return;
     UndoTransaction transaction(
           documentManager, tr("Deleting %1 items.").arg(count));
-    foreach (const QString &qualifiedId,
-             documentManager->targetManager()->targetItems()) {
+    for (auto qualifiedId:
+         documentManager->targetManager()->targetItems()) {
       SharedUiItem oldItem = documentManager->itemById(qualifiedId);
       if (!oldItem.isNull() && isThisItemDeletable(oldItem)) {
         QString reason;
-        QString idQualifier = oldItem.idQualifier();
+        auto idQualifier = oldItem.idQualifier();
         if (!documentManager->changeItem(
               SharedUiItem(), oldItem, idQualifier, &reason)) {
           // on error, warn user
@@ -57,7 +57,7 @@ DeleteItemAction::DeleteItemAction(
 
 void DeleteItemAction::targetChanged(
     TargetManager::TargetType targetType, PerspectiveWidget *perspectiveWidget,
-    QStringList itemIds) {
+    QByteArrayList itemIds) {
   Q_UNUSED(perspectiveWidget)
   if (targetType == TargetManager::PrimaryTarget)
     setEnabled(!itemIds.isEmpty());

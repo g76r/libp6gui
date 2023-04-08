@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -48,7 +48,8 @@ public:
 } // unnamed namespace
 
 SharedUiItem DtpDocumentManager::createNewItem(
-    QString idQualifier, PostCreationModifier modifier, QString *errorString) {
+    QByteArray idQualifier, PostCreationModifier modifier,
+    QString *errorString) {
   QString reason;
   if (!errorString)
     errorString = &reason;
@@ -91,7 +92,7 @@ bool DtpDocumentManager::changeItemByUiData(
 }
 
 bool DtpDocumentManager::changeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, QString idQualifier,
+    SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier,
     QString *errorString) {
   QString reason;
   if (!errorString)

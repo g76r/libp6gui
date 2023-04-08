@@ -1,4 +1,4 @@
-/* Copyright 2015-2022 Hallowyn and others.
+/* Copyright 2015-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -39,13 +39,13 @@ class TargetManager;
 class LIBP6GUISHARED_EXPORT DtpTableView : public EnhancedTableView {
   Q_OBJECT
   Q_DISABLE_COPY(DtpTableView)
-  Q_PROPERTY(QStringList primaryItemsIds READ selectedItemsIds
+  Q_PROPERTY(QByteArrayList primaryItemsIds READ selectedItemsIds
              NOTIFY selectedItemsChanged)
-  Q_PROPERTY(QStringList mouseoverItemsIds READ mouseoverItemsIds)
+  Q_PROPERTY(QByteArrayList mouseoverItemsIds READ mouseoverItemsIds)
   Q_PROPERTY(PerspectiveWidget* perspectiveWidget READ perspectiveWidget)
   PerspectiveWidget *_perspectiveWidget;
   QPersistentModelIndex _mousePosition;
-  QStringList _selectedItemsIds;
+  QByteArrayList _selectedItemsIds;
   SharedUiItemsProxyModelHelper _proxyModelHelper;
 
 public:
@@ -53,12 +53,12 @@ public:
   void setPerspectiveWidget(PerspectiveWidget *widget);
   PerspectiveWidget *perspectiveWidget() const { return _perspectiveWidget; }
   void setModel(QAbstractItemModel *newModel);
-  QStringList selectedItemsIds() const { return _selectedItemsIds; }
+  QByteArrayList selectedItemsIds() const { return _selectedItemsIds; }
   //QPersistentModelIndex mousePosition() const { return _mousePosition; }
-  bool startItemEdition(QString qualifiedId);
+  bool startItemEdition(QByteArray qualifiedId);
 
   signals:
-  void selectedItemsChanged(QStringList selectedItemsIds);
+  void selectedItemsChanged(QByteArrayList selectedItemsIds);
 
   protected:
   void selectionChanged(const QItemSelection &selected,
@@ -70,10 +70,10 @@ public:
 
   private:
   void itemHovered(const QModelIndex &index);
-  void setMouseoverTarget(QString itemId);
-  void setEmptyMouseoverTarget() { setMouseoverTarget(QString()); }
+  void setMouseoverTarget(QByteArray itemId);
+  void setEmptyMouseoverTarget() { setMouseoverTarget({}); }
   void clearMouseoverTarget();
-  QStringList mouseoverItemsIds() const;
+  QByteArrayList mouseoverItemsIds() const;
 };
 
 #endif // DTPTABLEVIEW_H

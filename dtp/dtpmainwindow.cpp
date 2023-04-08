@@ -139,7 +139,7 @@ void DtpMainWindow::focusChanged(QWidget *oldWidget, QWidget *newWidget) {
       newDm = pw->documentManager();
       if (newDm) {
         auto primaryItemsIds =
-            newWidget->property("primaryItemsIds").toStringList();
+            newWidget->property("primaryItemsIds").value<QByteArrayList>();
         //qDebug() << "  found new pw" << pw << newDm << primaryItemsIds;
         newDm->targetManager()->setTarget(pw, primaryItemsIds);
         break;

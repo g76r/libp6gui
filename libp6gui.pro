@@ -1,4 +1,4 @@
-# Copyright 2014-2022 Hallowyn, Gregoire Barbier and others.
+# Copyright 2014-2023 Hallowyn, Gregoire Barbier and others.
 # This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
 # Libpumpkin is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -11,8 +11,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
 
-QT += widgets
-CONFIG += largefile c++17 c++14 c++11 force_debug_info
+QT += widgets network
+CONFIG += largefile c++17 c++20 force_debug_info
 
 TARGET = p6gui
 TEMPLATE = lib

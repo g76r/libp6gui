@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -43,7 +43,7 @@ public:
 
 private:
   QMap<TargetType,QPointer<PerspectiveWidget> > _targetWidgets;
-  QMap<TargetType,QStringList> _targetItems;
+  QMap<TargetType,QByteArrayList> _targetItems;
   // TODO not sure how DocumentVersion should be handled
   // should a target contain the DV id and all its items forced to belong to
   // the same DV ?
@@ -54,27 +54,27 @@ public:
   explicit TargetManager(QObject *parent = 0);
   PerspectiveWidget *targetWidget(TargetType targetType = PrimaryTarget) const {
     return _targetWidgets[targetType].data(); }
-  QStringList targetItems(TargetType targetType = PrimaryTarget) const {
+  QByteArrayList targetItems(TargetType targetType = PrimaryTarget) const {
     return _targetItems[targetType]; }
   /** Must be called each time perspectiveWidget changes or switch to a new
     * perspective and each time targeted items change. */
   void setTarget(TargetType targetType,
                  PerspectiveWidget *perspectiveWidget = 0,
-                 QStringList itemsIds = QStringList());
+                 QByteArrayList itemsIds = {});
   /** Syntaxic sugar. */
   void setTarget(PerspectiveWidget *perspectiveWidget = 0,
-                 QStringList itemsIds = QStringList()) {
+                 QByteArrayList itemsIds = {}) {
     setTarget(PrimaryTarget, perspectiveWidget, itemsIds); }
   /** Syntaxic sugar. */
   void setTarget(TargetType targetType,
                  PerspectiveWidget *perspectiveWidget,
-                 QString itemId) {
+                 QByteArray itemId) {
     setTarget(targetType, perspectiveWidget,
-              itemId.isNull() ? QStringList() : QStringList(itemId)); }
+              itemId.isNull() ? QByteArray{} : QByteArray{itemId}); }
   /** Syntaxic sugar. */
-  void setTarget(PerspectiveWidget* perspectiveWidget, QString itemId) {
+  void setTarget(PerspectiveWidget* perspectiveWidget, QByteArray itemId) {
     setTarget(PrimaryTarget, perspectiveWidget,
-              itemId.isNull() ? QStringList() : QStringList(itemId)); }
+              itemId.isNull() ? QByteArrayList{} : QByteArrayList{itemId}); }
   /** All existing target types, as a set. */
   static QSet<TargetManager::TargetType> targetTypes();
 
@@ -89,7 +89,7 @@ signals:
   /** Sent every time a target changes */
   void targetChanged(TargetManager::TargetType targetType,
                      PerspectiveWidget *perspectiveWidget,
-                     QStringList itemIds);
+                     QByteArrayList itemIds);
 };
 
 #endif // TARGETMANAGER_H
