@@ -49,10 +49,10 @@ DESTDIR = ../build-$$TARGET-$$TARGET_OS/$$BUILD_TYPE
 #QMAKE_LFLAGS += -pg -fprofile-arcs
 
 # dependency libs
-INCLUDEPATH += ../libqtpf ../libp6core
-LIBS += -L../build-qtpf-$$TARGET_OS/$$BUILD_TYPE \
+INCLUDEPATH += ../libp6core
+LIBS += \
   -L../build-p6core-$$TARGET_OS/$$BUILD_TYPE
-LIBS += -lqtpf -lp6core
+LIBS += -lp6core
 
 SOURCES *= \
     widget/dynamicstackedwidget.cpp \
