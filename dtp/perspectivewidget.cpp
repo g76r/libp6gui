@@ -104,18 +104,18 @@ bool PerspectiveWidget::startItemEditionInTabWidget(
 
 PerspectiveWidget *PerspectiveWidget::popClone() {
   if (_documentManager) {
-    PerspectiveWidget *pw =
-        qobject_cast<PerspectiveWidget*>(metaObject()->newInstance());
-    if (pw) {
+    auto *o = metaObject()->newInstance();
+    PerspectiveWidget *pw = qobject_cast<PerspectiveWidget*>(o);
+    if (pw) { // should always happen
       pw->setAttribute(Qt::WA_QuitOnClose, false);
       pw->setAttribute(Qt::WA_DeleteOnClose);
       copyCloneSharedData(pw);
       pw->show();
       return pw;
-    } else {
-      qWarning() << "PerspectiveWidget::popClone() cannot create widget clone "
-                    "because it has no Q_INVOKABLE default constructor.";
     }
+    qWarning() << "PerspectiveWidget::popClone() cannot create widget clone.";
+    if (o)
+      o->deleteLater();
   }
   return 0;
 }

@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -86,14 +86,15 @@ public slots:
     * In this widget or, if not found, recursively within its children, or, if
     * still not found, recursively within its ancestors and siblings.
     * This method is called e.g. when an item has just been added interactively.
-    */
+    * @return true iff item found */
   // LATER remove virtual and final keywords
   virtual bool startItemEdition(QString qualifiedId) final;
   /** Helper for forms and windows that dispatch startItemEditionHere() among
    * forms within a QTabWidget. Try to call recursiveStartItemEdition() for every
    * PerspectiveWidget within the tab, starting with current one, then first one
    * (index 0). If a call is successful, the tab is made current and true is
-   * returned. */
+   * returned.
+   * @return true iff item found */
   static bool startItemEditionInTabWidget(
       QString qualifiedId, QTabWidget *tabWidget);
 
