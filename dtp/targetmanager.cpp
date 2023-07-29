@@ -21,7 +21,7 @@ TargetManager::TargetManager(QObject *parent) : QObject(parent) {
 
 void TargetManager::setTarget(TargetType targetType,
     PerspectiveWidget *perspectiveWidget,
-    QByteArrayList itemsIds) {
+    Utf8StringList itemsIds) {
   switch (targetType) {
   case MouseOverTarget:
     if (_targetWidgets[targetType] == perspectiveWidget
@@ -78,15 +78,15 @@ void TargetManager::itemChanged(SharedUiItem newItem, SharedUiItem oldItem) {
     auto oldId = oldItem.qualifiedId();
     auto newId = newItem.qualifiedId();
     if (oldId != newId) { // only handle events where id changed
-      foreach (TargetType targetType, _targetItems.keys()) {
-        QByteArrayList &itemsIds = _targetItems[targetType];
+      for (auto targetType: _targetItems.keys()) {
+        auto &itemsIds = _targetItems[targetType];
         if (newItem.isNull()) { // item removed
           itemsIds.removeAll(oldId);
           emit targetChanged(targetType, _targetWidgets[targetType], itemsIds);
         } else { // item renamed
           //qDebug() << "*** item renamed" << newId << oldId << itemsIds;
           for (int i = 0; i < itemsIds.size(); ++i) {
-            QByteArray &id = itemsIds[i];
+            auto &id = itemsIds[i];
             if (id == oldId) {
               //qDebug() << "*** renaming at" << i;
               id = newId;

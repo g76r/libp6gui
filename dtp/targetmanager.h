@@ -21,6 +21,7 @@
 #include "libp6gui_global.h"
 #include "perspectivewidget.h"
 #include "modelview/shareduiitem.h"
+#include "util/utf8string.h"
 
 /** Class for accessing and modifying GUI targets.
   * For every target (primary, mouseover...), items ar item ids of targeted
@@ -43,7 +44,7 @@ public:
 
 private:
   QMap<TargetType,QPointer<PerspectiveWidget> > _targetWidgets;
-  QMap<TargetType,QByteArrayList> _targetItems;
+  QMap<TargetType,Utf8StringList> _targetItems;
   // TODO not sure how DocumentVersion should be handled
   // should a target contain the DV id and all its items forced to belong to
   // the same DV ?
@@ -54,16 +55,16 @@ public:
   explicit TargetManager(QObject *parent = 0);
   PerspectiveWidget *targetWidget(TargetType targetType = PrimaryTarget) const {
     return _targetWidgets[targetType].data(); }
-  QByteArrayList targetItems(TargetType targetType = PrimaryTarget) const {
+  Utf8StringList targetItems(TargetType targetType = PrimaryTarget) const {
     return _targetItems[targetType]; }
   /** Must be called each time perspectiveWidget changes or switch to a new
     * perspective and each time targeted items change. */
   void setTarget(TargetType targetType,
                  PerspectiveWidget *perspectiveWidget = 0,
-                 QByteArrayList itemsIds = {});
+                 Utf8StringList itemsIds = {});
   /** Syntaxic sugar. */
   void setTarget(PerspectiveWidget *perspectiveWidget = 0,
-                 QByteArrayList itemsIds = {}) {
+                 Utf8StringList itemsIds = {}) {
     setTarget(PrimaryTarget, perspectiveWidget, itemsIds); }
   /** Syntaxic sugar. */
   void setTarget(TargetType targetType,
@@ -74,7 +75,7 @@ public:
   /** Syntaxic sugar. */
   void setTarget(PerspectiveWidget* perspectiveWidget, QByteArray itemId) {
     setTarget(PrimaryTarget, perspectiveWidget,
-              itemId.isNull() ? QByteArrayList{} : QByteArrayList{itemId}); }
+              itemId.isNull() ? Utf8StringList{} : Utf8StringList{itemId}); }
   /** All existing target types, as a set. */
   static QSet<TargetManager::TargetType> targetTypes();
 
@@ -89,7 +90,7 @@ signals:
   /** Sent every time a target changes */
   void targetChanged(TargetManager::TargetType targetType,
                      PerspectiveWidget *perspectiveWidget,
-                     QByteArrayList itemIds);
+                     Utf8StringList itemIds);
 };
 
 #endif // TARGETMANAGER_H

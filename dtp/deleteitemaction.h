@@ -22,9 +22,12 @@ class LIBP6GUISHARED_EXPORT DeleteItemAction : public DtpAction {
   Q_DISABLE_COPY(DeleteItemAction)
 
 public:
-  DeleteItemAction(DtpDocumentManager *documentManager, QObject *parent);
+  DeleteItemAction(
+      DtpDocumentManager *documentManager, Utf8String actionId,
+      TargetManager::TargetType targetType, QObject *parent);
   explicit DeleteItemAction(DtpDocumentManager *documentManager)
-    : DeleteItemAction(documentManager, documentManager) { }
+    : DeleteItemAction(documentManager, {}, TargetManager::PrimaryTarget,
+                       documentManager) { }
 
 protected:
   /** Subclasses can override this method to decide which items must not be
@@ -34,10 +37,11 @@ protected:
    */
   virtual bool isThisItemDeletable(SharedUiItem item);
 
-private:
-  void targetChanged(TargetManager::TargetType targetType,
-                     PerspectiveWidget *perspectiveWidget,
-                     QByteArrayList itemIds);
+protected:
+  void onTrigger(bool checked) override;
+  void onTargetChanged(TargetManager::TargetType targetType,
+                       PerspectiveWidget *perspectiveWidget,
+                       Utf8StringList itemIds) override;
 };
 
 #endif // DELETEITEMACTION_H

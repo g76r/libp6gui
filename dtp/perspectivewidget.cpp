@@ -113,7 +113,8 @@ PerspectiveWidget *PerspectiveWidget::popClone() {
       pw->show();
       return pw;
     }
-    qWarning() << "PerspectiveWidget::popClone() cannot create widget clone.";
+    qWarning() << "PerspectiveWidget::popClone() cannot create widget clone "
+                  "for class " << metaObject()->className();
     if (o)
       o->deleteLater();
   }

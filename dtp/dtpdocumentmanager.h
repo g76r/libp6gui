@@ -17,12 +17,13 @@
 #include <QSet>
 #include "targetmanager.h"
 #include "modelview/shareduiitemdocumentmanager.h"
+#include "util/utf8string.h"
 
 class QUndoStack;
+class DtpAction;
 
-// TODO use enums rather than #defines
-//#define MIMETYPE_TOOL_ID "com.hallowyn/tool-id"
-//#define MIMETYPE_ITEM_ID "com.hallowyn/item-id"
+#define MIMETYPE_ACTION_ID "pumpkin-lib/action-id"
+#define MIMETYPE_ITEM_ID "pumpkin-lib/item-id"
 
 /** DtpDocumentManager is a core class of the Document-Target-Perspective model,
  * this is a non-visible (i.e. non-widget) class for handling data and events
@@ -40,6 +41,8 @@ class LIBP6GUISHARED_EXPORT DtpDocumentManager
   TargetManager *_targetManager;
   QUndoStack *_undoStack;
   bool _pushChangesToUndoStack = true;
+  QMap<Utf8String,QPointer<DtpAction>> _actions;
+  QList<QPointer<DtpAction>> _permanentActions;
 
 public:
   explicit DtpDocumentManager(QObject *parent = 0);
@@ -69,6 +72,9 @@ public:
    * to the user. */
   void setPushChangesToUndoStack(bool enable = true) {
     _pushChangesToUndoStack = enable; }
+  void registerAction(DtpAction *action, bool is_permanent = false);
+  DtpAction *actionById(Utf8String actionId) const;
+  auto permanentActions() const { return _permanentActions; }
 };
 
 #endif // DTPDOCUMENTMANAGER_H

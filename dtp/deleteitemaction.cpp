@@ -19,48 +19,51 @@
 #include "util/undotransaction.h"
 
 DeleteItemAction::DeleteItemAction(
-    DtpDocumentManager *documentManager, QObject *parent)
-  : DtpAction(documentManager, parent) {
+    DtpDocumentManager *documentManager, Utf8String actionId,
+    TargetManager::TargetType targetType, QObject *parent)
+  : DtpAction(documentManager, actionId, targetType, parent) {
   setIcon(QIcon(":fa/trash-o.svg"));
   setText("Delete Item");
-  connect(this, &DeleteItemAction::triggered, [this,documentManager]() {
-    int count = documentManager->targetManager()->targetItems().size();
-    if (count < 1)
-      return;
-    UndoTransaction transaction(
-          documentManager, tr("Deleting %1 items.").arg(count));
-    for (auto qualifiedId:
-         documentManager->targetManager()->targetItems()) {
-      SharedUiItem oldItem = documentManager->itemById(qualifiedId);
-      if (!oldItem.isNull() && isThisItemDeletable(oldItem)) {
-        QString reason;
-        auto idQualifier = oldItem.idQualifier();
-        if (!documentManager->changeItem(
-              SharedUiItem(), oldItem, idQualifier, &reason)) {
-          // on error, warn user
-          PerspectiveWidget *pw =
-              documentManager->targetManager()->targetWidget();
-          QMessageBox::warning(
-                (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
-                tr("Cannot delete %1").arg(idQualifier),
-                tr("Cannot delete %1.\n%2").arg(idQualifier).arg(reason));
-          return; // implicit rollback
-        }
-      }
-    }
-    transaction.commit();
-  });
-  connect(documentManager->targetManager(), &TargetManager::targetChanged,
-          this, &DeleteItemAction::targetChanged);
-  setEnabled(!documentManager->targetManager()->targetItems().isEmpty());
+  setEnabled(documentManager->targetManager()->targetItems(targetType).size());
 }
 
-void DeleteItemAction::targetChanged(
-    TargetManager::TargetType targetType, PerspectiveWidget *perspectiveWidget,
-    QByteArrayList itemIds) {
-  Q_UNUSED(perspectiveWidget)
-  if (targetType == TargetManager::PrimaryTarget)
-    setEnabled(!itemIds.isEmpty());
+void DeleteItemAction::onTrigger(bool) {
+  auto dm = documentManager();
+  if (!dm)
+    return;
+  auto items = dm->targetManager()->targetItems(targetType());
+  int count = items.size();
+  if (count < 1)
+    return;
+  UndoTransaction transaction(
+        dm, tr("Deleting %1 items.").arg(count));
+  for (auto qualifiedId: items) {
+    SharedUiItem oldItem = dm->itemById(qualifiedId);
+    if (!oldItem.isNull() && isThisItemDeletable(oldItem)) {
+      QString reason;
+      auto idQualifier = oldItem.idQualifier();
+      if (!dm->changeItem(
+            SharedUiItem(), oldItem, idQualifier, &reason)) {
+        // on error, warn user
+        PerspectiveWidget *pw =
+            dm->targetManager()->targetWidget();
+        QMessageBox::warning(
+              (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
+              tr("Cannot delete %1").arg(idQualifier),
+              tr("Cannot delete %1.\n%2").arg(idQualifier).arg(reason));
+        return; // implicit rollback
+      }
+    }
+  }
+  transaction.commit();
+}
+
+void DeleteItemAction::onTargetChanged(
+    TargetManager::TargetType targetType, PerspectiveWidget *,
+    Utf8StringList itemIds) {
+  if (targetType != this->targetType())
+    return;
+  setEnabled(itemIds.size());
 }
 
 bool DeleteItemAction::isThisItemDeletable(SharedUiItem item) {

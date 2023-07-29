@@ -19,31 +19,36 @@
 #include <QUndoStack>
 
 CreateItemAction::CreateItemAction(
-    DtpDocumentManager *documentManager, QByteArray idQualifier, QIcon icon,
-    QString text, QObject *parent)
-  : DtpAction(documentManager, parent) {
+    DtpDocumentManager *documentManager, Utf8String idQualifier,
+    QString text, QIcon icon, Utf8String actionId,
+    TargetManager::TargetType targetType, QObject *parent)
+  : DtpAction(documentManager, actionId, targetType, parent),
+    _idQualifier(idQualifier) {
   setIcon(icon);
   setText(text);
-  connect(this, &CreateItemAction::triggered,
-          [this,documentManager,idQualifier]() {
-    QString reason;
-    SharedUiItem newItem =
-        documentManager->createNewItem(idQualifier, _modifier, &reason);
-    PerspectiveWidget *pw = documentManager->targetManager()->targetWidget();
-    // on error, warn user
-    if (newItem.isNull()) {
-      QMessageBox::warning(
-            (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
-            tr("Cannot create %1").arg(idQualifier),
-            tr("Cannot create %1.\n%2").arg(idQualifier).arg(reason));
-      return;
-    }
-    // if a target PerspectiveWidget exists try to start item edition through it
-    if (pw && pw->startItemEdition(newItem.qualifiedId()))
-      return;
-    // otherwise, or if it failed, try through main window
-    DtpMainWindow *mainWindow = DtpMainWindow::instance();
-    if (mainWindow)
-      mainWindow->startItemEdition(newItem.qualifiedId());
-  });
+}
+
+void CreateItemAction::onTrigger(bool) {
+  auto dm = documentManager();
+  if (!dm)
+    return;
+  QString reason;
+  SharedUiItem newItem =
+      dm->createNewItem(_idQualifier, _modifier, &reason);
+  PerspectiveWidget *pw = dm->targetManager()->targetWidget();
+  // on error, warn user
+  if (newItem.isNull()) {
+    QMessageBox::warning(
+          (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
+          tr("Cannot create %1").arg(_idQualifier),
+          tr("Cannot create %1.\n%2").arg(_idQualifier).arg(reason));
+    return;
+  }
+  // if a target PerspectiveWidget exists try to start item edition through it
+  if (pw && pw->startItemEdition(newItem.qualifiedId()))
+    return;
+  // otherwise, or if it failed, try through main window
+  DtpMainWindow *mainWindow = DtpMainWindow::instance();
+  if (mainWindow)
+    mainWindow->startItemEdition(newItem.qualifiedId());
 }

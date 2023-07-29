@@ -16,6 +16,7 @@
 
 #include <QMenu>
 #include "perspectivewidget.h"
+#include "util/utf8string.h"
 
 /** Menu that keeps previous target when shown.
  * Useful as context menu.
@@ -26,7 +27,7 @@ class LIBP6GUISHARED_EXPORT TargetKeepingMenu : public QMenu {
   Q_DISABLE_COPY(TargetKeepingMenu)
   DtpDocumentManager *_documentManager = 0;
   PerspectiveWidget *_primaryWidget = 0;
-  QByteArrayList _primaryItems;
+  Utf8StringList _primaryItems;
 
 public:
   TargetKeepingMenu(PerspectiveWidget *parent = 0);

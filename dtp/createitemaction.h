@@ -17,6 +17,7 @@
 #include "dtpaction.h"
 #include "dtpdocumentmanager.h"
 #include <functional>
+#include "util/utf8string.h"
 
 class LIBP6GUISHARED_EXPORT CreateItemAction : public DtpAction {
   Q_OBJECT
@@ -24,23 +25,30 @@ class LIBP6GUISHARED_EXPORT CreateItemAction : public DtpAction {
 
 private:
   SharedUiItemDocumentManager::PostCreationModifier _modifier;
+  Utf8String _idQualifier;
 
 public:
-  CreateItemAction(DtpDocumentManager *documentManager, QByteArray idQualifier,
-                   QIcon icon, QString text, QObject *parent);
   CreateItemAction(
-      DtpDocumentManager *documentManager, QByteArray idQualifier,
+      DtpDocumentManager *documentManager, Utf8String idQualifier,
+      QString text, QIcon icon, Utf8String actionId,
+      TargetManager::TargetType targetType = TargetManager::PrimaryTarget,
+      QObject *parent = 0);
+  CreateItemAction(
+      DtpDocumentManager *documentManager, Utf8String idQualifier,
+      QString text, QIcon icon = QIcon(":fa/plus-circle.svg"))
+    : CreateItemAction(documentManager, idQualifier, text, icon,
+                       "create_"+idQualifier) { }
+  CreateItemAction(
+      DtpDocumentManager *documentManager, Utf8String idQualifier,
       QIcon icon = QIcon(":fa/plus-circle.svg"))
-    : CreateItemAction(documentManager, idQualifier, icon,
-                       "Create "+idQualifier, documentManager) { }
-  CreateItemAction(
-      DtpDocumentManager *documentManager, QByteArray idQualifier,
-      QIcon icon, QObject *parent)
-    : CreateItemAction(documentManager, idQualifier, icon,
-                       "Create "+idQualifier, parent) { }
+    : CreateItemAction(documentManager, idQualifier,
+                       tr("Create %1").arg(idQualifier), icon) {}
   void setPostCreationModifier(
       SharedUiItemDocumentManager::PostCreationModifier modifier) {
     _modifier = modifier; }
+
+protected:
+  void onTrigger(bool checked) override;
 };
 
 #endif // CREATEITEMACTION_H

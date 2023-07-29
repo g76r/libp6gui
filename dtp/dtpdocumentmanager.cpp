@@ -18,6 +18,7 @@
 #include "closeallpoppedwindowsaction.h"
 #include <QMessageBox>
 #include "dtpmainwindow.h"
+#include "dtpaction.h"
 
 DtpDocumentManager::DtpDocumentManager(QObject *parent)
   : SharedUiItemDocumentManager(parent),
@@ -123,4 +124,22 @@ bool DtpDocumentManager::changeItem(
     return true;
   }
   return false;
+}
+
+void DtpDocumentManager::registerAction(
+    DtpAction *action, bool is_permanent) {
+  if (!action)
+    return;
+  auto actionId = action->actionId();
+  if (actionId.isEmpty())
+    return;
+  _actions.insert(actionId, QPointer<DtpAction>(action));
+  if (is_permanent) {
+    // TODO remove actions with same id
+    _permanentActions.append(action);
+  }
+}
+
+DtpAction *DtpDocumentManager::actionById(Utf8String actionId) const {
+  return qobject_cast<DtpAction*>(_actions.value(actionId).data());
 }

@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * Libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,15 +15,20 @@
 #define CLOSEALLSUBWINDOWSACTION_H
 
 #include "libp6gui_global.h"
-#include <QAction>
+#include "dtpaction.h"
 
 /** Close all PerspectiveWidget top level windows. */
-class LIBP6GUISHARED_EXPORT CloseAllPoppedWindowsAction : public QAction {
+class LIBP6GUISHARED_EXPORT CloseAllPoppedWindowsAction : public DtpAction {
   Q_OBJECT
   Q_DISABLE_COPY(CloseAllPoppedWindowsAction)
 
 public:
-  explicit CloseAllPoppedWindowsAction(QObject *parent);
+  explicit CloseAllPoppedWindowsAction(
+      DtpDocumentManager *documentManager = 0,
+      Utf8String actionId = "close_all_popped_windows", QObject *parent = 0);
+
+protected:
+  virtual void onTrigger(bool) override;
 };
 
 #endif // CLOSEALLSUBWINDOWSACTION_H

@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * Libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,13 +16,17 @@
 #include "perspectivewidget.h"
 #include <QApplication>
 
-CloseAllPoppedWindowsAction::CloseAllPoppedWindowsAction(QObject *parent)
-  : QAction(QIcon(":fa/desktop.svg"), tr("Close All Popped Windows"), parent) {
-  connect(this, &QAction::triggered, []() {
-    foreach (QWidget *w, QApplication::topLevelWidgets()) {
-      auto pw = qobject_cast<PerspectiveWidget*>(w);
-      if (pw)
-        pw->close();
-    }
-  });
+CloseAllPoppedWindowsAction::CloseAllPoppedWindowsAction(
+    DtpDocumentManager *documentManager, Utf8String actionId, QObject *parent)
+  : DtpAction(documentManager, actionId, {}, parent) {
+  setIcon(QIcon(":fa/desktop.svg"));
+  setText(tr("Close All Popped Windows"));
+}
+
+void CloseAllPoppedWindowsAction::onTrigger(bool) {
+  for (QWidget *w: QApplication::topLevelWidgets()) {
+    auto pw = qobject_cast<PerspectiveWidget*>(w);
+    if (pw)
+      pw->close();
+  }
 }

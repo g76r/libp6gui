@@ -24,9 +24,7 @@
 #include <QPainterPath>
 
 ToolButton::ToolButton(QWidget *parent, DtpDocumentManager *documentManager)
-  : QAbstractButton(parent), _mouseCurrentlyOver(false),
-    _flashBackground(Qt::lightGray), _targetType(TargetManager::PrimaryTarget),
-    _key(0), _modifiers(Qt::NoModifier) {
+  : super(parent), _mouseCurrentlyOver(false), _flashBackground(Qt::lightGray) {
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   setAcceptDrops(true);
   setDocumentManager(documentManager);
@@ -40,40 +38,28 @@ QSize ToolButton::sizeHint() const {
   return QSize(length, length);
 }
 
-void ToolButton::setTool(QPointer<DtpAction> tool) {
-  clearTool();
-  _tool = tool;
-  if (!_tool.isNull()) {
-    connect(_tool.data(), SIGNAL(changed()), this, SLOT(toolChanged()));
-    connect(_tool.data(), SIGNAL(triggered()), this, SLOT(toolTriggered()));
-    toolChanged();
+void ToolButton::setDefaultAction(QAction *action) {
+  auto old = defaultAction();
+  if (action == old)
+    return;
+  auto a = qobject_cast<DtpAction*>(old);
+  if (a) {
+    disconnect(a, &DtpAction::triggered,
+               this, &ToolButton::onActionTriggered);
   }
-}
-
-void ToolButton::clearTool() {
-  if (!_tool.isNull()) {
-    QObject::disconnect(_tool.data(), SIGNAL(changed()),
-                        this, SLOT(toolChanged()));
-    QObject::disconnect(_tool.data(), SIGNAL(triggered()),
-                        this, SLOT(toolTriggered()));
+  a = qobject_cast<DtpAction*>(action);
+  if (a) {
+    connect(a, &DtpAction::triggered,
+            this, &ToolButton::onActionTriggered);
   }
-  _tool.clear();
+  super::setDefaultAction(action);
 }
 
-void ToolButton::toolChanged() {
-  QString toolTip = _tool ? _tool.data()->toolTip() : QString();
-  if (!_keyLabel.isNull())
-    toolTip.append(" (").append(_keyLabel).append(')');
-  setToolTip(toolTip);
-  _currentlyTriggerable = _tool ? _tool.data()->isEnabled() : false;
-  update();
-}
-
-void ToolButton::toolTriggered() {
+void ToolButton::onActionTriggered() {
   QPropertyAnimation *a = new QPropertyAnimation(this, "flashBackground");
   a->setDuration(300);
   a->setStartValue(QColor(Qt::white));
-  a->setEndValue(QColor(Qt::lightGray));
+  a->setEndValue(_flashBackground);
   a->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
@@ -87,11 +73,12 @@ void ToolButton::paintEvent(QPaintEvent *) {
         ? (_mouseCurrentlyOver ? Qt::darkGray : Qt::lightGray)
         : Qt::white);
   p.drawRoundedRect(rect(), 20, 20, Qt::RelativeSize);
-  if (_tool) {
-    p.drawPixmap(2, 2, _tool->icon()
-                 .pixmap(iconSize(), _currentlyTriggerable
-                         ? QIcon::Normal : QIcon::Disabled));
+  auto action = qobject_cast<DtpAction*>(defaultAction());
+  if (action) {
+    auto mode = action->isEnabled() ? QIcon::Normal : QIcon::Disabled;
+    p.drawPixmap(2, 2, action->icon().pixmap(iconSize(), mode));
   }
+  QString _keyLabel; // FIXME
   if (!_keyLabel.isNull()) {
     QPainterPath pp;
     QFont font = this->font();
@@ -111,16 +98,18 @@ void ToolButton::paintEvent(QPaintEvent *) {
   }
   // LATER use icon rather than text as target indicator
   QString targetIndicator("?");
-  switch (_targetType) {
-  case TargetManager::PrimaryTarget:
-    targetIndicator = QString();
-    break;
-  case TargetManager::PreviousPrimaryTarget:
-    targetIndicator = "p";
-    break;
-  case TargetManager::MouseOverTarget:
-    targetIndicator = "o";
-    break;
+  if (action) {
+    switch (action->targetType()) {
+    case TargetManager::PrimaryTarget:
+      targetIndicator = QString();
+      break;
+    case TargetManager::PreviousPrimaryTarget:
+      targetIndicator = "p";
+      break;
+    case TargetManager::MouseOverTarget:
+      targetIndicator = "o";
+      break;
+    }
   }
   if (!targetIndicator.isEmpty()) {
     QFont font = this->font();
@@ -141,28 +130,9 @@ void ToolButton::mousePressEvent(QMouseEvent *e) {
 }
 
 void ToolButton::mouseReleaseEvent(QMouseEvent *e) {
-  _mousePressPoint = QPoint();
-  if (rect().contains(e->pos())) {
-    switch (e->button()) {
-    case Qt::LeftButton:
-      QAbstractButton::mouseReleaseEvent(e); // allow click only w/ left button
-      trigger();
-      break;
-    case Qt::RightButton:
-      // LATER add a popup menu or the like rather than right-click switch
-      _targetType = _targetType == TargetManager::PrimaryTarget
-          ? TargetManager::MouseOverTarget : TargetManager::PrimaryTarget;
-      break;
-    default:
-      ;
-    }
-    update();
-  }
-}
-
-void ToolButton::trigger() {
-  if (_tool)
-    _tool->trigger();
+  _mousePressPoint = {};
+  // update();
+  super::mouseReleaseEvent(e);
 }
 
 void ToolButton::enterEvent(QEnterEvent *e) {
@@ -181,32 +151,33 @@ void ToolButton::leaveEvent(QEvent *e) {
 void ToolButton::mouseMoveEvent(QMouseEvent *e) {
   QAbstractButton::mouseMoveEvent(e);
   // LATER another way to trigger drag is based on QApplication::startDragTime()
-  if (_documentManager && _tool && !_mousePressPoint.isNull()
+  auto action = qobject_cast<DtpAction*>(defaultAction());
+  if (_documentManager && action && !_mousePressPoint.isNull()
       && (_mousePressPoint - e->pos()).manhattanLength()
       >= QApplication::startDragDistance()) {
     QDrag d(this);
     QMimeData *md = new QMimeData;
-    md->setText(_tool.data()->text());
-    //md->setData(MIMETYPE_TOOL_ID, _tool.data()->id().toUtf8());
+    md->setText(action->text());
+    md->setData(MIMETYPE_ACTION_ID, action->actionId());
     d.setMimeData(md);
-    QPixmap pm = _tool.data()->icon().pixmap(iconSize().width());
+    QPixmap pm = action->icon().pixmap(iconSize().width());
     d.setPixmap(pm);
     d.setHotSpot(QPoint(pm.width()/2, pm.height()/2));
     Qt::DropAction da = d.exec(Qt::MoveAction | Qt::CopyAction,
                                Qt::CopyAction);
     //qDebug() << "dragged" << da << d.target() << this;
     if (da & Qt::MoveAction && d.target() != this)
-      clearTool();
+      setDefaultAction(0);
     _mousePressPoint = QPoint();
     update();
   }
 }
 
 void ToolButton::dragEnterEvent(QDragEnterEvent *e) {
-  //if (e->mimeData()->hasFormat(MIMETYPE_TOOL_ID)) {
-  //  e->accept();
-  //} else
-  e->ignore();
+  if (e->mimeData()->hasFormat(MIMETYPE_ACTION_ID)) {
+    e->accept();
+  } else
+    e->ignore();
 }
 
 void ToolButton::dragMoveEvent(QDragMoveEvent *e) {
@@ -223,48 +194,18 @@ void ToolButton::dragMoveEvent(QDragMoveEvent *e) {
 }
 
 void ToolButton::dropEvent(QDropEvent *e) {
-  if (e->source() == this) {
-    qDebug() << "  ignored";
-    e->ignore();
+  e->ignore();
+  if (e->source() == this || !_documentManager)
     return;
-  }
-  QPointer<DtpAction> tool;
-  if (_documentManager) {
-    //QString id = QString::fromUtf8(e->mimeData()->data(MIMETYPE_TOOL_ID));
-    //if (!id.isEmpty())
-    //  tool = _documentManager.data()->actionById(id);
-  }
-  if (tool.isNull()) {
-    e->ignore();
+  auto actionId = e->mimeData()->data(MIMETYPE_ACTION_ID);
+  auto action = _documentManager->actionById(actionId);
+  if (!action)
     return;
-  }
-  setTool(tool);
-  //qDebug() << "dropped" << e->possibleActions() << e->proposedAction();
+  setDefaultAction(action);
   e->accept();
-}
-
-void ToolButton::targetChanged(TargetManager::TargetType targetType,
-                               PerspectiveWidget *perspectiveWidget,
-                               QByteArrayList itemIds) {
-  Q_UNUSED(perspectiveWidget)
-  Q_UNUSED(itemIds)
-  //qDebug() << "ToolButton::targetChanged" << (_tool ? _tool->id() : "-") << targetType << perspectiveWidget << itemIds;
-  if (targetType == _targetType && _tool && _tool->isEnabled()) {
-    bool triggerable = _tool->isEnabled();
-    //qDebug() << "--" << triggerable << _currentlyTriggerable;
-    if (triggerable != _currentlyTriggerable)
-      toolChanged();
-  }
+  //qDebug() << "dropped" << e->possibleActions() << e->proposedAction();
 }
 
 void ToolButton::setDocumentManager(DtpDocumentManager *documentManager) {
-  if (_documentManager) {
-    disconnect(_documentManager->targetManager(), &TargetManager::targetChanged,
-               this, &ToolButton::targetChanged);
-  }
   _documentManager = documentManager;
-  if (_documentManager) {
-    connect(_documentManager->targetManager(), &TargetManager::targetChanged,
-            this, &ToolButton::targetChanged);
-  }
 }

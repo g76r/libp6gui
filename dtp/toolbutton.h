@@ -14,7 +14,7 @@
 #ifndef TOOLBUTTON_H
 #define TOOLBUTTON_H
 
-#include <QPushButton>
+#include <QToolButton>
 #include <QPointer>
 #include "dtpaction.h"
 #include "libp6gui_global.h"
@@ -22,34 +22,28 @@
 
 class DtpDocumentManager;
 
-// FIXME is it still usefull since Tool inherits from QAction ?
+// LATER add context menu to change action properties e.g. target type
 
-class LIBP6GUISHARED_EXPORT ToolButton : public QAbstractButton {
+/** Button on which DtpAction can be drag'n droped (provided they are registered
+ *  as persistent with the same DM).
+ */
+class LIBP6GUISHARED_EXPORT ToolButton : public QToolButton {
   Q_OBJECT
   Q_PROPERTY(QColor flashBackground
              READ flashBackground
              WRITE setFlashBackground)
 private:
+  typedef QToolButton super;
   QPointer<DtpDocumentManager> _documentManager;
-  QPointer<DtpAction> _tool;
-  bool _mouseCurrentlyOver, _currentlyTriggerable;
-  QString _keyLabel;
+  bool _mouseCurrentlyOver;
   QColor _flashBackground;
   QPoint _mousePressPoint;
-  TargetManager::TargetType _targetType;
-  int _key;
-  Qt::KeyboardModifiers _modifiers;
 
 public:
-  explicit ToolButton(QWidget *parent = 0, DtpDocumentManager *documentManager = 0);
+  explicit ToolButton(
+      QWidget *parent = 0, DtpDocumentManager *documentManager = 0);
   ~ToolButton();
-  void setTool(QPointer<DtpAction> tool);
-  void clearTool();
-  QString toolTip() const;
-  /** @key as in Qt::Key, if 0 remove global key
-    */
-  void setGlobalKey(int key = 0,
-                    Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+  void setDefaultAction(QAction *tool);
   void paintEvent(QPaintEvent*);
   void mousePressEvent(QMouseEvent*);
   void mouseReleaseEvent(QMouseEvent*);
@@ -61,19 +55,11 @@ public:
   void dropEvent(QDropEvent *e);
   QColor flashBackground() const { return _flashBackground; }
   void setFlashBackground(QColor color) { _flashBackground = color; update(); }
-  void trigger();
-  TargetManager::TargetType targetType() const { return _targetType; }
-  void setTargetType(TargetManager::TargetType targetType) {
-    _targetType = targetType; }
   void setDocumentManager(DtpDocumentManager *documentManager);
   QSize sizeHint() const;
 
 private slots:
-  void targetChanged(TargetManager::TargetType targetType,
-                     PerspectiveWidget *perspectiveWidget,
-                     QByteArrayList itemIds);
-  void toolChanged();
-  void toolTriggered();
+  void onActionTriggered();
 };
 
 #endif // TOOLBUTTON_H
