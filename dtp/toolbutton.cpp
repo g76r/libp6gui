@@ -65,6 +65,7 @@ void ToolButton::onActionTriggered() {
 
 void ToolButton::paintEvent(QPaintEvent *) {
   QPainter p(this);
+  auto r = rect();
   p.setRenderHint(QPainter::Antialiasing);
   p.setPen(Qt::black);
   p.setBrush(_flashBackground != Qt::lightGray
@@ -72,53 +73,44 @@ void ToolButton::paintEvent(QPaintEvent *) {
       : _mousePressPoint.isNull()
         ? (_mouseCurrentlyOver ? Qt::darkGray : Qt::lightGray)
         : Qt::white);
-  p.drawRoundedRect(rect(), 20, 20, Qt::RelativeSize);
+  p.drawRoundedRect(r, 20, 20, Qt::RelativeSize);
   auto action = qobject_cast<DtpAction*>(defaultAction());
   if (action) {
     auto mode = action->isEnabled() ? QIcon::Normal : QIcon::Disabled;
     p.drawPixmap(2, 2, action->icon().pixmap(iconSize(), mode));
   }
-  QString _keyLabel; // FIXME
-  if (!_keyLabel.isNull()) {
-    QPainterPath pp;
-    QFont font = this->font();
-    //QFont font("Sans");
-    //font.setPointSize(10);
-    pp.addText(QPointF(0, 0), font, _keyLabel);
-    pp.translate(width()-2-pp.boundingRect().width()-pp.boundingRect().x(),
-                 height()-2-pp.boundingRect().height()-pp.boundingRect().y());
-    p.setRenderHint(QPainter::Antialiasing);
-    // LATER parametrize outline and main letter colors
-    p.setBrush(Qt::white);
-    p.setPen(Qt::white);
-    p.drawPath(pp);
-    p.setBrush(Qt::darkBlue);
-    p.setPen(Qt::transparent);
-    p.drawPath(pp);
-  }
-  // LATER use icon rather than text as target indicator
-  QString targetIndicator("?");
   if (action) {
+    QString _keyLabel = action->shortcut().toString();
+    if (!_keyLabel.isNull()) {
+      QPainterPath pp;
+      QFont font = this->font();
+      //QFont font("Sans");
+      //font.setPointSize(10);
+      pp.addText(QPointF(0, 0), font, _keyLabel);
+      pp.translate(width()-2-pp.boundingRect().width()-pp.boundingRect().x(),
+                   height()-2-pp.boundingRect().height()-pp.boundingRect().y());
+      p.setRenderHint(QPainter::Antialiasing);
+      // LATER parametrize outline and main letter colors
+      p.setBrush(Qt::white);
+      p.setPen(Qt::white);
+      p.drawPath(pp);
+      p.setBrush(Qt::darkBlue);
+      p.setPen(Qt::transparent);
+      p.drawPath(pp);
+    }
+    p.setPen(Qt::transparent);
     switch (action->targetType()) {
-    case TargetManager::PrimaryTarget:
-      targetIndicator = QString();
-      break;
     case TargetManager::PreviousPrimaryTarget:
-      targetIndicator = "p";
+      p.setBrush(Qt::red);
       break;
     case TargetManager::MouseOverTarget:
-      targetIndicator = "o";
+      p.setBrush(Qt::blue);
+      break;
+    case TargetManager::PrimaryTarget:
+      p.setBrush(Qt::transparent);
       break;
     }
-  }
-  if (!targetIndicator.isEmpty()) {
-    QFont font = this->font();
-    //font.setPointSize(10);
-    p.setFont(font);
-    p.setPen(Qt::black);
-    QFontMetrics fm(font);
-    p.drawText(QRectF(2, height()-2-fm.height(), width()-4, fm.maxWidth()),
-               Qt::AlignLeft, targetIndicator);
+    p.drawRect(r.right()-3,1,r.right()-1,3); // square in upper right corner
   }
   p.end();
 }
