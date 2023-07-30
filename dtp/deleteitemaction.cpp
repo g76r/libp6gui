@@ -36,7 +36,8 @@ void DeleteItemAction::onTrigger(bool) {
   if (count < 1)
     return;
   UndoTransaction transaction(
-        dm, tr("Deleting %1 items.").arg(count));
+        dm, tr("Deleting %1 items: %2%3").arg(count).arg(items[0])
+      .arg(count > 1 ? "..." : ""));
   for (auto qualifiedId: items) {
     SharedUiItem oldItem = dm->itemById(qualifiedId);
     if (!oldItem.isNull() && isThisItemDeletable(oldItem)) {
