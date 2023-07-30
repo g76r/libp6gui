@@ -1,4 +1,4 @@
-/* Copyright 2016-2022 Hallowyn and others.
+/* Copyright 2016-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -27,7 +27,7 @@
 
 CopyViewAsHtmlAction::CopyViewAsHtmlAction(
     QAbstractItemView *view, bool ignoreSelection, QObject *parent)
-  : QAction(QIcon(":fa/copy.svg"), tr("Copy"), parent), _view(view),
+  : QAction(QIcon(":fas/copy.svg"), tr("Copy"), parent), _view(view),
     _indentationPlaceholder("&nbsp;&nbsp;&nbsp;"),
     _ignoreSelection(ignoreSelection) {
   connect(this, &QAction::triggered, [this]() {

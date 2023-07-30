@@ -22,7 +22,7 @@ DeleteItemAction::DeleteItemAction(
     DtpDocumentManager *documentManager, Utf8String actionId,
     TargetManager::TargetType targetType, QObject *parent)
   : DtpAction(documentManager, actionId, targetType, parent) {
-  setIcon(QIcon(":fa/trash-o.svg"));
+  setIcon(QIcon(":far/trash-can.svg"));
   setText("Delete Item");
   setEnabled(documentManager->targetManager()->targetItems(targetType).size());
 }

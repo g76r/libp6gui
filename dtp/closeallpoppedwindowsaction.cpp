@@ -19,7 +19,7 @@
 CloseAllPoppedWindowsAction::CloseAllPoppedWindowsAction(
     DtpDocumentManager *documentManager, Utf8String actionId, QObject *parent)
   : DtpAction(documentManager, actionId, {}, parent) {
-  setIcon(QIcon(":fa/desktop.svg"));
+  setIcon(QIcon(":fas/desktop.svg"));
   setText(tr("Close All Popped Windows"));
 }
 

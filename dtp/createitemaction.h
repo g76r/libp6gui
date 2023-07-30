@@ -35,12 +35,12 @@ public:
       QObject *parent = 0);
   CreateItemAction(
       DtpDocumentManager *documentManager, Utf8String idQualifier,
-      QString text, QIcon icon = QIcon(":fa/plus-circle.svg"))
+      QString text, QIcon icon = QIcon(":fas/circle-plus.svg"))
     : CreateItemAction(documentManager, idQualifier, text, icon,
                        "create_"+idQualifier) { }
   CreateItemAction(
       DtpDocumentManager *documentManager, Utf8String idQualifier,
-      QIcon icon = QIcon(":fa/plus-circle.svg"))
+      QIcon icon = QIcon(":fas/circle-plus.svg"))
     : CreateItemAction(documentManager, idQualifier,
                        tr("Create %1").arg(idQualifier), icon) {}
   void setPostCreationModifier(

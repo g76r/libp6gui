@@ -1,4 +1,4 @@
-/* Copyright 2017-2022 Hallowyn and others.
+/* Copyright 2017-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -23,10 +23,10 @@
 #define REMOVED_COLOR LIGHT_LILA
 #define MODIFIED_COLOR LIGHT_ORANGE
 
-#define ADDED_ICON ":fa/plus.svg"
-#define REMOVED_ICON ":fa/minus.svg"
-#define MODIFIED_ICON ":fa/exchange.svg"
-#define NOCHANGE_ICON ":fa/check.svg"
+#define ADDED_ICON ":fas/plus.svg"
+#define REMOVED_ICON ":fas/minus.svg"
+#define MODIFIED_ICON ":fas/right-left.svg"
+#define NOCHANGE_ICON ":fas/check.svg"
 
 DecoratedStringListDiffModel::DecoratedStringListDiffModel(QObject *parent)
   : StringListDiffModel(parent) {
