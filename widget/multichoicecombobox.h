@@ -1,4 +1,4 @@
-/* Copyright 2017-2022 Hallowyn and others.
+/* Copyright 2017-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -52,14 +52,14 @@ public:
   void renameItem(const QString &newText, const QString &oldText);
   QSet<QString> checkedStrings() const;
   QStringList checkedStringsAsSortedList() const;
-  void hidePopup();
+  void hidePopup() override;
   void setButtonText(const QString &text);
 
 signals:
   void checkedStringsChanged(const QSet<QString> &checkedStrings);
 
 protected:
-  void paintEvent(QPaintEvent *event);
+  void paintEvent(QPaintEvent *event) override;
 
 private:
   void setCheckedStrings(const QSet<QString> &checked);

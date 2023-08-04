@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -36,8 +36,8 @@ class LIBP6GUISHARED_EXPORT EnhancedListView : public QListView {
 
 public:
   explicit EnhancedListView(QWidget *parent = 0);
-  void dropEvent(QDropEvent *e);
-  void keyPressEvent(QKeyEvent *event);
+  void dropEvent(QDropEvent *e) override;
+  void keyPressEvent(QKeyEvent *event) override;
   inline bool ignoreInternalDrop() const { return _ignoreInternalDrop; }
   inline void setIgnoreInternalDrop(bool ignoreInternalDrop) {
     _ignoreInternalDrop = ignoreInternalDrop; }

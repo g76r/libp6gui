@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -50,9 +50,9 @@ public:
   explicit GraphvizGraphicsLayout(QGraphicsLayoutItem *parent = 0);
   ~GraphvizGraphicsLayout();
   /** @return nodes count (not counting edges) */
-  int count() const;
+  int count() const override;
   /** @return ith node (edges are not accessible this way) */
-  QGraphicsLayoutItem *itemAt(int i) const;
+  QGraphicsLayoutItem *itemAt(int i) const override;
   /** Add a QGraphicsLayoutItem that will be layouted as a node by graphviz
    * layout algorithm. */
   void addNode(QGraphicsLayoutItem *child, QString name);
@@ -75,15 +75,15 @@ public:
       QGraphicsItem *parent, QString tailName, QString headName,
       QString label = QString());
   /** remove ith node (edges are not accessible this way) */
-  void removeAt(int index);
+  void removeAt(int index) override;
   void removeNode(QGraphicsLayoutItem *child);
   void removeNode(QString name);
   void removeEdge(GraphvizEdgeGraphicsItem *child);
-  void setGeometry(const QRectF &rect);
-  void invalidate();
+  void setGeometry(const QRectF &rect) override;
+  void invalidate() override;
 
 protected:
-  QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
+  QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const override;
 
 private:
   void computeLayout();

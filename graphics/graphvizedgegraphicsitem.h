@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -41,9 +41,9 @@ public:
                            QGraphicsLayoutItem *head,
                            QString label = QString());
   ~GraphvizEdgeGraphicsItem();
-  QRectF boundingRect() const;
+  QRectF boundingRect() const override;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-             QWidget *widget);
+             QWidget *widget) override;
   QGraphicsLayoutItem *tail() const { return _tail; }
   QGraphicsLayoutItem *head() const { return _head; }
   QString label() const { return _label; }

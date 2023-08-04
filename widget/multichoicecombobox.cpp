@@ -1,4 +1,4 @@
-/* Copyright 2017-2022 Hallowyn and others.
+/* Copyright 2017-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -26,7 +26,7 @@ public:
     : QStyledItemDelegate(parent) { }
 
   void paint(QPainter *painter, const QStyleOptionViewItem &option,
-             const QModelIndex &index) const {
+             const QModelIndex &index) const override {
     auto newOption = option;
     // ignore some decorations
     newOption.showDecorationSelected = false;

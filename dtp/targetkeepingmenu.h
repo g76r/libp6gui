@@ -36,7 +36,7 @@ public:
   DtpDocumentManager *documentManger() const { return _documentManager; }
 
 protected:
-  void enterEvent(QEnterEvent *event);
+  void enterEvent(QEnterEvent *event) override;
 };
 
 #endif // TARGETKEEPINGMENU_H

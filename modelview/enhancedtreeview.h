@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -55,8 +55,8 @@ class LIBP6GUISHARED_EXPORT EnhancedTreeView : public QTreeView {
 
 public:
   explicit EnhancedTreeView(QWidget *parent = 0);
-  void leaveEvent(QEvent *event);
-  void keyPressEvent(QKeyEvent *event);
+  void leaveEvent(QEvent *event) override;
+  void keyPressEvent(QKeyEvent *event) override;
   bool ignoreKeyboardInput() const { return _ignoreKeyboardInput; }
   void setIgnoreKeyboardInput(bool enable = true) {
     _ignoreKeyboardInput = enable; }
@@ -70,7 +70,7 @@ public:
   bool editNextMeansEditRight() const { return _editNextMeansEditRight; }
   void setEditNextMeansEditRight(bool enable = true) {
     _editNextMeansEditRight = enable; }
-  void setModel(QAbstractItemModel *model);
+  void setModel(QAbstractItemModel *model) override;
 
 signals:
   void leaved();
@@ -78,7 +78,8 @@ signals:
 protected:
   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
                    const QVector<int> &roles) override;
-  void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint);
+  void closeEditor(
+      QWidget *editor, QAbstractItemDelegate::EndEditHint hint) override;
 
 private:
   void rowsAppeared();

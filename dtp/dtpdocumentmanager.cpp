@@ -42,8 +42,8 @@ public:
   UndoCommandAdapter(CoreUndoCommand *wrapped) : _wrapped(wrapped) {
     setText(_wrapped->text()); }
   ~UndoCommandAdapter() { delete _wrapped; }
-  void undo() { _wrapped->undo(); }
-  void redo() { _wrapped->redo(); }
+  void undo() override { _wrapped->undo(); }
+  void redo() override { _wrapped->redo(); }
 };
 
 } // unnamed namespace

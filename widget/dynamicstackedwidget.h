@@ -1,3 +1,16 @@
+/* Copyright 2014-2023 Gregoire Barbier and others.
+ * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
+ * libpumpkin is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * libpumpkin is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #ifndef DYNAMICSTACKEDWIDGET_H
 #define DYNAMICSTACKEDWIDGET_H
 
@@ -25,9 +38,9 @@ private:
 
 public:
   explicit DynamicStackedWidget(QWidget *parent = 0);
-  void enterEvent(QEnterEvent *event);
-  void leaveEvent(QEvent *event);
-  void showEvent(QShowEvent *event);
+  void enterEvent(QEnterEvent *event) override;
+  void leaveEvent(QEvent *event) override;
+  void showEvent(QShowEvent *event) override;
   int expandedIndex() const { return _expandedIndex; }
   void setExpandedIndex(int expandedIndex) { _expandedIndex = expandedIndex; }
   int reducedIndex() const { return _reducedIndex; }
@@ -35,8 +48,8 @@ public:
   bool frozen() const { return _frozen; }
   int currentLength() const { return _currentLength; }
   void setCurrentLength(int currentLength);
-  QSize sizeHint() const;
-  QSize minimumSizeHint() const;
+  QSize sizeHint() const override;
+  QSize minimumSizeHint() const override;
   bool expandsHorizontally() const { return _expandsHorizontally; }
   void setExpandsHorizontally(bool enabled);
 

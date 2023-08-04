@@ -52,7 +52,7 @@ public:
   explicit DtpTableView(QWidget *parent = 0);
   void setPerspectiveWidget(PerspectiveWidget *widget);
   PerspectiveWidget *perspectiveWidget() const { return _perspectiveWidget; }
-  void setModel(QAbstractItemModel *newModel);
+  void setModel(QAbstractItemModel *newModel) override;
   QByteArrayList selectedItemsIds() const { return _selectedItemsIds; }
   //QPersistentModelIndex mousePosition() const { return _mousePosition; }
   bool startItemEdition(QByteArray qualifiedId);
@@ -63,7 +63,7 @@ public:
   protected:
   void selectionChanged(const QItemSelection &selected,
                         const QItemSelection &deselected) override;
-  void commitData(QWidget *editor);
+  void commitData(QWidget *editor) override;
 
   private slots:
   void itemChanged(SharedUiItem newItem, SharedUiItem oldItem);

@@ -1,4 +1,4 @@
-/* Copyright 2017-2022 Hallowyn and others.
+/* Copyright 2017-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,8 @@ class LIBP6GUISHARED_EXPORT DecoratedStringListDiffModel
     : public StringListDiffModel {
 public:
   DecoratedStringListDiffModel(QObject *parent = 0);
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  QVariant data(const QModelIndex &index,
+                int role = Qt::DisplayRole) const override;
 };
 
 #endif // DECORATEDSTRINGLISTDIFFMODEL_H

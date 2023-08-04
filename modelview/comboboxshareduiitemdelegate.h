@@ -1,4 +1,4 @@
-/* Copyright 2015-2022 Hallowyn and others.
+/* Copyright 2015-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -50,10 +50,10 @@ public:
    * Column number can also be AllColumns. */
   void setModel(int column, QAbstractItemModel *model, int modelColumn);
   QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                        const QModelIndex &index) const;
-  void setEditorData(QWidget *editor, const QModelIndex &index) const;
+                        const QModelIndex &index) const override;
+  void setEditorData(QWidget *editor, const QModelIndex &index) const override;
   void setModelData(QWidget *editor, QAbstractItemModel *model,
-                    const QModelIndex &index) const;
+                    const QModelIndex &index) const override;
 };
 
 #endif // COMBOBOXSHAREDUIITEMDELEGATE_H

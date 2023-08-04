@@ -44,19 +44,19 @@ public:
       QWidget *parent = 0, DtpDocumentManager *documentManager = 0);
   ~ToolButton();
   void setDefaultAction(QAction *tool);
-  void paintEvent(QPaintEvent*);
-  void mousePressEvent(QMouseEvent*);
-  void mouseReleaseEvent(QMouseEvent*);
-  void enterEvent(QEnterEvent *);
-  void leaveEvent(QEvent*);
-  void mouseMoveEvent(QMouseEvent *e);
-  void dragEnterEvent(QDragEnterEvent *e);
-  void dragMoveEvent(QDragMoveEvent *e);
-  void dropEvent(QDropEvent *e);
+  void paintEvent(QPaintEvent*) override;
+  void mousePressEvent(QMouseEvent*) override;
+  void mouseReleaseEvent(QMouseEvent*) override;
+  void enterEvent(QEnterEvent *) override;
+  void leaveEvent(QEvent*) override;
+  void mouseMoveEvent(QMouseEvent *e) override;
+  void dragEnterEvent(QDragEnterEvent *e) override;
+  void dragMoveEvent(QDragMoveEvent *e) override;
+  void dropEvent(QDropEvent *e) override;
   QColor flashBackground() const { return _flashBackground; }
   void setFlashBackground(QColor color) { _flashBackground = color; update(); }
   void setDocumentManager(DtpDocumentManager *documentManager);
-  QSize sizeHint() const;
+  QSize sizeHint() const override;
 
 private slots:
   void onActionTriggered();
