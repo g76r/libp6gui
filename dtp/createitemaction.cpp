@@ -35,7 +35,7 @@ void CreateItemAction::onTrigger(bool) {
   QString reason;
   SharedUiItem newItem =
       dm->createNewItem(_idQualifier, _modifier, &reason);
-  PerspectiveWidget *pw = dm->targetManager()->targetWidget();
+  PerspectiveWidget *pw = dm->targetManager()->targetWidget(targetType());
   // on error, warn user
   if (newItem.isNull()) {
     QMessageBox::warning(

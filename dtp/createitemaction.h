@@ -35,14 +35,19 @@ public:
       QObject *parent = 0);
   CreateItemAction(
       DtpDocumentManager *documentManager, Utf8String idQualifier,
-      QString text, QIcon icon = QIcon(":fas/circle-plus.svg"))
+      QString text, QIcon icon = QIcon(":fas/circle-plus.svg"),
+      TargetManager::TargetType targetType = TargetManager::PrimaryTarget,
+      QObject *parent = 0)
     : CreateItemAction(documentManager, idQualifier, text, icon,
-                       "create_"+idQualifier) { }
+                       "create_"+idQualifier, targetType, parent) { }
   CreateItemAction(
       DtpDocumentManager *documentManager, Utf8String idQualifier,
-      QIcon icon = QIcon(":fas/circle-plus.svg"))
-    : CreateItemAction(documentManager, idQualifier,
-                       tr("Create %1").arg(idQualifier), icon) {}
+      QIcon icon = QIcon(":fas/circle-plus.svg"),
+      TargetManager::TargetType targetType = TargetManager::PrimaryTarget,
+      QObject *parent = 0)
+    : CreateItemAction(
+        documentManager, idQualifier, tr("Create %1").arg(idQualifier), icon,
+        targetType, parent) {}
   void setPostCreationModifier(
       SharedUiItemDocumentManager::PostCreationModifier modifier) {
     _modifier = modifier; }
