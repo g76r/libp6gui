@@ -21,7 +21,6 @@
 #include "libp6gui_global.h"
 #include "perspectivewidget.h"
 #include "modelview/shareduiitem.h"
-#include "util/utf8string.h"
 
 /** Class for accessing and modifying GUI targets.
   * For every target (primary, mouseover...), items ar item ids of targeted

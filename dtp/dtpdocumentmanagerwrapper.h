@@ -36,11 +36,11 @@ public:
    * object must live longer that wrapper. */
   void setWrapped(SharedUiItemDocumentManager *wrapped);
   using DtpDocumentManager::itemById;
-  SharedUiItem itemById(QByteArray idQualifier, QByteArray id) const override;
-  SharedUiItem itemById(QByteArray qualifiedId) const override;
+  SharedUiItem itemById(Utf8String idQualifier, Utf8String id) const override;
+  SharedUiItem itemById(Utf8String qualifiedId) const override;
   using DtpDocumentManager::itemsByIdQualifier;
   SharedUiItemList<SharedUiItem> itemsByIdQualifier(
-      QByteArray idQualifier) const override;
+      Utf8String idQualifier) const override;
   void reorderItems(QList<SharedUiItem> items) override;
   void registerItemType(QString idQualifier, Setter setter,
                         Creator creator) = delete;
@@ -54,15 +54,15 @@ public:
 protected:
   bool prepareChangeItem(
       SharedUiItemDocumentTransaction *transaction, SharedUiItem newItem,
-      SharedUiItem oldItem, QByteArray idQualifier,
+      SharedUiItem oldItem, Utf8String idQualifier,
       QString *errorString) override;
   void commitChangeItem(SharedUiItem newItem, SharedUiItem oldItem,
-                        QByteArray idQualifier) override;
+                        Utf8String idQualifier) override;
   SharedUiItemDocumentTransaction *internalCreateNewItem(
-      SharedUiItem *newItem, QByteArray idQualifier,
+      SharedUiItem *newItem, Utf8String idQualifier,
       PostCreationModifier modifier, QString *errorString) override;
   SharedUiItemDocumentTransaction *internalChangeItem(
-      SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier,
+      SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier,
       QString *errorString) override;
   SharedUiItemDocumentTransaction *internalChangeItemByUiData(
       SharedUiItem oldItem, int section, const QVariant &value,

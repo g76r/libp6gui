@@ -49,7 +49,7 @@ public:
 } // unnamed namespace
 
 SharedUiItem DtpDocumentManager::createNewItem(
-    QByteArray idQualifier, PostCreationModifier modifier,
+    Utf8String idQualifier, PostCreationModifier modifier,
     QString *errorString) {
   QString reason;
   if (!errorString)
@@ -93,7 +93,7 @@ bool DtpDocumentManager::changeItemByUiData(
 }
 
 bool DtpDocumentManager::changeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier,
+    SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier,
     QString *errorString) {
   QString reason;
   if (!errorString)

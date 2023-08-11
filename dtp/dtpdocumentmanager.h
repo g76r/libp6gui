@@ -52,7 +52,7 @@ public:
   /** Override SharedUiItemDocumentManager::createNewItem() to push
    * QUndoCommand in QUndoStack when returning true. */
   SharedUiItem createNewItem(
-      QByteArray idQualifier, PostCreationModifier modifier,
+      Utf8String idQualifier, PostCreationModifier modifier,
       QString *errorString) override;
   /** Override SharedUiItemDocumentManager::changeItemByUiData() to push
    * QUndoCommand in QUndoStack when returning true and display error to the
@@ -63,7 +63,7 @@ public:
   /** Override SharedUiItemDocumentManager::changeItem() to push QUndoCommand in
    * QUndoStack when returning true. */
   bool changeItem(
-      SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier,
+      SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier,
       QString *errorString) override;
   bool pushChangesToUndoStack() const { return _pushChangesToUndoStack; }
   /** Push further changes to the undo stack.

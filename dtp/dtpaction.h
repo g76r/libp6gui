@@ -17,7 +17,6 @@
 #include <QAction>
 #include <QPointer>
 #include "libp6gui_global.h"
-#include "util/utf8string.h"
 #include "targetmanager.h"
 
 class DtpDocumentManager;

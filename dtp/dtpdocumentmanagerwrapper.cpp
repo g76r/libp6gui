@@ -42,14 +42,14 @@ void DtpDocumentManagerWrapper::setWrapped(
 
 SharedUiItemDocumentTransaction
 *DtpDocumentManagerWrapper::internalCreateNewItem(
-    SharedUiItem *newItem, QByteArray idQualifier,
+    SharedUiItem *newItem, Utf8String idQualifier,
     PostCreationModifier modifier, QString *errorString) {
   return _wrapped->internalCreateNewItem(newItem, idQualifier, modifier,
                                          errorString);
 }
 
 SharedUiItemDocumentTransaction *DtpDocumentManagerWrapper::internalChangeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier,
+    SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier,
     QString *errorString) {
   return _wrapped->internalChangeItem(newItem, oldItem, idQualifier,
                                       errorString);
@@ -65,7 +65,7 @@ SharedUiItemDocumentTransaction
 
 bool DtpDocumentManagerWrapper::prepareChangeItem(
     SharedUiItemDocumentTransaction *transaction, SharedUiItem newItem,
-    SharedUiItem oldItem, QByteArray idQualifier, QString *errorString) {
+    SharedUiItem oldItem, Utf8String idQualifier, QString *errorString) {
   Q_UNUSED(transaction)
   Q_UNUSED(newItem)
   Q_UNUSED(oldItem)
@@ -78,7 +78,7 @@ bool DtpDocumentManagerWrapper::prepareChangeItem(
 }
 
 void DtpDocumentManagerWrapper::commitChangeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier) {
+    SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier) {
   Q_UNUSED(newItem)
   Q_UNUSED(oldItem)
   Q_UNUSED(idQualifier)
@@ -92,15 +92,15 @@ void DtpDocumentManagerWrapper::reorderItems(QList<SharedUiItem> items) {
 }
 
 SharedUiItem DtpDocumentManagerWrapper::itemById(
-    QByteArray idQualifier, QByteArray id) const {
+    Utf8String idQualifier, Utf8String id) const {
   return _wrapped->itemById(idQualifier, id);
 }
 
-SharedUiItem DtpDocumentManagerWrapper::itemById(QByteArray qualifiedId) const {
+SharedUiItem DtpDocumentManagerWrapper::itemById(Utf8String qualifiedId) const {
   return _wrapped->itemById(qualifiedId);
 }
 
 SharedUiItemList<SharedUiItem> DtpDocumentManagerWrapper
-::itemsByIdQualifier(QByteArray idQualifier) const {
+::itemsByIdQualifier(Utf8String idQualifier) const {
   return _wrapped->itemsByIdQualifier(idQualifier);
 }

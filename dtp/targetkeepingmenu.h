@@ -16,7 +16,7 @@
 
 #include <QMenu>
 #include "perspectivewidget.h"
-#include "util/utf8string.h"
+#include "util/utf8stringlist.h"
 
 /** Menu that keeps previous target when shown.
  * Useful as context menu.
