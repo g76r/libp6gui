@@ -77,7 +77,7 @@ signals:
 
 protected:
   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
-                   const QVector<int> &roles) override;
+                   const QList<int> &roles) override;
   void closeEditor(
       QWidget *editor, QAbstractItemDelegate::EndEditHint hint) override;
 

@@ -53,7 +53,7 @@ void EnhancedTreeView::setModel(QAbstractItemModel *model) {
 
 void EnhancedTreeView::dataChanged(
     const QModelIndex &topLeft, const QModelIndex &bottomRight,
-    const QVector<int> &roles) {
+    const QList<int> &roles) {
   QTreeView::dataChanged(topLeft, bottomRight, roles);
   rowsAppearedOrChanged();
 }
