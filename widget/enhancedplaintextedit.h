@@ -14,8 +14,8 @@
 #ifndef ENHANCEDPLAINTEXTEDIT_H
 #define ENHANCEDPLAINTEXTEDIT_H
 
-#include <QPlainTextEdit>
 #include "libp6gui_global.h"
+#include <QPlainTextEdit>
 
 /** Enhanced QPlainTextEdit
  *

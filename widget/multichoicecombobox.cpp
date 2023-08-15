@@ -12,11 +12,10 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "multichoicecombobox.h"
-#include <QStandardItemModel>
 #include <QStyledItemDelegate>
+#include <QStandardItemModel>
 #include <QStylePainter>
-#include <QStyleOptionComboBox>
-#include <QtDebug>
+#include <QPalette>
 
 namespace {
 

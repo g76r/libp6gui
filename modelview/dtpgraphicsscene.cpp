@@ -13,13 +13,8 @@
  */
 #include "dtpgraphicsscene.h"
 #include "dtp/perspectivewidget.h"
-#include <QGraphicsView>
 #include "dtp/targetmanager.h"
 #include "dtpgraphicsview.h"
-#include <QGraphicsItem>
-#include "modelview/shareduiitem.h"
-#include <QMultiHash>
-#include <QtDebug>
 
 DtpGraphicsScene::DtpGraphicsScene(QObject *parent) : QGraphicsScene(parent) {
   connect(this, &DtpGraphicsScene::selectionChanged,

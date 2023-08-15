@@ -14,8 +14,8 @@
 #ifndef DYNAMICSTACKEDWIDGET_H
 #define DYNAMICSTACKEDWIDGET_H
 
-#include <QStackedWidget>
 #include "libp6gui_global.h"
+#include <QStackedWidget>
 
 class LIBP6GUISHARED_EXPORT DynamicStackedWidget : public QStackedWidget {
   Q_OBJECT

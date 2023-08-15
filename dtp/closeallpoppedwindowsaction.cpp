@@ -13,7 +13,6 @@
  */
 #include "closeallpoppedwindowsaction.h"
 #include "dtpdocumentmanager.h"
-#include "perspectivewidget.h"
 #include <QApplication>
 
 CloseAllPoppedWindowsAction::CloseAllPoppedWindowsAction(

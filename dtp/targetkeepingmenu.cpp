@@ -13,7 +13,6 @@
  */
 #include "targetkeepingmenu.h"
 #include "dtpdocumentmanager.h"
-#include <QtDebug>
 
 TargetKeepingMenu::TargetKeepingMenu(PerspectiveWidget *parent)
   : QMenu(parent) {

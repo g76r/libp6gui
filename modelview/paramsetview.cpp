@@ -1,4 +1,4 @@
-/* Copyright 2015-2022 Hallowyn and others.
+/* Copyright 2015-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -12,8 +12,7 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "paramsetview.h"
-#include <QtDebug>
-#include "util/paramsetmodel.h"
+#include "modelview/paramsetmodel.h"
 
 void ParamSetView::deleteSelectedParams() {
   auto *paramSetModel = static_cast<ParamSetModel*>(model());

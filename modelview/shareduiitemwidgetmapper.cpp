@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -12,17 +12,14 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "shareduiitemwidgetmapper.h"
-#include <QWidget>
+#include "widget/enhancedtextedit.h"
+#include "widget/enhancedplaintextedit.h"
 #include <QMetaProperty>
-#include <QtDebug>
-#include "modelview/shareduiitemdocumentmanager.h"
 #include <QLineEdit>
 #include <QComboBox>
 #include <QAbstractSpinBox>
-#include <QCheckBox>
 #include <QAbstractButton>
-#include "widget/enhancedtextedit.h"
-#include "widget/enhancedplaintextedit.h"
+#include "modelview/shareduiitemdocumentmanager.h"
 
 SharedUiItemWidgetMapper::SharedUiItemWidgetMapper(QObject *parent)
   : QObject(parent), _documentManager(0) {

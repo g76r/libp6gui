@@ -16,8 +16,6 @@
 
 #include "enhancedtableview.h"
 #include "dtp/perspectivewidget.h"
-#include "modelview/shareduiitem.h"
-#include <QPersistentModelIndex>
 #include "modelview/shareduiitemsmodel.h"
 
 class TargetManager;

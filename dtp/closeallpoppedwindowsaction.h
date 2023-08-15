@@ -14,7 +14,6 @@
 #ifndef CLOSEALLSUBWINDOWSACTION_H
 #define CLOSEALLSUBWINDOWSACTION_H
 
-#include "libp6gui_global.h"
 #include "dtpaction.h"
 
 /** Close all PerspectiveWidget top level windows. */

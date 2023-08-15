@@ -14,11 +14,9 @@
 #ifndef TOOLBUTTON_H
 #define TOOLBUTTON_H
 
-#include <QToolButton>
-#include <QPointer>
 #include "dtpaction.h"
-#include "libp6gui_global.h"
 #include "targetmanager.h"
+#include <QToolButton>
 
 class DtpDocumentManager;
 

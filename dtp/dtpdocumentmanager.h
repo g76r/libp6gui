@@ -14,10 +14,8 @@
 #ifndef DTPDOCUMENTMANAGER_H
 #define DTPDOCUMENTMANAGER_H
 
-#include <QSet>
 #include "targetmanager.h"
 #include "modelview/shareduiitemdocumentmanager.h"
-#include "util/utf8string.h"
 
 class QUndoStack;
 class DtpAction;

@@ -11,8 +11,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
 
-QT += widgets network
-CONFIG += largefile c++17 c++20 force_debug_info
+QT += widgets network sql
+CONFIG += largefile c++17 c++20 precompile_header force_debug_info
 
 TARGET = p6gui
 TEMPLATE = lib
@@ -54,6 +54,9 @@ INCLUDEPATH += ../libp6core
 LIBS += \
   -L../build-p6core-$$TARGET_OS/$$BUILD_TYPE
 LIBS += -lp6core
+
+PRECOMPILED_HEADER *= \
+    libp6gui_stable.h
 
 SOURCES *= \
     widget/dynamicstackedwidget.cpp \
@@ -103,6 +106,7 @@ SOURCES *= \
 
 HEADERS *=\
     libp6gui_global.h \
+    libp6gui_stable.h \
     widget/dynamicstackedwidget.h \
     modelview/enhancedgraphicsview.h \
     modelview/enhancedlistview.h \

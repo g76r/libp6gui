@@ -12,16 +12,16 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "toolbutton.h"
-#include <QPaintEvent>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QtDebug>
-#include <QApplication>
-#include <QPropertyAnimation>
-#include <QDrag>
-#include <QMimeData>
 #include "dtpdocumentmanager.h"
+#include <QMouseEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QMimeData>
+#include <QDrag>
+#include <QPropertyAnimation>
+#include <QPainter>
 #include <QPainterPath>
+#include <QApplication>
 
 ToolButton::ToolButton(QWidget *parent, DtpDocumentManager *documentManager)
   : super(parent), _mouseCurrentlyOver(false), _flashBackground(Qt::lightGray) {

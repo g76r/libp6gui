@@ -14,9 +14,8 @@
 #ifndef COMBOBOXSHAREDUIITEMDELEGATE_H
 #define COMBOBOXSHAREDUIITEMDELEGATE_H
 
-#include <QStyledItemDelegate>
-#include "modelview/shareduiitemsmodel.h"
 #include "libp6gui_global.h"
+#include <QStyledItemDelegate>
 
 // TODO rename class (ComboBoxItemDelegate, no SUI dependency)
 /** Item delegate providing QComboBox based on SharedUiItemsModel for one or

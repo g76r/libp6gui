@@ -13,9 +13,6 @@
  */
 #include "dtptableview.h"
 #include "dtp/dtpdocumentmanager.h"
-#include "modelview/shareduiitem.h"
-#include <QtDebug>
-#include "modelview/shareduiitemsmodel.h"
 
 // TODO factorize code with DtpTreeView
 

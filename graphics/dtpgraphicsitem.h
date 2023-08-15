@@ -14,9 +14,8 @@
 #ifndef DTPGRAPHICSITEM_H
 #define DTPGRAPHICSITEM_H
 
-#include <QGraphicsObject>
-#include "modelview/shareduiitem.h"
 #include "dtp/dtpdocumentmanager.h"
+#include <QGraphicsObject>
 
 /** QGraphicsObject with DTP extensions:
  * - holding a ShareUiItem

@@ -14,7 +14,6 @@
 #include "dtpgraphicsview.h"
 #include "dtp/targetmanager.h"
 #include "dtpgraphicsscene.h"
-#include <QMouseEvent>
 
 DtpGraphicsView::DtpGraphicsView(QWidget *parent)
   : EnhancedGraphicsView(parent), _perspectiveWidget(0) {

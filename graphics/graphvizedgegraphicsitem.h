@@ -14,11 +14,9 @@
 #ifndef GRAPHVIZEDGEGRAPHICSITEM_H
 #define GRAPHVIZEDGEGRAPHICSITEM_H
 
+#include "libp6gui_global.h"
 #include <QGraphicsItem>
 #include <QGraphicsLayoutItem>
-#include "libp6gui_global.h"
-#include <QPainterPath>
-#include <QRectF>
 
 class GraphvizGraphicsLayout;
 

@@ -1,4 +1,4 @@
-/* Copyright 2017-2022 Hallowyn and others.
+/* Copyright 2017-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,7 +15,7 @@
 #define UNDOTRANSACTION_H
 
 #include "libp6gui_global.h"
-#include <QString>
+#include "util/utf8string.h"
 
 class QUndoStack;
 class DtpDocumentManager;

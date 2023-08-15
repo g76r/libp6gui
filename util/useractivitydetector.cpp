@@ -1,4 +1,4 @@
-/* Copyright 2017-2022 Hallowyn and others.
+/* Copyright 2017-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -12,9 +12,9 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "useractivitydetector.h"
-#include <QCoreApplication>
 #include <QTimer>
-#include <QtDebug>
+#include <QEvent>
+#include <QCoreApplication>
 
 UserActivityDetector::UserActivityDetector(
     int inactivityDelayMillis, QObject *parent)

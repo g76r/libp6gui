@@ -12,9 +12,9 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "decoratedstringlistdiffmodel.h"
-#include <QBrush>
 #include <QColor>
 #include <QIcon>
+#include <QBrush>
 
 #define LIGHT_GREEN "#d9ead5"
 #define LIGHT_LILA "#dcd7e7"
@@ -47,7 +47,7 @@ QVariant DecoratedStringListDiffModel::data(
     case NoChange:
       ;
     }
-    return QVariant();
+    return {};
   case Qt::DecorationRole:
     if (column == 2) {
       switch (rowStatus(index.row())) {
@@ -61,7 +61,7 @@ QVariant DecoratedStringListDiffModel::data(
         return QIcon(NOCHANGE_ICON);
       }
     }
-    return QVariant();
+    return {};
   }
   return StringListDiffModel::data(index, role);
 }

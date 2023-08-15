@@ -14,9 +14,7 @@
 #include "createitemaction.h"
 #include "dtpdocumentmanager.h"
 #include "dtpmainwindow.h"
-#include "perspectivewidget.h"
 #include <QMessageBox>
-#include <QUndoStack>
 
 CreateItemAction::CreateItemAction(
     DtpDocumentManager *documentManager, Utf8String idQualifier,

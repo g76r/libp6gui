@@ -14,8 +14,8 @@
 #ifndef ENHANCEDTREEVIEW_H
 #define ENHANCEDTREEVIEW_H
 
-#include <QTreeView>
 #include "libp6gui_global.h"
+#include <QTreeView>
 
 /** Enhanced QTreeView
  *

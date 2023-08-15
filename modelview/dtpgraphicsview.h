@@ -14,7 +14,6 @@
 #ifndef DTPGRAPHICSVIEW_H
 #define DTPGRAPHICSVIEW_H
 
-#include "libp6gui_global.h"
 #include "enhancedgraphicsview.h"
 #include "dtp/perspectivewidget.h"
 

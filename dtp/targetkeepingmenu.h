@@ -14,8 +14,8 @@
 #ifndef TARGETKEEPINGMENU_H
 #define TARGETKEEPINGMENU_H
 
-#include <QMenu>
 #include "perspectivewidget.h"
+#include <QMenu>
 #include "util/utf8stringlist.h"
 
 /** Menu that keeps previous target when shown.

@@ -14,10 +14,9 @@
 #ifndef DTPGRAPHICSSCENE_H
 #define DTPGRAPHICSSCENE_H
 
-#include <QGraphicsScene>
 #include "dtp/perspectivewidget.h"
 #include "graphics/dtpgraphicsitem.h"
-#include "modelview/shareduiitemlist.h"
+#include <QGraphicsScene>
 
 /** FIXME doc
  *

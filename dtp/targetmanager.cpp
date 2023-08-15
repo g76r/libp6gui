@@ -13,7 +13,6 @@
  */
 #include "targetmanager.h"
 #include "perspectivewidget.h"
-#include <QtDebug>
 
 TargetManager::TargetManager(QObject *parent) : QObject(parent) {
   qRegisterMetaType<TargetManager::TargetType>("TargetManager::TargetType");

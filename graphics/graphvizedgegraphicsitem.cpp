@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -13,10 +13,8 @@
  */
 #include "graphvizedgegraphicsitem.h"
 #include "graphvizgraphicslayout.h"
-#include <QPainter>
 #include <QPen>
-#include <QBrush>
-#include <QtDebug>
+#include <QPainter>
 
 #define NORMAL_PENWIDTH 2
 #define SELECTED_PENWIDTH 3

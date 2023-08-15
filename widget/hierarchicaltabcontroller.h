@@ -14,13 +14,8 @@
 #ifndef HIERARCHICALTABCONTROLLER_H
 #define HIERARCHICALTABCONTROLLER_H
 
-#include <QWidget>
-#include <QAtomicInt>
-#include <QBrush>
-#include <QList>
-#include <QHash>
-#include <QMap>
 #include "libp6gui_global.h"
+#include <QWidget>
 
 class QPainter;
 class HierarchicalTabController;

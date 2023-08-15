@@ -14,8 +14,8 @@
 #ifndef ENHANCEDTABLEVIEW_H
 #define ENHANCEDTABLEVIEW_H
 
-#include <QTableView>
 #include "libp6gui_global.h"
+#include <QTableView>
 
 /** Enhanced QTableView
  *

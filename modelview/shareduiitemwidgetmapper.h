@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -14,9 +14,9 @@
 #ifndef UIITEMWIDGETMAPPER_H
 #define UIITEMWIDGETMAPPER_H
 
+#include "libp6gui_global.h"
 #include <QObject>
 #include "modelview/shareduiitem.h"
-#include "libp6gui_global.h"
 
 class QWidget;
 class SharedUiItemDocumentManager;

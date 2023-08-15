@@ -12,14 +12,11 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "copyviewashtmlaction.h"
-#include <QAbstractItemModel>
-#include <QClipboard>
 #include <QApplication>
-#include <QMimeData>
-#include <QtDebug>
 #include <QListView>
 #include <QTreeView>
-#include <QTableView>
+#include <QMimeData>
+#include <QClipboard>
 #include "format/stringutils.h"
 
 // LATER add txt/csv in addition to html

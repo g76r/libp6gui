@@ -13,10 +13,9 @@
  */
 #include "deleteitemaction.h"
 #include "dtpdocumentmanager.h"
-#include <QtDebug>
-#include <QMessageBox>
 #include "dtpmainwindow.h"
 #include "util/undotransaction.h"
+#include <QMessageBox>
 
 DeleteItemAction::DeleteItemAction(
     DtpDocumentManager *documentManager, Utf8String actionId,

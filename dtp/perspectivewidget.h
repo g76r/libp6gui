@@ -14,8 +14,8 @@
 #ifndef PERSPECTIVEWIDGET_H
 #define PERSPECTIVEWIDGET_H
 
-#include <QWidget>
 #include "libp6gui_global.h"
+#include <QWidget>
 
 class DtpDocumentManager;
 class DocumentVersion;

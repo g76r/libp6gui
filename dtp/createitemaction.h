@@ -16,8 +16,6 @@
 
 #include "dtpaction.h"
 #include "dtpdocumentmanager.h"
-#include <functional>
-#include "util/utf8string.h"
 
 class LIBP6GUISHARED_EXPORT CreateItemAction : public DtpAction {
   Q_OBJECT

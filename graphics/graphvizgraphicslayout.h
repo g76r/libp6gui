@@ -14,10 +14,8 @@
 #ifndef GRAPHVIZGRAPHICSLAYOUT_H
 #define GRAPHVIZGRAPHICSLAYOUT_H
 
-#include <QGraphicsLayout>
 #include "graphvizedgegraphicsitem.h"
-#include <QDebug>
-#include "libp6gui_global.h"
+#include <QGraphicsLayout>
 
 /** Layout for using Graphviz to layout two item kinds, graph nodes being
  * represented by regular QGraphicsLayoutItems and edges being represented

@@ -13,9 +13,6 @@
  */
 #include "dtptreeview.h"
 #include "dtp/dtpdocumentmanager.h"
-#include "modelview/shareduiitem.h"
-#include <QtDebug>
-#include "modelview/shareduiitemsmodel.h"
 
 DtpTreeView::DtpTreeView(QWidget *parent)
   : EnhancedTreeView(parent), _perspectiveWidget(0) {

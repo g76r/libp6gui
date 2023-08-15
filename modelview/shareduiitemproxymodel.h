@@ -14,11 +14,9 @@
 #ifndef SHAREDUIITEMPROXYMODEL_H
 #define SHAREDUIITEMPROXYMODEL_H
 
+#include "libp6gui_global.h"
 #include <QIdentityProxyModel>
 #include <QIcon>
-#include <QString>
-#include <QHash>
-#include "libp6gui_global.h"
 
 /** Decoration proxy model for SharedUiItemsModel.
  * @see SharedUiItemsModel */

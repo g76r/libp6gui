@@ -13,8 +13,6 @@
  */
 #include "dtpgraphicsitem.h"
 #include "modelview/dtpgraphicsscene.h"
-#include <QtDebug>
-#include "modelview/dtpgraphicsscene.h"
 
 DtpGraphicsItem::DtpGraphicsItem(QGraphicsItem *parent)
   : QGraphicsObject(parent) {

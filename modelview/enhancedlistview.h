@@ -14,8 +14,8 @@
 #ifndef ENHANCEDLISTVIEW_H
 #define ENHANCEDLISTVIEW_H
 
-#include <QListView>
 #include "libp6gui_global.h"
+#include <QListView>
 
 /** Enhanced QListView
  *

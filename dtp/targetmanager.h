@@ -14,12 +14,9 @@
 #ifndef TARGETMANAGER_H
 #define TARGETMANAGER_H
 
-#include <QObject>
-#include <QMap>
-#include <QStringList>
-#include <QPointer>
-#include "libp6gui_global.h"
 #include "perspectivewidget.h"
+#include <QObject>
+#include <QPointer>
 #include "modelview/shareduiitem.h"
 
 /** Class for accessing and modifying GUI targets.

@@ -1,4 +1,4 @@
-/* Copyright 2014-2022 Hallowyn and others.
+/* Copyright 2014-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -13,16 +13,10 @@
  */
 #include "perspectivewidget.h"
 #include "dtpdocumentmanager.h"
-#include <QEvent>
-#include <QWindowStateChangeEvent>
-#include <QtDebug>
-#include <QMetaObject>
 #include "widget/widgetutils.h"
-#include <QIcon>
 #include "widget/responsiveapplication.h"
-#include <QWindow>
-#include <QScreen>
 #include <QTabWidget>
+#include <QWindow>
 
 PerspectiveWidget::PerspectiveWidget(QWidget *parent)
   : QWidget(parent), _documentManager(0) {

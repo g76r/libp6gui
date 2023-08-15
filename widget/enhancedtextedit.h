@@ -14,8 +14,8 @@
 #ifndef ENHANCEDTEXTEDIT_H
 #define ENHANCEDTEXTEDIT_H
 
-#include <QTextEdit>
 #include "libp6gui_global.h"
+#include <QTextEdit>
 
 /** Enhanced QTextEdit
  *

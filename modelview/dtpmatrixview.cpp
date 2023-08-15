@@ -13,9 +13,6 @@
  */
 #include "dtpmatrixview.h"
 #include "dtp/dtpdocumentmanager.h"
-#include "modelview/shareduiitem.h"
-#include <QtDebug>
-#include "modelview/shareduiitemsmodel.h"
 #include "modelview/shareduiitemsmatrixmodel.h"
 
 // TODO factorize code with DtpTreeView

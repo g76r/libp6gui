@@ -12,13 +12,13 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "dtpdocumentmanager.h"
-#include <QtDebug>
 #include "perspectivewidget.h"
-#include <QUndoStack>
 #include "closeallpoppedwindowsaction.h"
-#include <QMessageBox>
 #include "dtpmainwindow.h"
 #include "dtpaction.h"
+#include <QUndoCommand>
+#include <QUndoStack>
+#include <QMessageBox>
 
 DtpDocumentManager::DtpDocumentManager(QObject *parent)
   : SharedUiItemDocumentManager(parent),

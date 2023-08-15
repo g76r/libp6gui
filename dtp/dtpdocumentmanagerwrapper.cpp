@@ -12,9 +12,6 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "dtpdocumentmanagerwrapper.h"
-#include <QtDebug>
-#include "modelview/inmemoryshareduiitemdocumentmanager.h"
-#include <QMessageBox>
 #include "dtpmainwindow.h"
 
 DtpDocumentManagerWrapper::DtpDocumentManagerWrapper(QObject *parent)

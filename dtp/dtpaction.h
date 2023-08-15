@@ -14,10 +14,8 @@
 #ifndef DTPACTION_H
 #define DTPACTION_H
 
-#include <QAction>
-#include <QPointer>
-#include "libp6gui_global.h"
 #include "targetmanager.h"
+#include <QAction>
 
 class DtpDocumentManager;
 

@@ -1,4 +1,4 @@
-/* Copyright 2017-2022 Hallowyn and others.
+/* Copyright 2017-2023 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -12,10 +12,9 @@
  * along with libpumpkin.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "undotransaction.h"
-#include <QUndoStack>
-#include <QtDebug>
 #include "dtp/dtpdocumentmanager.h"
 #include "dtp/perspectivewidget.h"
+#include <QUndoStack>
 
 UndoTransaction::UndoTransaction(QUndoStack *stack, const QString &text)
   : _stack(stack), _state(stack ? Running : Free), _text(text) {

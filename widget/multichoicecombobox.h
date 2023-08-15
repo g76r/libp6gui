@@ -16,9 +16,6 @@
 
 #include "libp6gui_global.h"
 #include <QComboBox>
-#include <QList>
-#include <QString>
-#include <QSet>
 
 class QStandardItemModel;
 class QStyledItemDelegate;
