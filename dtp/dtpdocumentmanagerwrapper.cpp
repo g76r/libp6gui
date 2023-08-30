@@ -13,6 +13,7 @@
  */
 #include "dtpdocumentmanagerwrapper.h"
 #include "dtpmainwindow.h"
+#include "log/log.h"
 
 DtpDocumentManagerWrapper::DtpDocumentManagerWrapper(QObject *parent)
   : DtpDocumentManager(parent), _wrapped(0) {
@@ -60,29 +61,30 @@ SharedUiItemDocumentTransaction
                                               errorString);
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=noreturn"
+
 bool DtpDocumentManagerWrapper::prepareChangeItem(
-    SharedUiItemDocumentTransaction *transaction, SharedUiItem newItem,
-    SharedUiItem oldItem, Utf8String idQualifier, QString *errorString) {
-  Q_UNUSED(transaction)
-  Q_UNUSED(newItem)
-  Q_UNUSED(oldItem)
-  Q_UNUSED(idQualifier)
-  Q_UNUSED(errorString)
+    SharedUiItemDocumentTransaction *, SharedUiItem, SharedUiItem, Utf8String,
+    QString *) {
   // must never be called since internalChangeItem and
   // internalChangeItemByUiData are called on wrapped DM
-  Q_ASSERT(false);
+  Log::error() << "DtpDocumentManagerWrapper::prepareChangeItem() called "
+                  "instead of subclass";
+  assert(false);
   return false;
 }
 
 void DtpDocumentManagerWrapper::commitChangeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier) {
-  Q_UNUSED(newItem)
-  Q_UNUSED(oldItem)
-  Q_UNUSED(idQualifier)
+    SharedUiItem, SharedUiItem, Utf8String) {
   // must never be called since prepareChangeItem is called on wrapped DM, the
   // commands call back its commitChangeItem() not ours
-  Q_ASSERT(false);
+  Log::error() << "DtpDocumentManagerWrapper::commitChangeItem() called "
+                  "instead of subclass";
+  assert(false);
 }
+
+#pragma GCC diagnostic pop
 
 void DtpDocumentManagerWrapper::reorderItems(QList<SharedUiItem> items) {
   _wrapped->reorderItems(items);
