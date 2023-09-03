@@ -61,45 +61,46 @@ SharedUiItemDocumentTransaction
                                               errorString);
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsuggest-attribute=noreturn"
-
 bool DtpDocumentManagerWrapper::prepareChangeItem(
-    SharedUiItemDocumentTransaction *, SharedUiItem, SharedUiItem, Utf8String,
-    QString *) {
-  // must never be called since internalChangeItem and
-  // internalChangeItemByUiData are called on wrapped DM
+    SharedUiItemDocumentTransaction *transaction, const SharedUiItem &new_item,
+    const SharedUiItem &old_item, const Utf8String &qualifier,
+    QString *errorString) {
+  // should never be called since internalXXX() methods use wrapped dm
   Log::error() << "DtpDocumentManagerWrapper::prepareChangeItem() called "
-                  "instead of subclass";
-  assert(false);
-  return false;
+                  "instead of wrapped one: "
+               << transaction << " " << new_item.qualifiedId() << " "
+               << old_item.qualifiedId() << " " << qualifier;
+  return _wrapped->prepareChangeItem(transaction, new_item, old_item, qualifier,
+                                     errorString);
 }
 
 void DtpDocumentManagerWrapper::commitChangeItem(
-    SharedUiItem, SharedUiItem, Utf8String) {
-  // must never be called since prepareChangeItem is called on wrapped DM, the
-  // commands call back its commitChangeItem() not ours
+    const SharedUiItem &new_item, const SharedUiItem &old_item,
+    const Utf8String &qualifier) {
+  // should never be called since internalXXX() methods use wrapped dm
   Log::error() << "DtpDocumentManagerWrapper::commitChangeItem() called "
-                  "instead of subclass";
-  assert(false);
+                  "instead of wrapped one: "
+               << new_item.qualifiedId() << " " << old_item.qualifiedId()
+               << " " << qualifier;
+  _wrapped->commitChangeItem(new_item, old_item, qualifier);
 }
 
-#pragma GCC diagnostic pop
-
-void DtpDocumentManagerWrapper::reorderItems(QList<SharedUiItem> items) {
+void DtpDocumentManagerWrapper::reorderItems(
+    const SharedUiItemList<SharedUiItem> &items) {
   _wrapped->reorderItems(items);
 }
 
 SharedUiItem DtpDocumentManagerWrapper::itemById(
-    Utf8String idQualifier, Utf8String id) const {
-  return _wrapped->itemById(idQualifier, id);
+    const Utf8String &qualifier, const Utf8String &id) const {
+  return _wrapped->itemById(qualifier, id);
 }
 
-SharedUiItem DtpDocumentManagerWrapper::itemById(Utf8String qualifiedId) const {
-  return _wrapped->itemById(qualifiedId);
+SharedUiItem DtpDocumentManagerWrapper::itemById(
+    const Utf8String &qualified_id) const {
+  return _wrapped->itemById(qualified_id);
 }
 
 SharedUiItemList<SharedUiItem> DtpDocumentManagerWrapper
-::itemsByIdQualifier(Utf8String idQualifier) const {
-  return _wrapped->itemsByIdQualifier(idQualifier);
+::itemsByIdQualifier(const Utf8String &qualifier) const {
+  return _wrapped->itemsByIdQualifier(qualifier);
 }

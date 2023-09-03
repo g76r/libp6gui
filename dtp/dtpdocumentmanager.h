@@ -50,19 +50,19 @@ public:
   /** Override SharedUiItemDocumentManager::createNewItem() to push
    * QUndoCommand in QUndoStack when returning true. */
   SharedUiItem createNewItem(
-      Utf8String idQualifier, PostCreationModifier modifier,
+      const Utf8String &qualifier, PostCreationModifier modifier,
       QString *errorString) override;
   /** Override SharedUiItemDocumentManager::changeItemByUiData() to push
    * QUndoCommand in QUndoStack when returning true and display error to the
    * user otherwise. */
   bool changeItemByUiData(
-      SharedUiItem oldItem, int section, const QVariant &value,
+      const SharedUiItem &old_item, int section, const QVariant &value,
       QString *errorString = 0) override;
   /** Override SharedUiItemDocumentManager::changeItem() to push QUndoCommand in
    * QUndoStack when returning true. */
   bool changeItem(
-      SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier,
-      QString *errorString) override;
+      const SharedUiItem &new_item, const SharedUiItem &old_item,
+      const Utf8String &qualifier, QString *errorString) override;
   bool pushChangesToUndoStack() const { return _pushChangesToUndoStack; }
   /** Push further changes to the undo stack.
    * Enabled by default.

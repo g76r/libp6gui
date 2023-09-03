@@ -49,14 +49,14 @@ public:
 } // unnamed namespace
 
 SharedUiItem DtpDocumentManager::createNewItem(
-    Utf8String idQualifier, PostCreationModifier modifier,
+    const Utf8String &qualifier, PostCreationModifier modifier,
     QString *errorString) {
   QString reason;
   if (!errorString)
     errorString = &reason;
   SharedUiItem newItem;
   CoreUndoCommand *command =
-      internalCreateNewItem(&newItem, idQualifier, modifier, errorString);
+      internalCreateNewItem(&newItem, qualifier, modifier, errorString);
   if (command) {
     if (_pushChangesToUndoStack)
       undoStack()->push(new UndoCommandAdapter(command));
@@ -70,13 +70,13 @@ SharedUiItem DtpDocumentManager::createNewItem(
 }
 
 bool DtpDocumentManager::changeItemByUiData(
-    SharedUiItem oldItem, int section, const QVariant &value,
+    const SharedUiItem &old_item, int section, const QVariant &value,
     QString *errorString) {
   QString reason;
   if (!errorString)
     errorString = &reason;
   CoreUndoCommand *command =
-      internalChangeItemByUiData(oldItem, section, value, errorString);
+      internalChangeItemByUiData(old_item, section, value, errorString);
   if (command) {
     if (_pushChangesToUndoStack)
       undoStack()->push(new UndoCommandAdapter(command));
@@ -93,22 +93,22 @@ bool DtpDocumentManager::changeItemByUiData(
 }
 
 bool DtpDocumentManager::changeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier,
-    QString *errorString) {
+    const SharedUiItem &new_item, const SharedUiItem &old_item,
+    const Utf8String &qualifier, QString *errorString) {
   QString reason;
   if (!errorString)
     errorString = &reason;
-  if ((!newItem.isNull() && newItem.idQualifier() != idQualifier)
-      || (!oldItem.isNull() && oldItem.idQualifier() != idQualifier)) {
+  if ((!new_item.isNull() && new_item.idQualifier() != qualifier)
+      || (!old_item.isNull() && old_item.idQualifier() != qualifier)) {
     *errorString =
         tr("DtpDocumentManager::changeItem called with inconsistent "
            "items id qualifiers: %1, %2, %3")
-        .arg(newItem.qualifiedId()).arg(oldItem.qualifiedId()).arg(idQualifier);
+        .arg(new_item.qualifiedId()).arg(old_item.qualifiedId()).arg(qualifier);
     qWarning().noquote() << *errorString;
     return false;
   }
   CoreUndoCommand *command =
-      internalChangeItem(newItem, oldItem, idQualifier, errorString);
+      internalChangeItem(new_item, old_item, qualifier, errorString);
   //qDebug() << "DtpDocumentManager::changeItem" << command;
   if (command) {
     // commands w/o children do nothing (e.g. deleteIfExists on inexistent item)

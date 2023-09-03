@@ -36,28 +36,32 @@ public:
    * object must live longer that wrapper. */
   void setWrapped(SharedUiItemDocumentManager *wrapped);
   using DtpDocumentManager::itemById;
-  SharedUiItem itemById(Utf8String idQualifier, Utf8String id) const override;
-  SharedUiItem itemById(Utf8String qualifiedId) const override;
+  SharedUiItem itemById(
+      const Utf8String &qualifier, const Utf8String &id) const override;
+  SharedUiItem itemById(const Utf8String &qualified_id) const override;
   using DtpDocumentManager::itemsByIdQualifier;
   SharedUiItemList<SharedUiItem> itemsByIdQualifier(
-      Utf8String idQualifier) const override;
-  void reorderItems(QList<SharedUiItem> items) override;
-  void registerItemType(QString idQualifier, Setter setter,
-                        Creator creator) = delete;
-  void addForeignKey(QString sourceQualifier, int sourceSection,
-                     QString referenceQualifier, int referenceSection,
-                     OnChangePolicy onUpdatePolicy,
-                     OnChangePolicy onDeletePolicy) = delete;
-  void addChangeItemTrigger(QString idQualifier, TriggerFlags flags,
-                            ChangeItemTrigger trigger) = delete;
+      const Utf8String &qualifier) const override;
+  void reorderItems(const SharedUiItemList<SharedUiItem> &items) override;
+  void registerItemType(
+      const Utf8String &qualifier, Setter setter, Creator creator) = delete;
+  void addForeignKey(
+      const Utf8String &sourceQualifier, int sourceSection,
+      const Utf8String &referenceQualifier, int referenceSection,
+      OnChangePolicy onUpdatePolicy,
+      OnChangePolicy onDeletePolicy) = delete;
+  void addChangeItemTrigger(
+      const Utf8String &qualifier, TriggerFlags flags,
+      ChangeItemTrigger trigger) = delete;
 
 protected:
   bool prepareChangeItem(
-      SharedUiItemDocumentTransaction *transaction, SharedUiItem newItem,
-      SharedUiItem oldItem, Utf8String idQualifier,
-      QString *errorString) override;
-  void commitChangeItem(SharedUiItem newItem, SharedUiItem oldItem,
-                        Utf8String idQualifier) override;
+      SharedUiItemDocumentTransaction *transaction,
+      const SharedUiItem &new_item, const SharedUiItem &old_item,
+      const Utf8String &qualifier, QString *errorString) override;
+  void commitChangeItem(
+      const SharedUiItem &new_item, const SharedUiItem &old_item,
+      const Utf8String &qualifier) override;
   SharedUiItemDocumentTransaction *internalCreateNewItem(
       SharedUiItem *newItem, Utf8String idQualifier,
       PostCreationModifier modifier, QString *errorString) override;
