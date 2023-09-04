@@ -44,7 +44,7 @@ public:
   QString uiString(int section, int role = Qt::DisplayRole) const {
     return uiData(section, role).toString(); }
   void itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
-                   QByteArray idQualifier);
+                   QByteArray qualifier);
 
 signals:
   /** emitted whenever at less one of the ui items changes */

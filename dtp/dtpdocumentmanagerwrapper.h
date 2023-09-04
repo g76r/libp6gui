@@ -39,8 +39,8 @@ public:
   SharedUiItem itemById(
       const Utf8String &qualifier, const Utf8String &id) const override;
   SharedUiItem itemById(const Utf8String &qualified_id) const override;
-  using DtpDocumentManager::itemsByIdQualifier;
-  SharedUiItemList<SharedUiItem> itemsByIdQualifier(
+  using DtpDocumentManager::itemsByQualifier;
+  SharedUiItemList<SharedUiItem> itemsByQualifier(
       const Utf8String &qualifier) const override;
   void reorderItems(const SharedUiItemList<SharedUiItem> &items) override;
   void registerItemType(
@@ -63,10 +63,10 @@ protected:
       const SharedUiItem &new_item, const SharedUiItem &old_item,
       const Utf8String &qualifier) override;
   SharedUiItemDocumentTransaction *internalCreateNewItem(
-      SharedUiItem *newItem, Utf8String idQualifier,
+      SharedUiItem *newItem, Utf8String qualifier,
       PostCreationModifier modifier, QString *errorString) override;
   SharedUiItemDocumentTransaction *internalChangeItem(
-      SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier,
+      SharedUiItem newItem, SharedUiItem oldItem, Utf8String qualifier,
       QString *errorString) override;
   SharedUiItemDocumentTransaction *internalChangeItemByUiData(
       SharedUiItem oldItem, int section, const QVariant &value,

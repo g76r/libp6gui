@@ -17,11 +17,11 @@
 #include <QMessageBox>
 
 CreateItemAction::CreateItemAction(
-    DtpDocumentManager *documentManager, Utf8String idQualifier,
+    DtpDocumentManager *documentManager, Utf8String qualifier,
     QString text, QIcon icon, Utf8String actionId,
     TargetManager::TargetType targetType, QObject *parent)
   : DtpAction(documentManager, actionId, targetType, parent),
-    _idQualifier(idQualifier) {
+    _qualifier(qualifier) {
   setIcon(icon);
   setText(text);
 }
@@ -32,14 +32,14 @@ void CreateItemAction::onTrigger(bool) {
     return;
   QString reason;
   SharedUiItem newItem =
-      dm->createNewItem(_idQualifier, _modifier, &reason);
+      dm->createNewItem(_qualifier, _modifier, &reason);
   PerspectiveWidget *pw = dm->targetManager()->targetWidget(targetType());
   // on error, warn user
   if (newItem.isNull()) {
     QMessageBox::warning(
           (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
-          tr("Cannot create %1").arg(_idQualifier),
-          tr("Cannot create %1.\n%2").arg(_idQualifier).arg(reason));
+          tr("Cannot create %1").arg(_qualifier),
+          tr("Cannot create %1.\n%2").arg(_qualifier).arg(reason));
     return;
   }
   // if a target PerspectiveWidget exists try to start item edition through it

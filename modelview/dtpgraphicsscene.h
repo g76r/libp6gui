@@ -58,7 +58,7 @@ public slots:
    * Should be overriden by subclasses to create new graphics items when
    * needed. */
   virtual void itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
-                           QByteArray idQualifier);
+                           QByteArray qualifier);
 
 signals:
   void selectedItemsChanged(QByteArrayList selectedItemsIds);

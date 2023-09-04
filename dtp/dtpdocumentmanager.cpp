@@ -98,8 +98,8 @@ bool DtpDocumentManager::changeItem(
   QString reason;
   if (!errorString)
     errorString = &reason;
-  if ((!new_item.isNull() && new_item.idQualifier() != qualifier)
-      || (!old_item.isNull() && old_item.idQualifier() != qualifier)) {
+  if ((!new_item.isNull() && new_item.qualifier() != qualifier)
+      || (!old_item.isNull() && old_item.qualifier() != qualifier)) {
     *errorString =
         tr("DtpDocumentManager::changeItem called with inconsistent "
            "items id qualifiers: %1, %2, %3")

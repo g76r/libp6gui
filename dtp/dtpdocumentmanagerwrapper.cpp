@@ -40,16 +40,16 @@ void DtpDocumentManagerWrapper::setWrapped(
 
 SharedUiItemDocumentTransaction
 *DtpDocumentManagerWrapper::internalCreateNewItem(
-    SharedUiItem *newItem, Utf8String idQualifier,
+    SharedUiItem *newItem, Utf8String qualifier,
     PostCreationModifier modifier, QString *errorString) {
-  return _wrapped->internalCreateNewItem(newItem, idQualifier, modifier,
+  return _wrapped->internalCreateNewItem(newItem, qualifier, modifier,
                                          errorString);
 }
 
 SharedUiItemDocumentTransaction *DtpDocumentManagerWrapper::internalChangeItem(
-    SharedUiItem newItem, SharedUiItem oldItem, Utf8String idQualifier,
+    SharedUiItem newItem, SharedUiItem oldItem, Utf8String qualifier,
     QString *errorString) {
-  return _wrapped->internalChangeItem(newItem, oldItem, idQualifier,
+  return _wrapped->internalChangeItem(newItem, oldItem, qualifier,
                                       errorString);
 }
 
@@ -101,6 +101,6 @@ SharedUiItem DtpDocumentManagerWrapper::itemById(
 }
 
 SharedUiItemList<SharedUiItem> DtpDocumentManagerWrapper
-::itemsByIdQualifier(const Utf8String &qualifier) const {
-  return _wrapped->itemsByIdQualifier(qualifier);
+::itemsByQualifier(const Utf8String &qualifier) const {
+  return _wrapped->itemsByQualifier(qualifier);
 }

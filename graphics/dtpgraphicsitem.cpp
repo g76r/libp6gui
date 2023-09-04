@@ -47,14 +47,14 @@ void DtpGraphicsItem::setUiItems(SharedUiItemList<> uiItems) {
 }
 
 void DtpGraphicsItem::itemChanged(SharedUiItem newItem, SharedUiItem oldItem,
-                                  QByteArray idQualifier) {
-  Q_UNUSED(idQualifier)
+                                  QByteArray qualifier) {
+  Q_UNUSED(qualifier)
   int i = 0;
   for (SharedUiItem &item : _uiItems) {
     if (item.qualifiedId() == oldItem.qualifiedId()) {
       //qDebug() << "DtpGraphicsItem::itemChanged" << this << i
       //         << newItem.qualifiedId() << oldItem.qualifiedId()
-      //         << idQualifier;
+      //         << qualifier;
       if (newItem.isNull()) {
         auto graphicsScene = scene();
         if (graphicsScene && (_uiItems.isEmpty() || _uiItems.first() == item)) {

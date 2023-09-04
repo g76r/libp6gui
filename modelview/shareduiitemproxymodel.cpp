@@ -22,7 +22,7 @@ QVariant SharedUiItemProxyModel::data(
     const QModelIndex &index, int role) const {
   auto suiModel = qobject_cast<SharedUiItemsModel*>(sourceModel());
   if (suiModel && role == Qt::DecorationRole)
-    return _icons.value(suiModel->itemAt(mapToSource(index)).idQualifier())
+    return _icons.value(suiModel->itemAt(mapToSource(index)).qualifier())
         .value(index.column());
   return QIdentityProxyModel::data(index, role);
 }

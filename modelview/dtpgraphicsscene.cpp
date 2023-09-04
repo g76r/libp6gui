@@ -62,9 +62,9 @@ void DtpGraphicsScene::registerDtpGraphicsItem(DtpGraphicsItem *graphicsItem,
 }
 
 void DtpGraphicsScene::itemChanged(
-    SharedUiItem newItem, SharedUiItem oldItem, QByteArray idQualifier) {
+    SharedUiItem newItem, SharedUiItem oldItem, QByteArray qualifier) {
   if (!_itemQualifierFilter.isEmpty()
-      && !_itemQualifierFilter.contains(idQualifier))
+      && !_itemQualifierFilter.contains(qualifier))
     return;
   _registeredItems.remove(oldItem.qualifiedId(), nullptr);
   if (_itemsByMainUiItem.value(oldItem.qualifiedId()).isNull())
@@ -85,7 +85,7 @@ void DtpGraphicsScene::itemChanged(
   }
   for (DtpGraphicsItem *dgi : items) {
     Q_ASSERT(dgi); // should always be true since 0 have been removed before
-    dgi->itemChanged(newItem, oldItem, idQualifier);
+    dgi->itemChanged(newItem, oldItem, qualifier);
   }
 }
 

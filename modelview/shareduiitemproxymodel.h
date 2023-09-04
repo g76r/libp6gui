@@ -30,12 +30,12 @@ public:
   SharedUiItemProxyModel(QObject *parent = 0);
   QVariant data(const QModelIndex &index, int role) const override;
   /** Associate an id qualifier with an icon. */
-  SharedUiItemProxyModel &setIcon(QString idQualifier, int column, QIcon icon) {
-    _icons[idQualifier][column] = icon; return *this; }
+  SharedUiItemProxyModel &setIcon(QString qualifier, int column, QIcon icon) {
+    _icons[qualifier][column] = icon; return *this; }
   /** Convenience operator() for setIcon(). */
   SharedUiItemProxyModel &operator()(
-      QString idQualifier, int column, QIcon icon) {
-    return setIcon(idQualifier, column, icon); }
+      QString qualifier, int column, QIcon icon) {
+    return setIcon(qualifier, column, icon); }
   /** Reset id qualifiers and icons associations. */
   SharedUiItemProxyModel &clearIcons() { _icons.clear(); return *this; }
 };

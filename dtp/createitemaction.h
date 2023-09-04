@@ -23,28 +23,28 @@ class LIBP6GUISHARED_EXPORT CreateItemAction : public DtpAction {
 
 private:
   SharedUiItemDocumentManager::PostCreationModifier _modifier;
-  Utf8String _idQualifier;
+  Utf8String _qualifier;
 
 public:
   CreateItemAction(
-      DtpDocumentManager *documentManager, Utf8String idQualifier,
+      DtpDocumentManager *documentManager, Utf8String qualifier,
       QString text, QIcon icon, Utf8String actionId,
       TargetManager::TargetType targetType = TargetManager::PrimaryTarget,
       QObject *parent = 0);
   CreateItemAction(
-      DtpDocumentManager *documentManager, Utf8String idQualifier,
+      DtpDocumentManager *documentManager, Utf8String qualifier,
       QString text, QIcon icon = QIcon(":fas/circle-plus.svg"),
       TargetManager::TargetType targetType = TargetManager::PrimaryTarget,
       QObject *parent = 0)
-    : CreateItemAction(documentManager, idQualifier, text, icon,
-                       "create_"+idQualifier, targetType, parent) { }
+    : CreateItemAction(documentManager, qualifier, text, icon,
+                       "create_"+qualifier, targetType, parent) { }
   CreateItemAction(
-      DtpDocumentManager *documentManager, Utf8String idQualifier,
+      DtpDocumentManager *documentManager, Utf8String qualifier,
       QIcon icon = QIcon(":fas/circle-plus.svg"),
       TargetManager::TargetType targetType = TargetManager::PrimaryTarget,
       QObject *parent = 0)
     : CreateItemAction(
-        documentManager, idQualifier, tr("Create %1").arg(idQualifier), icon,
+        documentManager, qualifier, tr("Create %1").arg(qualifier), icon,
         targetType, parent) {}
   void setPostCreationModifier(
       SharedUiItemDocumentManager::PostCreationModifier modifier) {

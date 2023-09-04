@@ -41,16 +41,16 @@ void DeleteItemAction::onTrigger(bool) {
     SharedUiItem oldItem = dm->itemById(qualifiedId);
     if (!oldItem.isNull() && isThisItemDeletable(oldItem)) {
       QString reason;
-      auto idQualifier = oldItem.idQualifier();
+      auto qualifier = oldItem.qualifier();
       if (!dm->changeItem(
-            SharedUiItem(), oldItem, idQualifier, &reason)) {
+            SharedUiItem(), oldItem, qualifier, &reason)) {
         // on error, warn user
         PerspectiveWidget *pw =
             dm->targetManager()->targetWidget();
         QMessageBox::warning(
               (pw ? (QWidget*)pw : (QWidget*)DtpMainWindow::instance()),
-              tr("Cannot delete %1").arg(idQualifier),
-              tr("Cannot delete %1.\n%2").arg(idQualifier).arg(reason));
+              tr("Cannot delete %1").arg(qualifier),
+              tr("Cannot delete %1.\n%2").arg(qualifier).arg(reason));
         return; // implicit rollback
       }
     }
