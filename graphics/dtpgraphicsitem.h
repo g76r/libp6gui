@@ -24,13 +24,13 @@
 class LIBP6GUISHARED_EXPORT DtpGraphicsItem : public QGraphicsObject {
   Q_OBJECT
   Q_DISABLE_COPY(DtpGraphicsItem)
-  SharedUiItemList<> _uiItems;
+  SharedUiItemList _uiItems;
   QByteArray _positionSectionName = "position";
 
 public:
   DtpGraphicsItem(QGraphicsItem *parent = 0);
-  SharedUiItemList<> uiItems() const { return _uiItems; }
-  virtual void setUiItems(SharedUiItemList<> uiItems = { });
+  SharedUiItemList uiItems() const { return _uiItems; }
+  virtual void setUiItems(const SharedUiItemList &uiItems = { });
   DtpDocumentManager *documentManager() const;
   /** SharedUiItem section used to track position, default to "position" */
   void setPositionSection(const QByteArray &sectionName) {

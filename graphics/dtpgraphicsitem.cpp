@@ -22,7 +22,7 @@ DtpGraphicsItem::DtpGraphicsItem(QGraphicsItem *parent)
           this, &DtpGraphicsItem::persistPosition);
 }
 
-void DtpGraphicsItem::setUiItems(SharedUiItemList<> uiItems) {
+void DtpGraphicsItem::setUiItems(const SharedUiItemList &uiItems) {
   // LATER support being called twice or more: unregister, etc.
   //qDebug() << "DtpGraphicsItem::setUiItems" << this << uiItems.join(',', true);
   _uiItems = uiItems;

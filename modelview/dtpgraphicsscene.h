@@ -74,8 +74,8 @@ private slots:
 private:
   friend class DtpGraphicsItem;
   /** called by DtpGraphicsItem::setUiItems() */
-  void registerDtpGraphicsItem(DtpGraphicsItem *graphicsItem,
-                               SharedUiItemList<> uiItems);
+  void registerDtpGraphicsItem(
+      DtpGraphicsItem *graphicsItem, const SharedUiItemList &uiItems);
   /*void setMouseOverItem(QByteArrayList ids);
   void setMouseOverItem(QByteArray id) { setMouseOverItem(QByteArrayList(id)); }
   void clearMouseOverItem() { setMouseOverItem(QByteArrayList()); }*/

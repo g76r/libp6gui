@@ -49,8 +49,8 @@ void DtpGraphicsScene::propagateSelectionChanged() {
   }
 }
 
-void DtpGraphicsScene::registerDtpGraphicsItem(DtpGraphicsItem *graphicsItem,
-                                               SharedUiItemList<> uiItems) {
+void DtpGraphicsScene::registerDtpGraphicsItem(
+    DtpGraphicsItem *graphicsItem, const SharedUiItemList &uiItems) {
   bool first = true;
   for (const SharedUiItem &sui : uiItems) {
     if (first) {

@@ -40,9 +40,9 @@ public:
       const Utf8String &qualifier, const Utf8String &id) const override;
   SharedUiItem itemById(const Utf8String &qualified_id) const override;
   using DtpDocumentManager::itemsByQualifier;
-  SharedUiItemList<SharedUiItem> itemsByQualifier(
+  SharedUiItemList itemsByQualifier(
       const Utf8String &qualifier) const override;
-  void reorderItems(const SharedUiItemList<SharedUiItem> &items) override;
+  void reorderItems(const SharedUiItemList &items) override;
   void registerItemType(
       const Utf8String &qualifier, Setter setter, Creator creator) = delete;
   void addForeignKey(

@@ -86,7 +86,7 @@ void DtpDocumentManagerWrapper::commitChangeItem(
 }
 
 void DtpDocumentManagerWrapper::reorderItems(
-    const SharedUiItemList<SharedUiItem> &items) {
+    const SharedUiItemList &items) {
   _wrapped->reorderItems(items);
 }
 
@@ -100,7 +100,7 @@ SharedUiItem DtpDocumentManagerWrapper::itemById(
   return _wrapped->itemById(qualified_id);
 }
 
-SharedUiItemList<SharedUiItem> DtpDocumentManagerWrapper
-::itemsByQualifier(const Utf8String &qualifier) const {
+SharedUiItemList DtpDocumentManagerWrapper::itemsByQualifier(
+    const Utf8String &qualifier) const {
   return _wrapped->itemsByQualifier(qualifier);
 }
