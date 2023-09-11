@@ -14,8 +14,6 @@
 #ifndef LIBP6GUI_STABLE_H
 #define LIBP6GUI_STABLE_H
 
-#include "libp6core_stable.h"
-
 // C
 
 #if defined __cplusplus
