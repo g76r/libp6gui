@@ -49,7 +49,7 @@ GraphvizGraphicsLayout::~GraphvizGraphicsLayout() {
               delete item;
       }
   }
-  foreach (GraphvizEdgeGraphicsItem *edge, _edges)
+  for (GraphvizEdgeGraphicsItem *edge: _edges)
     edge->setParentLayout(0);
 }
 
@@ -177,7 +177,7 @@ void GraphvizGraphicsLayout::computeLayout() {
     return;
   }
   QString inGraph = "graph g {\n";
-  foreach (QGraphicsLayoutItem *node, _nodes) {
+  for (QGraphicsLayoutItem *node: _nodes) {
     QString nodeName = _nodesNames.value(node);
     if (!nodeName.isEmpty()) { // should always be true
       inGraph += "  \""+nodeName+"\" [";
@@ -191,7 +191,7 @@ void GraphvizGraphicsLayout::computeLayout() {
       inGraph += "]\n";
     }
   }
-  foreach (GraphvizEdgeGraphicsItem *edge, _edges) {
+  for (GraphvizEdgeGraphicsItem *edge: _edges) {
     QString tailNodeName = _nodesNames.value(edge->tail()),
         headNodeName = _nodesNames.value(edge->head());
     if (!tailNodeName.isEmpty() && !headNodeName.isEmpty()) {
@@ -229,33 +229,21 @@ void GraphvizGraphicsLayout::applyLayout() {
   //   than screen top-left origin conventions
   // - graphivz node position are those of its center, not top-left corner
   // - the whole diagram must be translated to match margins
-  foreach(QGraphicsLayoutItem *node, _currentLayout._nodesPos.keys()) {
+  for (QGraphicsLayoutItem *node: _currentLayout._nodesPos.keys()) {
     QRectF geometry(fromLayoutCoord(_currentLayout._nodesPos.value(node)),
                     _currentLayout._nodesSize.value(node));
     //qDebug() << "*** applygeometry to node:" << _nodesNames.value(node)
     //         << geometry;
     node->setGeometry(geometry);
   }
-  foreach (GraphvizEdgeGraphicsItem *edge, _currentLayout._edgePoints.keys()) {
+  for (GraphvizEdgeGraphicsItem *edge: _currentLayout._edgePoints.keys()) {
     edge->setLabelPos(
           fromLayoutCoord(_currentLayout._edgeLabelsPos.value(edge)));
     QList<QPointF> points;
-    foreach (QPointF point, _currentLayout._edgePoints.value(edge))
+    for (const QPointF &point: _currentLayout._edgePoints.value(edge))
       points << fromLayoutCoord(point);
     edge->setControlPoints(points);
   }
-}
-
-QPointF GraphvizGraphicsLayout::fromPsCoord(QPointF psPoint, QSizeF graphSize) {
-  return QPointF(psPoint.x(), graphSize.height() - psPoint.y());
-}
-
-QPointF GraphvizGraphicsLayout::fromCenterCoord(QPointF center, QSizeF size) {
-  return QPointF(center.x() - size.width()/2, center.y() - size.height()/2);
-}
-
-QPointF GraphvizGraphicsLayout::fromLayoutCoord(QPointF point) const {
-  return point + geometry().topLeft();
 }
 
 //QPointF GraphvizGraphicsLayout::fromGraphvizCoord(
@@ -375,19 +363,18 @@ GraphvizGraphicsLayout::Layout GraphvizGraphicsLayout::parseGraphvizOutput(
 
 QDebug operator<<(QDebug dbg, const GraphvizGraphicsLayout::Layout &layout) {
   dbg.nospace() << "{ graphSize: " << layout._graphSize << "; nodesPos: { ";
-  foreach (QPointF pos, layout._nodesPos.values())
+  for (const QPointF &pos: layout._nodesPos.values())
     dbg.nospace() << pos;
   dbg.nospace() << " }; nodesSize: { ";
-  foreach (QSizeF size, layout._nodesSize.values())
+  for (const QSizeF &size: layout._nodesSize.values())
     dbg.nospace() << size;
   dbg.nospace() << " }; edgeLabelsPos: { ";
-  foreach (QPointF pos, layout._edgeLabelsPos.values())
+  for (const QPointF &pos: layout._edgeLabelsPos.values())
     dbg.nospace() << pos;
   dbg.nospace() << " }; edgePoints: { ";
-  foreach (GraphvizEdgeGraphicsItem *edge, layout._edgePoints.keys()) {
-    QList<QPointF> points = layout._edgePoints.value(edge);
+  for (GraphvizEdgeGraphicsItem *edge: layout._edgePoints.keys()) {
     dbg.nospace() << "{ ";
-    foreach (QPointF point, points)
+    for (const QPointF &point: layout._edgePoints.value(edge))
       dbg.nospace() << point;
     dbg.nospace() << " } ";
   }

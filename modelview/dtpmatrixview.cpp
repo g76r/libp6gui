@@ -92,11 +92,11 @@ void DtpMatrixView::selectionChanged(const QItemSelection &selected,
   QAbstractItemModel *m = model();
   // LATER use a better way to identify rows than testing column 0, since this only works with selectionBehavior() == SelectRows
   if (m) {
-    foreach(const QModelIndex &index, deselected.indexes()) {
+    for (const QModelIndex &index: deselected.indexes()) {
       _selectedItemsIds.removeAll(index.data(SharedUiItem::QualifiedIdRole)
                                   .toString());
     }
-    foreach(const QModelIndex &index, selected.indexes()) {
+    for (const QModelIndex &index: selected.indexes()) {
       auto id = index.data(SharedUiItem::QualifiedIdRole).toString().toUtf8();
       if (!_selectedItemsIds.contains(id))
         _selectedItemsIds.append(id);

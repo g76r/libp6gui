@@ -21,12 +21,12 @@ void ParamSetView::deleteSelectedParams() {
     return;
   }
   QSet<int> rows;
-  foreach (const QModelIndex &index, selectedIndexes())
+  for (const QModelIndex &index: selectedIndexes())
     rows.insert(index.row());
   auto sortedRows = QList<int>(rows.begin(), rows.end());
   std::sort(sortedRows.begin(), sortedRows.end());
   int alreadyRemoved = 0;
-  foreach (int row, sortedRows) {
+  for (int row: sortedRows) {
     paramSetModel->removeRows(row-alreadyRemoved, 1);
     ++alreadyRemoved;
   }

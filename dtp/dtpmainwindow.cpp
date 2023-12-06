@@ -44,7 +44,7 @@ void DtpMainWindow::closeEvent(QCloseEvent *event) {
   // closing subwindows before main window is needed because subwindows may
   // rely on resources allocated by main window, such as the DocumentManager,
   // some QAbstractItemModels, loaded configuration, etc.
-  foreach (QWidget *w, QApplication::topLevelWidgets()) {
+  for (QWidget *w: QApplication::topLevelWidgets()) {
     auto pw = qobject_cast<PerspectiveWidget*>(w);
     if (pw)
       pw->close();
@@ -83,8 +83,8 @@ static bool startItemEditionAmongChildren(
   auto *pw = qobject_cast<PerspectiveWidget*>(widget);
   if (pw)
     return pw->startItemEdition(qualifiedId);
-  foreach (QObject *child, widget->children()) {
-    auto *widget = qobject_cast<QWidget*>(child);
+  for (QObject *o: widget->children()) {
+    auto *widget = qobject_cast<QWidget*>(o);
     if (widget && startItemEditionAmongChildren(qualifiedId, widget))
       return true;
   }

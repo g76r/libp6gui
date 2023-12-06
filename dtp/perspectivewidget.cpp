@@ -42,8 +42,8 @@ bool PerspectiveWidget::recursiveStartItemEditionThroughNonPW(
   auto *pw = qobject_cast<PerspectiveWidget*>(widget);
   if (pw)
     return pw->recursiveStartItemEdition(qualifiedId);
-  foreach (QObject *child, widget->children()) {
-    auto *widget = qobject_cast<QWidget*>(child);
+  for (QObject *o: widget->children()) {
+    auto *widget = qobject_cast<QWidget*>(o);
     if (widget && recursiveStartItemEditionThroughNonPW(qualifiedId, widget))
       return true;
   }
@@ -58,8 +58,8 @@ bool PerspectiveWidget::recursiveStartItemEdition(
     return true;
   }
   // otherwise: try in children, excepted in recursively calling child
-  foreach (QObject *child, children()) {
-    auto *widget = qobject_cast<QWidget*>(child);
+  for (QObject *o: children()) {
+    auto *widget = qobject_cast<QWidget*>(o);
     if (widget && widget != callingChild
         && recursiveStartItemEditionThroughNonPW(qualifiedId, widget)) {
       return true;

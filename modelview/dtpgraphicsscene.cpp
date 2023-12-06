@@ -27,7 +27,7 @@ void DtpGraphicsScene::setPerspectiveWidget(PerspectiveWidget *widget) {
 
 void DtpGraphicsScene::propagateSelectionChanged() {
   QByteArrayList ids;
-  foreach(QGraphicsItem *i, selectedItems()) {
+  for (const QGraphicsItem *i: selectedItems()) {
     auto qualifiedId = i->data(SharedUiItem::QualifiedIdRole)
         .toString().toUtf8();
     if (!qualifiedId.isEmpty()) {
@@ -38,10 +38,10 @@ void DtpGraphicsScene::propagateSelectionChanged() {
   emit selectedItemsChanged(ids);
   TargetManager *tm = PerspectiveWidget::targetManager(_perspectiveWidget);
   if (tm) {
-    foreach (QGraphicsView *gv, views())
+    for (QGraphicsView *gv: views())
       if (gv && gv->hasFocus()) {
         tm->setTarget(_perspectiveWidget, ids);
-        DtpGraphicsView *dgv = qobject_cast<DtpGraphicsView*>(gv);
+        auto dgv = qobject_cast<DtpGraphicsView*>(gv);
         if (dgv)
           emit dgv->selectedItemsChanged(ids);
         break;

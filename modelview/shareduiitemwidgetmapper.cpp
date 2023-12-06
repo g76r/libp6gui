@@ -48,7 +48,7 @@ void SharedUiItemWidgetMapper::clearMapping() {
 }
 
 void SharedUiItemWidgetMapper::removeMapping(QWidget *widget) {
-  foreach (int section, _sectionToWidget.keys())
+  for (int section: _sectionToWidget.keys())
     if (widget == _sectionToWidget.value(section))
       _sectionToWidget.remove(section);
   disconnect(widget, 0, this, SLOT(widgetEdited()));
@@ -57,7 +57,7 @@ void SharedUiItemWidgetMapper::removeMapping(QWidget *widget) {
 
 void SharedUiItemWidgetMapper::removeMapping(int section) {
   _sectionToWidget.remove(section);
-  foreach (QWidget *widget, _widgetToSection.keys())
+  for (QWidget *widget: _widgetToSection.keys())
     if (section == _widgetToSection.value(widget)) {
       disconnect(widget, 0, this, SLOT(widgetEdited()));
       _widgetToSection.remove(widget);
@@ -81,7 +81,7 @@ void SharedUiItemWidgetMapper::itemChanged(SharedUiItem newItem,
 }
 
 void SharedUiItemWidgetMapper::populate() {
-  foreach(int i, _sectionToWidget.keys())
+  for (int i: _sectionToWidget.keys())
     populate(i);
 }
 

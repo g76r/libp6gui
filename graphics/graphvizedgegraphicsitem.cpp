@@ -100,7 +100,7 @@ QDebug operator<<(QDebug dbg, const GraphvizEdgeGraphicsItem &edge) {
                 << " head: " << QString::number((quint64)edge.head(), 16)
                 << " label: " << edge.label() << " labelPos: "
                 << edge.labelPos() << " controlPoints: { ";
-  foreach (QPointF point, edge.controlPoints())
+  for (const QPointF &point: edge.controlPoints())
     dbg.nospace() << point;
   dbg.nospace() << " } }";
   return dbg.space();

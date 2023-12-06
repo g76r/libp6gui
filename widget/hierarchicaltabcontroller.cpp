@@ -61,9 +61,9 @@ void HierarchicalTabController::computeStructure(int id, int x, int y) const {
     return;
   int width = 0, depth = 1, eldersWidth = 0;
   QList<int> children;
-  foreach (int childId, _edges.values(id))
+  for (int childId: _edges.values(id))
     children.prepend(childId);
-  foreach (int childId, children) {
+  for (int childId: children) {
     computeStructure(childId, x+eldersWidth, y+1);
     HierarchicalTabControllerItem &child = _items[childId];
     if (child.isNull())
@@ -92,7 +92,7 @@ void HierarchicalTabController::computeStructure() const {
   _matrix.clear();
   _width = _depth = 0;
   int eldersWidth = 0;
-  foreach(int rootId, _roots) {
+  for (int rootId: _roots) {
     computeStructure(rootId, eldersWidth, 0);
     HierarchicalTabControllerItem root = _items.value(rootId);
     //qDebug() << "foo" << root._x << root._y << root._width << root._depth;
@@ -176,7 +176,7 @@ void HierarchicalTabController::paintEvent(QPaintEvent *e) {
   QPainter p(this);
   p.setRenderHint(QPainter::Antialiasing);
   //p.setRenderHint(QPainter::TextAntialiasing);
-  foreach (HierarchicalTabControllerItem item, _items)
+  for (const HierarchicalTabControllerItem &item: _items)
     paintCell(p, item.id());
   p.drawLine(0, 0, itemTreeWidth()*CELL_WIDTH, 0);
   p.end();
@@ -213,7 +213,7 @@ void HierarchicalTabController::select(void *pointer) {
 }
 
 void HierarchicalTabController::unselectAll() {
-  foreach (int id, _selection) {
+  for (int id: _selection) {
     HierarchicalTabControllerItem i = _items.value(id);
     if (!i.isNull()) {
       emit unselected(id);

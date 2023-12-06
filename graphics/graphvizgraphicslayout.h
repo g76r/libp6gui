@@ -90,13 +90,21 @@ private:
   inline Layout parseGraphvizOutput(QByteArray output) const;
   inline void applyLayout();
   /** Translate from postscript affine frame to QGraphicsWidget screen frame. */
-  static inline QPointF fromPsCoord(QPointF psPoint, QSizeF graphSize);
+  static inline QPointF fromPsCoord(
+      const QPointF &psPoint, const QSizeF &graphSize) {
+    return QPointF(psPoint.x(), graphSize.height() - psPoint.y());
+  }
   /** Translate from center node pos to top-left corner widget pos. */
-  static inline QPointF fromCenterCoord(QPointF center, QSizeF size);
+  static inline QPointF fromCenterCoord(
+      const QPointF &center, const QSizeF &size) {
+    return QPointF(center.x() - size.width()/2, center.y() - size.height()/2);
+  }
   /** Translate from layout-local coords to parent QGraphicsItem coords.
     * Does nothing when the layout is the only one in the QGraphicsWidget, but
     * is needed if several layouts are embeded one into another. */
-  inline QPointF fromLayoutCoord(QPointF point) const;
+  inline QPointF fromLayoutCoord(const QPointF &point) const {
+    return point + geometry().topLeft();
+  }
 };
 
 QDebug LIBP6GUISHARED_EXPORT operator<<(
