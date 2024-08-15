@@ -67,7 +67,7 @@ public:
                  PerspectiveWidget *perspectiveWidget,
                  QByteArray itemId) {
     setTarget(targetType, perspectiveWidget,
-              itemId.isNull() ? QByteArray{} : QByteArray{itemId}); }
+              itemId.isNull() ? Utf8StringList{} : Utf8StringList{itemId}); }
   /** Syntaxic sugar. */
   void setTarget(PerspectiveWidget* perspectiveWidget, QByteArray itemId) {
     setTarget(PrimaryTarget, perspectiveWidget,
