@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Hallowyn and others.
+/* Copyright 2014-2024 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -22,7 +22,7 @@
 
 static DtpMainWindow *singletonInstance = 0;
 
-DtpMainWindow::DtpMainWindow(QWidget *parent) : QMainWindow(parent) {
+DtpMainWindow::DtpMainWindow(QWidget *parent) : EnhancedMainWindow(parent) {
   Q_ASSERT(singletonInstance == 0); // only one DtpMainWindow instance at a time
   singletonInstance = this;
   connect((QApplication*)QApplication::instance(), &QApplication::focusChanged,
@@ -31,36 +31,12 @@ DtpMainWindow::DtpMainWindow(QWidget *parent) : QMainWindow(parent) {
 
 DtpMainWindow::DtpMainWindow(DtpDocumentManager *documentManager,
                              QWidget *parent)
-  : QMainWindow(parent) {
+  : EnhancedMainWindow(parent) {
   addDocumentManager(documentManager);
 }
 
 DtpMainWindow::~DtpMainWindow() {
   singletonInstance = 0;
-}
-
-// LATER check if document should be saved and ignore event do prevent closing
-void DtpMainWindow::closeEvent(QCloseEvent *event) {
-  // closing subwindows before main window is needed because subwindows may
-  // rely on resources allocated by main window, such as the DocumentManager,
-  // some QAbstractItemModels, loaded configuration, etc.
-  for (QWidget *w: QApplication::topLevelWidgets()) {
-    auto pw = qobject_cast<PerspectiveWidget*>(w);
-    if (pw)
-      pw->close();
-  }
-  // Note: creating a label here is a hack to ensure that MainWindow and chidren
-  // destructors will all be called, even on platforms (at less Windows) where
-  // closing the last window kills the program
-  QLabel *label = new QLabel(tr("Shuting down..."));
-  label->setAttribute(Qt::WA_DeleteOnClose);
-  label->setAttribute(Qt::WA_QuitOnClose);
-  label->setWindowFlags(Qt::Window|Qt::FramelessWindowHint);
-  label->setMargin(20);
-  label->move(x()+width()/2, y()+height()/2);
-  label->show();
-  QMetaObject::invokeMethod(label, "deleteLater", Qt::QueuedConnection);
-  QMainWindow::closeEvent(event);
 }
 
 void DtpMainWindow::windowFocused() {

@@ -68,6 +68,7 @@ SOURCES *= \
     modelview/enhancedgraphicsview.cpp \
     modelview/enhancedlistview.cpp \
     modelview/enhancedtreeview.cpp \
+    widget/enhancedmainwindow.cpp \
     widget/hierarchicaltabcontroller.cpp \
     dtp/perspectivewidget.cpp \
     dtp/targetmanager.cpp \
@@ -116,6 +117,7 @@ HEADERS *=\
     modelview/enhancedgraphicsview.h \
     modelview/enhancedlistview.h \
     modelview/enhancedtreeview.h \
+    widget/enhancedmainwindow.h \
     widget/hierarchicaltabcontroller.h \
     dtp/perspectivewidget.h \
     dtp/targetmanager.h \

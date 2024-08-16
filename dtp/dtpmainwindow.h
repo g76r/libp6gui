@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Hallowyn and others.
+/* Copyright 2014-2024 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,7 +15,7 @@
 #define DTPMAINWINDOW_H
 
 #include "libp6gui_global.h"
-#include <QMainWindow>
+#include "widget/enhancedmainwindow.h"
 
 class DtpDocumentManager;
 
@@ -33,7 +33,7 @@ class DtpDocumentManager;
  *
  * @see PerspectiveWidget
  */
-class LIBP6GUISHARED_EXPORT DtpMainWindow : public QMainWindow {
+class LIBP6GUISHARED_EXPORT DtpMainWindow : public EnhancedMainWindow {
   Q_OBJECT
   Q_DISABLE_COPY(DtpMainWindow)
 
@@ -59,7 +59,6 @@ public:
 protected:
   void showEvent(QShowEvent *event) override;
   void hideEvent(QHideEvent *event) override;
-  void closeEvent(QCloseEvent *event) override;
 
 private:
   void focusChanged(QWidget *oldWidget, QWidget *newWidget);
