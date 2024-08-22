@@ -99,7 +99,6 @@ SOURCES *= \
     modelview/paramsetview.cpp \
     widget/responsiveapplication.cpp \
     modelview/comboboxshareduiitemdelegate.cpp \
-    modelview/dtptableview.cpp \
     modelview/enhancedtableview.cpp \
     modelview/dtpmatrixview.cpp \
     modelview/copyviewashtmlaction.cpp \
@@ -148,7 +147,6 @@ HEADERS *=\
     modelview/paramsetview.h \
     widget/responsiveapplication.h \
     modelview/comboboxshareduiitemdelegate.h \
-    modelview/dtptableview.h \
     modelview/enhancedtableview.h \
     modelview/dtpmatrixview.h \
     modelview/copyviewashtmlaction.h \
@@ -204,7 +202,6 @@ HEADERS *=\
     modelview/paramsetview.h \
     widget/responsiveapplication.h \
     modelview/comboboxshareduiitemdelegate.h \
-    modelview/dtptableview.h \
     modelview/enhancedtableview.h \
     modelview/dtpmatrixview.h \
     modelview/copyviewashtmlaction.h
