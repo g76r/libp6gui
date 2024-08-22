@@ -16,10 +16,12 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+// TODO cell_width -> property preferredCellWidth + width depending on labels
+// TODO cell_height -> property cellHeight
 #define CELL_WIDTH 80
 #define CELL_HEIGHT 16
 
-// TODO utiliser QPixmapCache
+// LATER utiliser QPixmapCache
 // http://qt-quarterly.developpez.com/qq-12/qpixmapcache/
 
 QAtomicInt HierarchicalTabControllerItem::_counter(1); // must never be 0
@@ -81,8 +83,6 @@ void HierarchicalTabController::computeStructure(int id, int x, int y) const {
   item._y = y;
   for (int i = x; i < x+width; ++i)
     _matrix.insert(QPoint(i, y), id);
-  //qDebug() << "compute" << id << item._x << item._y << item.parentId()
-  //         << item._width << item._depth;
 }
 
 void HierarchicalTabController::computeStructure() const {
@@ -95,14 +95,11 @@ void HierarchicalTabController::computeStructure() const {
   for (int rootId: _roots) {
     computeStructure(rootId, eldersWidth, 0);
     HierarchicalTabControllerItem root = _items.value(rootId);
-    //qDebug() << "foo" << root._x << root._y << root._width << root._depth;
     _width += root._width;
     eldersWidth += root._width;
     if (root._depth > _depth)
       _depth = root._depth;
   }
-  //qDebug() << "compute all" << _width << _depth;
-  //qDebug() << _matrix;
   if (_selection.isEmpty() && !_roots.isEmpty()) {
     int id = _roots.first();
     while (!_edges.values(id).isEmpty()) {
@@ -132,7 +129,6 @@ QSize HierarchicalTabController::sizeHint() const {
   if (_structureHasChanged)
     computeStructure();
   QSize s(itemTreeWidth()*CELL_WIDTH, itemDepth()*CELL_HEIGHT);
-  //qDebug() << "HierarchicalTabController::sizeHint" << s << itemTreeWidth() << itemDepth() << _items.size();
   return s;
 }
 
@@ -142,30 +138,26 @@ QSize HierarchicalTabController::minimumSizeHint() const {
 
 void HierarchicalTabController::paintCell(QPainter &p, int id) {
   // LATER support other positions than south
-  // LATER antialias, draw lights, shadows and so on
-  // TODO support palette roles
   HierarchicalTabControllerItem i = _items.value(id);
   QRect r(i._x*CELL_WIDTH, rect().height()-CELL_HEIGHT*(i._y+1),
           CELL_WIDTH*i._width, CELL_HEIGHT-1);
+  bool selected = _selection.contains(id);
   QPainterPath pp;
-  if (_selection.contains(id)) {
-    pp.moveTo(r.topRight());
-    pp.lineTo(r.bottomRight()+QPoint(-6,0));
-    pp.lineTo(r.bottomLeft()+QPoint(6,0));
-    pp.lineTo(r.topLeft());
-    pp.closeSubpath();
-    p.fillPath(pp, Qt::white);
-    pp = QPainterPath();
-  }
-  pp.moveTo(r.right(), 0);
-  pp.lineTo(r.topRight()+QPoint(-1,0));
+  pp.moveTo(r.topRight());
   pp.lineTo(r.bottomRight()+QPoint(-6,0));
   pp.lineTo(r.bottomLeft()+QPoint(6,0));
-  pp.lineTo(r.topLeft()+QPoint(1,0));
-  pp.lineTo(r.left(), 0);
+  pp.lineTo(r.topLeft());
+  p.fillPath(pp, (selected != _invertBgColor ? palette().base()
+                                             : palette().button()).color());
+  p.setPen(QPen(palette().mid().color(), selected ? 1 : 0));
   p.drawPath(pp);
-  p.setPen(Qt::black);
-  p.drawText(r.adjusted(6, 1, -6, -1), Qt::AlignHCenter|Qt::AlignVCenter,
+  if (_underlineSelected) {
+    auto font = p.font();
+    font.setUnderline(selected);
+    p.setFont(font);
+  }
+  p.setPen(palette().text().color());
+  p.drawText(r.adjusted(6, 1, -6, -2), Qt::AlignHCenter|Qt::AlignVCenter,
              i.label());
 }
 
@@ -176,9 +168,15 @@ void HierarchicalTabController::paintEvent(QPaintEvent *e) {
   QPainter p(this);
   p.setRenderHint(QPainter::Antialiasing);
   //p.setRenderHint(QPainter::TextAntialiasing);
+  auto font = p.font();
+  font.setKerning(true);
+  p.setFont(font);
   for (const HierarchicalTabControllerItem &item: _items)
     paintCell(p, item.id());
-  p.drawLine(0, 0, itemTreeWidth()*CELL_WIDTH, 0);
+  if (_drawBaseline) {
+    p.setPen(palette().mid().color());
+    p.drawLine(0, 0, itemTreeWidth()*CELL_WIDTH, 0);
+  }
   p.end();
 }
 
@@ -227,7 +225,6 @@ void HierarchicalTabController::unselectAll() {
 
 void HierarchicalTabController::mouseDoubleClickEvent(QMouseEvent *e) {
   HierarchicalTabControllerItem i = itemUnderMouse(e->pos());
-  //qDebug() << "mouseDoubleClick" << i.label();
   if (i.isNull())
     return; // clicked outside of any tab
   emit activated(i.id());

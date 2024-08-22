@@ -46,22 +46,22 @@ private:
   int _id, _parentId;
   void *_pointer;
   QString _label;
-  QBrush _normalBg;
   int _x, _y, _width, _depth;
 
 public:
   explicit inline HierarchicalTabControllerItem(
       QString label, int parentId = 0, void *pointer = 0)
     : _parentId(parentId), _pointer(pointer), _label(label),
-      _normalBg(Qt::gray) {
+      _x(0), _y(0), _width(0), _depth(0) {
     _id = _counter.fetchAndAddRelaxed(1);
   }
   explicit inline HierarchicalTabControllerItem()
-    : _id(0), _parentId(0), _pointer(0) {
+    : _id(0), _parentId(0), _pointer(0),
+      _x(0), _y(0), _width(0), _depth(0) {
   }
   inline HierarchicalTabControllerItem(const HierarchicalTabControllerItem &o)
     : _id(o._id), _parentId(o._parentId), _pointer(o._pointer), _label(o._label),
-      _normalBg(o._normalBg), _x(o._x), _y(o._y), _width(o._width),
+      _x(o._x), _y(o._y), _width(o._width),
       _depth(o._depth) {
   }
   inline int id() const { return _id; }
@@ -71,11 +71,14 @@ public:
   inline void *pointer() const { return _pointer; }
   inline QString label() const { return _label; }
   inline bool isNull() const { return !_id; }
-  inline QBrush normalBg() const { return _normalBg; }
 };
 
 class LIBP6GUISHARED_EXPORT HierarchicalTabController : public QWidget {
   Q_OBJECT
+  Q_PROPERTY(bool invertBgColor READ invertBgColor WRITE setInvertBgColor)
+  Q_PROPERTY(bool drawBaseline READ drawBaseline WRITE setDrawBaseline)
+  Q_PROPERTY(bool underlineSelected READ underlineSelected
+             WRITE setUnderlineSelected)
 private:
   mutable QHash<int,HierarchicalTabControllerItem> _items;
   QList<int> _roots;
@@ -85,6 +88,8 @@ private:
   mutable int _depth, _width;
   mutable QList<int> _selection;
   QMap<void*,int> _pointers;
+  bool _invertBgColor = false, _drawBaseline = false,
+  _underlineSelected = false;
 
 public:
   explicit HierarchicalTabController(QWidget *parent = 0);
@@ -107,6 +112,13 @@ public:
   HierarchicalTabControllerItem item(int id) const {
     return _items.value(id);
   }
+  bool invertBgColor() const { return _invertBgColor; }
+  void setInvertBgColor(bool invertBgColor) { _invertBgColor = invertBgColor; }
+  bool drawBaseline() const { return _drawBaseline; }
+  void setDrawBaseline(bool drawBaseline) { _drawBaseline = drawBaseline; }
+  bool underlineSelected() const { return _underlineSelected; }
+  void setUnderlineSelected(bool underlineSelected) {
+    _underlineSelected = underlineSelected; }
 
 signals:
   void selected(int id) const;
