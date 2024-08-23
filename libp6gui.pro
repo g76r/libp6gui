@@ -64,6 +64,7 @@ PRECOMPILED_HEADER *= \
     libp6gui_stable.h
 
 SOURCES *= \
+    util/guipercentfunctions.cpp \
     widget/dynamicstackedwidget.cpp \
     modelview/enhancedgraphicsview.cpp \
     modelview/enhancedlistview.cpp \
