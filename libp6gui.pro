@@ -1,4 +1,4 @@
-# Copyright 2014-2023 Hallowyn, Gregoire Barbier and others.
+# Copyright 2014-2024 Hallowyn, Gregoire Barbier and others.
 # This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
 # Libpumpkin is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -64,6 +64,8 @@ PRECOMPILED_HEADER *= \
     libp6gui_stable.h
 
 SOURCES *= \
+    target/toolaction.cpp \
+    target/viewfinder.cpp \
     util/guipercentfunctions.cpp \
     widget/dynamicstackedwidget.cpp \
     modelview/enhancedgraphicsview.cpp \
@@ -113,6 +115,8 @@ SOURCES *= \
 HEADERS *=\
     libp6gui_global.h \
     libp6gui_stable.h \
+    target/toolaction.h \
+    target/viewfinder.h \
     widget/dynamicstackedwidget.h \
     modelview/enhancedgraphicsview.h \
     modelview/enhancedlistview.h \

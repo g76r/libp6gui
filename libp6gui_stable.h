@@ -1,4 +1,4 @@
-/* Copyright 2023 Gregoire Barbier and others.
+/* Copyright 2023-2024 Gregoire Barbier and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * Libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -51,6 +51,8 @@
 #include <QMainWindow>
 #include <QMenu>
 #include <QMessageBox>
+#include <QMetaObject>
+#include <QMetaMethod>
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QPainter>
@@ -59,6 +61,7 @@
 #include <QPen>
 #include <QPersistentModelIndex>
 #include <QPlainTextEdit>
+#include <QPointer>
 #include <QPropertyAnimation>
 #include <QRect>
 #include <QRectF>
