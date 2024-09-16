@@ -107,9 +107,7 @@ void HierarchicalTabController::computeStructure() const {
     }
     HierarchicalTabControllerItem first = _items.value(id);
     _selection.append(id);
-    emit selected(id);
-    emit selected(first.pointer());
-    emit selected(first.label());
+    emit selected(id, first.pointer(), first.label());
   }
 }
 
@@ -189,6 +187,8 @@ HierarchicalTabControllerItem HierarchicalTabController
 }
 
 void HierarchicalTabController::mouseReleaseEvent(QMouseEvent *e) {
+  if (e->button() != Qt::LeftButton)
+    return;
   select(itemUnderMouse(e->pos()).id());
 }
 
@@ -200,9 +200,7 @@ void HierarchicalTabController::select(int id) {
     return; // already selected
   unselectAll();
   _selection.append(i.id());
-  emit selected(i.id());
-  emit selected(i.pointer());
-  emit selected(i.label());
+  emit selected(i.id(), i.pointer(), i.label());
   update();
 }
 
@@ -214,9 +212,7 @@ void HierarchicalTabController::unselectAll() {
   for (int id: _selection) {
     HierarchicalTabControllerItem i = _items.value(id);
     if (!i.isNull()) {
-      emit unselected(id);
-      emit unselected(i.pointer());
-      emit unselected(i.label());
+      emit unselected(id, i.pointer(), i.label());
     }
   }
   _selection.clear();
@@ -227,7 +223,12 @@ void HierarchicalTabController::mouseDoubleClickEvent(QMouseEvent *e) {
   HierarchicalTabControllerItem i = itemUnderMouse(e->pos());
   if (i.isNull())
     return; // clicked outside of any tab
-  emit activated(i.id());
-  emit activated(i.pointer());
-  emit activated(i.label());
+  emit activated(i.id(), i.pointer(), i.label());
+}
+
+void HierarchicalTabController::contextMenuEvent(QContextMenuEvent *e) {
+  auto item = itemUnderMouse(e->pos());
+  if (item.isNull())
+    return;
+  emit context_menu_requested(item.id(), item.pointer(), item.label());
 }

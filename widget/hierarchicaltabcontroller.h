@@ -121,15 +121,10 @@ public:
     _underlineSelected = underlineSelected; }
 
 signals:
-  void selected(int id) const;
-  void selected(void *pointer) const;
-  void selected(QString label) const;
-  void unselected(int id);
-  void unselected(void *pointer);
-  void unselected(QString label);
-  void activated(int id);
-  void activated(void *pointer);
-  void activated(QString label);
+  void selected(int id, void *pointer, QString label) const;
+  void unselected(int id, void *pointer, QString label);
+  void activated(int id, void *pointer, QString label);
+  void context_menu_requested(int id, void *pointer, const QString &label);
 
 public slots:
   void select(int id);
@@ -141,6 +136,7 @@ private:
   void computeStructure() const;
   void paintCell(QPainter &p, int id);
   HierarchicalTabControllerItem itemUnderMouse(QPoint mousePos) const;
+  void contextMenuEvent(QContextMenuEvent *event) override;
 };
 
 #endif // HIERARCHICALTABCONTROLLER_H
