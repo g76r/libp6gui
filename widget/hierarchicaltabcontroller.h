@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Gregoire Barbier and others.
+/* Copyright 2014-2024 Gregoire Barbier and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -90,6 +90,7 @@ private:
   QMap<void*,int> _pointers;
   bool _invertBgColor = false, _drawBaseline = false,
   _underlineSelected = false;
+  int _mouseover_item = 0;
 
 public:
   explicit HierarchicalTabController(QWidget *parent = 0);
@@ -103,10 +104,6 @@ public:
   int itemTreeWidth() const;
   QSize sizeHint() const override;
   QSize minimumSizeHint() const override;
-  void paintEvent(QPaintEvent *) override;
-  void mouseReleaseEvent(QMouseEvent *) override;
-  void mouseDoubleClickEvent(QMouseEvent *) override;
-  //void wheelEvent(QWheelEvent *);
   /** Returned item.isNull() if id not found.
     */
   HierarchicalTabControllerItem item(int id) const {
@@ -121,22 +118,31 @@ public:
     _underlineSelected = underlineSelected; }
 
 signals:
-  void selected(int id, void *pointer, QString label) const;
-  void unselected(int id, void *pointer, QString label);
-  void activated(int id, void *pointer, QString label);
-  void context_menu_requested(int id, void *pointer, const QString &label);
+  void selected(int id, void *pointer, const QString &label) const;
+  void unselected(int id, void *pointer, const QString &label);
+  void activated(int id, void *pointer, const QString &label);
+  /** emited when a tab is hovered or stop being hovered (with {} values)
+   *  needs enabled mouse tracking to work */
+  void hovered(int id, void *pointer, const QString &label);
 
 public slots:
   void select(int id);
   void select(void *pointer);
   void unselectAll();
 
+protected:
+  void paintEvent(QPaintEvent *) override;
+  void mouseReleaseEvent(QMouseEvent *) override;
+  void mouseDoubleClickEvent(QMouseEvent *) override;
+  void enterEvent(QEnterEvent *) override;
+  void mouseMoveEvent(QMouseEvent *) override;
+  void leaveEvent(QEvent *) override;
+  HierarchicalTabControllerItem itemAt(const QPoint &mousePos) const;
+
 private:
   void computeStructure(int id, int x, int y) const;
   void computeStructure() const;
   void paintCell(QPainter &p, int id);
-  HierarchicalTabControllerItem itemUnderMouse(QPoint mousePos) const;
-  void contextMenuEvent(QContextMenuEvent *event) override;
 };
 
 #endif // HIERARCHICALTABCONTROLLER_H

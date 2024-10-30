@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Hallowyn and others.
+/* Copyright 2014-2024 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -179,7 +179,7 @@ void HierarchicalTabController::paintEvent(QPaintEvent *e) {
 }
 
 HierarchicalTabControllerItem HierarchicalTabController
-::itemUnderMouse(QPoint mousePos) const {
+::itemAt(const QPoint &mousePos) const {
   if (_structureHasChanged)
     computeStructure();
   QPoint pos(mousePos.x()/CELL_WIDTH,
@@ -190,7 +190,7 @@ HierarchicalTabControllerItem HierarchicalTabController
 void HierarchicalTabController::mouseReleaseEvent(QMouseEvent *e) {
   if (e->button() != Qt::LeftButton)
     return;
-  select(itemUnderMouse(e->pos()).id());
+  select(itemAt(e->pos()).id());
 }
 
 void HierarchicalTabController::select(int id) {
@@ -221,15 +221,25 @@ void HierarchicalTabController::unselectAll() {
 }
 
 void HierarchicalTabController::mouseDoubleClickEvent(QMouseEvent *e) {
-  HierarchicalTabControllerItem i = itemUnderMouse(e->pos());
+  HierarchicalTabControllerItem i = itemAt(e->pos());
   if (i.isNull())
     return; // clicked outside of any tab
   emit activated(i.id(), i.pointer(), i.label());
 }
 
-void HierarchicalTabController::contextMenuEvent(QContextMenuEvent *e) {
-  auto item = itemUnderMouse(e->pos());
-  if (item.isNull())
+void HierarchicalTabController::enterEvent(QEnterEvent *) {
+  emit hovered(_mouseover_item = 0, {}, {});
+}
+
+void HierarchicalTabController::mouseMoveEvent(QMouseEvent *e) {
+  HierarchicalTabControllerItem i = itemAt(e->position().toPoint());
+  if (i.id() == _mouseover_item)
+    return; // hovering outside of any tab
+  emit hovered(_mouseover_item = i.id(), i.pointer(), i.label());
+}
+
+void HierarchicalTabController::leaveEvent(QEvent *) {
+  if (_mouseover_item == 0)
     return;
-  emit context_menu_requested(item.id(), item.pointer(), item.label());
+  emit hovered(_mouseover_item = 0, {}, {});
 }
