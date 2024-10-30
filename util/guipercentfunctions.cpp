@@ -34,24 +34,6 @@ static int staticInit() {
     icon.addFile(Utf8String{params.value(3) % context}, {}, QIcon::Selected);
     return icon;
   });
-  PercentEvaluator::register_function(
-        "=icon", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) -> QVariant {
-    auto params = key.split_headed_list(ml);
-    auto count = params.count();
-    if (count == 0)
-      return {};
-    QIcon icon(Utf8String{params.value(0) % context});
-    if (count == 1)
-      return icon;
-    icon.addFile(Utf8String{params.value(1) % context}, {}, QIcon::Disabled);
-    if (count == 2)
-      return icon;
-    icon.addFile(Utf8String{params.value(2) % context}, {}, QIcon::Active);
-    if (count == 3)
-      return icon;
-    icon.addFile(Utf8String{params.value(3) % context}, {}, QIcon::Selected);
-    return icon;
-  });
   return 0;
 }
 Q_CONSTRUCTOR_FUNCTION(staticInit)
