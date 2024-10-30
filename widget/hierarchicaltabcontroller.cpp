@@ -182,7 +182,8 @@ HierarchicalTabControllerItem HierarchicalTabController
 ::itemUnderMouse(QPoint mousePos) const {
   if (_structureHasChanged)
     computeStructure();
-  QPoint pos(mousePos.x()/CELL_WIDTH, _depth-(mousePos.y()/CELL_HEIGHT)-1);
+  QPoint pos(mousePos.x()/CELL_WIDTH,
+             (rect().height()-mousePos.y())/CELL_HEIGHT);
   return _items.value(_matrix.value(pos));
 }
 
