@@ -48,6 +48,8 @@ void ViewFinder::do_set_target(TargetType target_type, QWidget *widget,
     case MouseOverTarget:
       if (target._sub_widget == widget && target._items == items) // expensive
         return; // target did not actually change
+      if (target._sub_widget || !target._items.isEmpty())
+        _targets[PreviousMouseOverTarget] = target;
       break;
     case PrimaryTarget:
       if (target._sub_widget == widget && target._items == items) // expensive
@@ -62,13 +64,17 @@ void ViewFinder::do_set_target(TargetType target_type, QWidget *widget,
   }
   auto pw = widget_perspective(widget)._perspective_widget;
   target = { pw, widget, items };
-  emit target_changed(target_type, pw, widget, items);
-  // TODO is it useful to notify previous target ? is previous target even useful ? since one can remember it if needed
   if (target_type == PrimaryTarget) {
     const Target &prev = _targets[PreviousPrimaryTarget];
     emit target_changed(PreviousPrimaryTarget, prev._perspective_widget,
                         prev._sub_widget, prev._items);
   }
+  if (target_type == MouseOverTarget) {
+    const Target &prev = _targets[PreviousMouseOverTarget];
+    emit target_changed(PreviousMouseOverTarget, prev._perspective_widget,
+                        prev._sub_widget, prev._items);
+  }
+  emit target_changed(target_type, pw, widget, items);
 }
 
 ToolAction *ViewFinder::tool(qsizetype rank) {

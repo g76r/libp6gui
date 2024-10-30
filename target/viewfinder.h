@@ -52,6 +52,7 @@ public:
     PrimaryTarget, // primary: current selection, dragged items
     PreviousPrimaryTarget, // previous primary, usefull for tools requesting a second target since it keeps the first one
     MouseOverTarget, // can be used for mouseover (fast!) actions but also as context menu target
+    PreviousMouseOverTarget, // previous mouseover, usefull for context menu as soon as it has shown
   };
   class Target {
   public:
