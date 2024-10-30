@@ -46,15 +46,15 @@ void ViewFinder::do_set_target(TargetType target_type, QWidget *widget,
   Target &target = _targets[target_type];
   switch (target_type) {
     case MouseOverTarget:
-      if (target._sub_widget == widget && target._items == items) // expensive
+      if (target._widget == widget && target._items == items) // expensive
         return; // target did not actually change
-      if (target._sub_widget || !target._items.isEmpty())
+      if (target._widget || !target._items.isEmpty())
         _targets[PreviousMouseOverTarget] = target;
       break;
     case PrimaryTarget:
-      if (target._sub_widget == widget && target._items == items) // expensive
+      if (target._widget == widget && target._items == items) // expensive
         return; // target did not actually change
-      if (target._sub_widget || !target._items.isEmpty())
+      if (target._widget || !target._items.isEmpty())
         _targets[PreviousPrimaryTarget] = target;
       break;
     default:
@@ -62,19 +62,16 @@ void ViewFinder::do_set_target(TargetType target_type, QWidget *widget,
                << target_type;
       return;
   }
-  auto pw = widget_perspective(widget)._perspective_widget;
-  target = { pw, widget, items };
+  target = { widget, items };
   if (target_type == PrimaryTarget) {
     const Target &prev = _targets[PreviousPrimaryTarget];
-    emit target_changed(PreviousPrimaryTarget, prev._perspective_widget,
-                        prev._sub_widget, prev._items);
+    emit target_changed(PreviousPrimaryTarget, prev._widget, prev._items);
   }
   if (target_type == MouseOverTarget) {
     const Target &prev = _targets[PreviousMouseOverTarget];
-    emit target_changed(PreviousMouseOverTarget, prev._perspective_widget,
-                        prev._sub_widget, prev._items);
+    emit target_changed(PreviousMouseOverTarget, prev._widget, prev._items);
   }
-  emit target_changed(target_type, pw, widget, items);
+  emit target_changed(target_type, widget, items);
 }
 
 ToolAction *ViewFinder::tool(qsizetype rank) {
@@ -85,13 +82,9 @@ void ViewFinder::set_tool(qsizetype rank, ToolAction *tool) {
   instance()->_tools[rank] = tool;
 }
 
-ViewFinder::Perspective ViewFinder::widget_perspective(QWidget *widget) {
-  return Perspective{ widget };
-}
-
 void ViewFinder::do_warning(
     TargetType target_type, const Utf8String &title, const Utf8String &text) {
-  QWidget *w = _targets[target_type]._sub_widget;
+  QWidget *w = _targets[target_type]._widget;
   if (!w)
     w = _main_window;
   QMessageBox::warning(w, title, text | title);

@@ -24,10 +24,14 @@ class ToolAction;
 /** Global (singleton) targets and tools manager.
  *
  *  For every target (PrimaryTarget, MouseOverTarget...) provides targeted item
- *  ids plus the widget and perspective through which they were acquired.
+ *  ids plus the widget through which they were acquired.
  *  Widgets can be null whereas items list is not empty, if items are
   * targeted outside any perspective. Widgets can be set whereas the items list
   * is empty when they are targeted with empty selection.
+  * Full perspective can be deduced from targeted widget in specialized view
+  * finders e.g. EntityViewFinder, they should provide a method with this
+  * signature:
+  *   static Perspective widget_perspective(QWidget *widget);
   *
   * Widgets used for target acquisition, or their ancestors are assumed to have
   * a Utf8StringList "primary_items" property otherwise focus follow won't
@@ -56,13 +60,8 @@ public:
   };
   class Target {
   public:
-    QPointer<QWidget> _perspective_widget;
-    QPointer<QWidget> _sub_widget;
+    QPointer<QWidget> _widget;
     Utf8StringList _items;
-  };
-  class Perspective {
-  public:
-    QPointer<QWidget> _perspective_widget;
   };
 
 protected:
@@ -79,7 +78,7 @@ public:
   static void init();
   inline static Target target(TargetType target_type = PrimaryTarget) {
     return instance()->_targets[target_type]; }
-  /** Must be called each time perspectiveWidget changes or switch to a new
+  /** Must be called each time widget changes or switch to a new
     * perspective and each time targeted items change. */
   inline static void set_target(TargetType target_type, QWidget *widget = 0,
                                 const Utf8StringList &items = {}) {
@@ -94,8 +93,6 @@ public:
   /** Syntaxic sugar. */
   inline static void set_tool(ToolAction *tool) {
     return set_tool(0, tool); }
-  /** Perspective through which a widget gives a point of view */
-  static Perspective widget_perspective(QWidget *widget);
   /** Warn the user using a message box centered on targeted widget */
   inline static void warning(
       TargetType target_type, const Utf8String &title,
@@ -109,8 +106,8 @@ public:
 signals:
   /** Sent every time a target changes */
   void target_changed(
-      ViewFinder::TargetType target_type, QWidget *perspective_widget,
-      QWidget *sub_widget, const Utf8StringList &items);
+      ViewFinder::TargetType target_type, QWidget *widget,
+      const Utf8StringList &items);
 
 protected:
   virtual void focus_changed(QWidget *old_widget, QWidget *new_widget);

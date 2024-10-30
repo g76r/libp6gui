@@ -58,8 +58,8 @@ protected:
    *  or a targetType change,
    *  common case is to setEnabled() depending on the new target */
   virtual void on_target_changed(
-      ViewFinder::TargetType target_type, QWidget *perspective_widget,
-      QWidget *sub_widget, const Utf8StringList &items);
+      ViewFinder::TargetType target_type, QWidget *widget,
+      const Utf8StringList &items);
 };
 
 #endif // TOOLACTION_H

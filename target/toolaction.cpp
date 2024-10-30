@@ -22,7 +22,7 @@ ToolAction::ToolAction(
 }
 
 void ToolAction::on_target_changed(
-    ViewFinder::TargetType, QWidget *, QWidget *, const Utf8StringList &) {
+    ViewFinder::TargetType, QWidget *, const Utf8StringList &) {
 }
 
 void ToolAction::on_trigger(bool) {
@@ -35,8 +35,7 @@ void ToolAction::set_target_type(ViewFinder::TargetType target_type) {
     return;
   emit target_type_changed(_target_type = target_type);
   auto target = ViewFinder::target(target_type);
-  on_target_changed(target_type, target._perspective_widget, target._sub_widget,
-                    target._items);
+  on_target_changed(target_type, target._widget, target._items);
 }
 
 void ToolAction::set_oneshot(bool oneshot) {
