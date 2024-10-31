@@ -55,7 +55,7 @@ public:
       _x(0), _y(0), _width(0), _depth(0) {
     _id = _counter.fetchAndAddRelaxed(1);
   }
-  explicit inline HierarchicalTabControllerItem()
+  inline HierarchicalTabControllerItem()
     : _id(0), _parentId(0), _pointer(0),
       _x(0), _y(0), _width(0), _depth(0) {
   }
@@ -99,6 +99,10 @@ public:
   int addItem(HierarchicalTabControllerItem item);
   // TODO removeItem (recursively or not)
   // TODO insertItem
+  void setItemLabel(int id, const QString &label);
+  void setItemLabel(void *pointer, const QString &label) {
+    setItemLabel(item(pointer)._id, label);
+  }
   inline int itemCount() const { return _items.size(); }
   int itemDepth() const;
   int itemTreeWidth() const;
@@ -108,6 +112,12 @@ public:
     */
   HierarchicalTabControllerItem item(int id) const {
     return _items.value(id);
+  }
+  HierarchicalTabControllerItem item(void *pointer) const {
+    for (auto [_,v]: _items.asKeyValueRange())
+      if (pointer == v._pointer)
+        return v;
+    return {};
   }
   bool invertBgColor() const { return _invertBgColor; }
   void setInvertBgColor(bool invertBgColor) { _invertBgColor = invertBgColor; }
