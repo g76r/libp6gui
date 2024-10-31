@@ -19,6 +19,7 @@
 
 class QPainter;
 class HierarchicalTabController;
+class QLineEdit;
 
 // TODO permit multiselection (e.g. to delete several tabs at once)
 // TODO rename widget
@@ -79,6 +80,8 @@ class LIBP6GUISHARED_EXPORT HierarchicalTabController : public QWidget {
   Q_PROPERTY(bool drawBaseline READ drawBaseline WRITE setDrawBaseline)
   Q_PROPERTY(bool underlineSelected READ underlineSelected
              WRITE setUnderlineSelected)
+  Q_PROPERTY(bool allowTabRename READ allowTabRename WRITE setAllowTabRename)
+
 private:
   mutable QHash<int,HierarchicalTabControllerItem> _items;
   QList<int> _roots;
@@ -89,8 +92,9 @@ private:
   mutable QList<int> _selection;
   QMap<void*,int> _pointers;
   bool _invertBgColor = false, _drawBaseline = false,
-  _underlineSelected = false;
+  _underlineSelected = false, _allowTabRename = true;
   int _mouseover_item = 0;
+  QLineEdit *_editor;
 
 public:
   explicit HierarchicalTabController(QWidget *parent = 0);
@@ -126,14 +130,22 @@ public:
   bool underlineSelected() const { return _underlineSelected; }
   void setUnderlineSelected(bool underlineSelected) {
     _underlineSelected = underlineSelected; }
+  bool allowTabRename() const { return _allowTabRename; }
+  void setAllowTabRename(bool allowTabRename) {
+    _allowTabRename = allowTabRename; }
 
 signals:
   void selected(int id, void *pointer, const QString &label) const;
   void unselected(int id, void *pointer, const QString &label);
+  /** emited when a tab label is double-clicked
+    * requires allowTabRename property set to false */
   void activated(int id, void *pointer, const QString &label);
   /** emited when a tab is hovered or stop being hovered (with {} values)
    *  needs enabled mouse tracking to work */
   void hovered(int id, void *pointer, const QString &label);
+  /** emited when a tab label is changed interactively (after double click edit)
+    * requires allowTabRename property set to true */
+  void renamed(int id, void *pointer, const QString &label);
 
 public slots:
   void select(int id);
@@ -142,6 +154,7 @@ public slots:
 
 protected:
   void paintEvent(QPaintEvent *) override;
+  void mousePressEvent(QMouseEvent *) override;
   void mouseReleaseEvent(QMouseEvent *) override;
   void mouseDoubleClickEvent(QMouseEvent *) override;
   void enterEvent(QEnterEvent *) override;
@@ -153,6 +166,8 @@ private:
   void computeStructure(int id, int x, int y) const;
   void computeStructure() const;
   void paintCell(QPainter &p, int id);
+  QRect item_rect(const HierarchicalTabControllerItem &i);
+  void commitEdition();
 };
 
 #endif // HIERARCHICALTABCONTROLLER_H

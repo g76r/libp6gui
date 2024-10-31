@@ -15,6 +15,7 @@
 #include <QPainterPath>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QLineEdit>
 
 // TODO cell_width -> property preferredCellWidth + width depending on labels
 // TODO cell_height -> property cellHeight
@@ -27,7 +28,17 @@
 QAtomicInt HierarchicalTabControllerItem::_counter(1); // must never be 0
 
 HierarchicalTabController::HierarchicalTabController(QWidget *parent)
-  : QWidget(parent), _structureHasChanged(false) {
+  : QWidget(parent), _structureHasChanged(false), _editor(new QLineEdit(this)) {
+  _editor->hide();
+  connect(_editor, &QLineEdit::returnPressed,
+          this, &HierarchicalTabController::commitEdition);
+  connect (_editor, &QLineEdit::editingFinished,
+           _editor, &QWidget::hide);
+  auto action = new QAction(_editor);
+  action->setShortcut(Qt::Key_Escape);
+  _editor->addAction(action);
+  connect (action, &QAction::triggered,
+           _editor, &QWidget::hide);
 }
 
 int HierarchicalTabController::addItem(QString label, int parentId,
@@ -141,11 +152,17 @@ QSize HierarchicalTabController::minimumSizeHint() const {
   return sizeHint();
 }
 
+QRect HierarchicalTabController::item_rect(
+    const HierarchicalTabControllerItem &i) {
+  return QRect(i._x*CELL_WIDTH,
+               rect().height()-CELL_HEIGHT*(i._y+1),
+               CELL_WIDTH*i._width,
+               CELL_HEIGHT-1);
+}
 void HierarchicalTabController::paintCell(QPainter &p, int id) {
   // LATER support other positions than south
   HierarchicalTabControllerItem i = _items.value(id);
-  QRect r(i._x*CELL_WIDTH, rect().height()-CELL_HEIGHT*(i._y+1),
-          CELL_WIDTH*i._width, CELL_HEIGHT-1);
+  QRect r = item_rect(i);
   bool selected = _selection.contains(id);
   QPainterPath pp;
   pp.moveTo(r.topRight());
@@ -194,6 +211,10 @@ HierarchicalTabControllerItem HierarchicalTabController
   return _items.value(_matrix.value(pos));
 }
 
+void HierarchicalTabController::mousePressEvent(QMouseEvent *) {
+  commitEdition();
+}
+
 void HierarchicalTabController::mouseReleaseEvent(QMouseEvent *e) {
   if (e->button() != Qt::LeftButton)
     return;
@@ -228,10 +249,35 @@ void HierarchicalTabController::unselectAll() {
 }
 
 void HierarchicalTabController::mouseDoubleClickEvent(QMouseEvent *e) {
+  _editor->hide(); // should always already be hidden (by commitEdition() called
+  // by mousePressEvent() before mouseDoubleClickEvent())
   HierarchicalTabControllerItem i = itemAt(e->pos());
   if (i.isNull())
     return; // clicked outside of any tab
-  emit activated(i.id(), i.pointer(), i.label());
+  if (!_allowTabRename) {
+    emit activated(i.id(), i.pointer(), i.label());
+    return;
+  }
+  _editor->setGeometry(item_rect(i) + QMargins(-6, 0, -6, 0));
+  _editor->setText(i._label);
+  _editor->selectAll();
+  _editor->setProperty("itemid", i._id);
+  _editor->show();
+  _editor->setFocus();
+}
+
+void HierarchicalTabController::commitEdition() {
+  if (!_editor->isVisible())
+    return;
+  auto i = item(_editor->property("itemid").toLongLong());
+  if (i.isNull())
+    return;
+  auto label = _editor->text();
+  if (label == i._label)
+    return;
+  _editor->hide();
+  emit renamed(i._id, i._pointer, label);
+  setItemLabel(i._id, label);
 }
 
 void HierarchicalTabController::enterEvent(QEnterEvent *) {
