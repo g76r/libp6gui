@@ -30,15 +30,13 @@ QAtomicInt HierarchicalTabControllerItem::_counter(1); // must never be 0
 HierarchicalTabController::HierarchicalTabController(QWidget *parent)
   : QWidget(parent), _structureHasChanged(false), _editor(new QLineEdit(this)) {
   _editor->hide();
-  connect(_editor, &QLineEdit::returnPressed,
-          this, &HierarchicalTabController::commitEdition);
   connect (_editor, &QLineEdit::editingFinished,
-           _editor, &QWidget::hide);
+           this, &HierarchicalTabController::commitEdition);
   auto action = new QAction(_editor);
   action->setShortcut(Qt::Key_Escape);
   _editor->addAction(action);
   connect (action, &QAction::triggered,
-           _editor, &QWidget::hide);
+           this, &HierarchicalTabController::cancelEdition);
 }
 
 int HierarchicalTabController::addItem(QString label, int parentId,
@@ -284,6 +282,7 @@ void HierarchicalTabController::mouseDoubleClickEvent(QMouseEvent *e) {
   _editor->setText(i._label);
   _editor->selectAll();
   _editor->setProperty("itemid", i._id);
+  _editor->setProperty("originalvalue", i._label);
   _editor->show();
   _editor->setFocus();
 }
@@ -300,6 +299,13 @@ void HierarchicalTabController::commitEdition() {
   _editor->hide();
   emit renamed(i._id, i._pointer, label);
   setItemLabel(i._id, label);
+}
+
+void HierarchicalTabController::cancelEdition() {
+  if (!_editor->isVisible())
+    return;
+  _editor->setText(_editor->property("originalvalue").toString());
+  _editor->hide();
 }
 
 void HierarchicalTabController::enterEvent(QEnterEvent *) {

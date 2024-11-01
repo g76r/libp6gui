@@ -171,6 +171,7 @@ private:
   void paintCell(QPainter &p, int id);
   QRect item_rect(const HierarchicalTabControllerItem &i);
   void commitEdition();
+  void cancelEdition();
 };
 
 #endif // HIERARCHICALTABCONTROLLER_H
