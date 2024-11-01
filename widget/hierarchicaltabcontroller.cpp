@@ -75,6 +75,28 @@ void HierarchicalTabController::setItemLabel(int id, const QString &label) {
   update();
 }
 
+void HierarchicalTabController::removeItem(int id) {
+  if (!_items.contains(id))
+    return;
+  // first recursively remove children
+  QList<int> children;
+  for (auto [_,v]: _items.asKeyValueRange())
+    if (v._parentId == id)
+      children += v._id;
+  for (auto childid: children)
+    removeItem(childid);
+  // then remove this item
+  auto old = _items[id];
+  if (_selection.contains(id))
+    select(old._parentId);
+  _items.remove(id);
+  _roots.removeAll(id);
+  _edges.remove(id);
+  emit removed(id, old._pointer, old._label);
+  _structureHasChanged = true;
+  updateGeometry();
+}
+
 void HierarchicalTabController::computeStructure(int id, int x, int y) const {
   HierarchicalTabControllerItem &item = _items[id];
   if (item.isNull())

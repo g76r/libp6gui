@@ -101,11 +101,13 @@ public:
   int addItem(QString label, int parentId = 0, void *pointer = 0);
   int addItem(QString label, void *parentPointer = 0, void *pointer = 0);
   int addItem(HierarchicalTabControllerItem item);
-  // TODO removeItem (recursively or not)
-  // TODO insertItem
   void setItemLabel(int id, const QString &label);
   void setItemLabel(void *pointer, const QString &label) {
     setItemLabel(item(pointer)._id, label);
+  }
+  void removeItem(int id);
+  void removeItem(void *pointer) {
+    removeItem(item(pointer)._id);
   }
   inline int itemCount() const { return _items.size(); }
   int itemDepth() const;
@@ -137,6 +139,7 @@ public:
 signals:
   void selected(int id, void *pointer, const QString &label) const;
   void unselected(int id, void *pointer, const QString &label);
+  void removed(int id, void *pointer, const QString &label);
   /** emited when a tab label is double-clicked
     * requires allowTabRename property set to false */
   void activated(int id, void *pointer, const QString &label);
