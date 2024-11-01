@@ -85,11 +85,15 @@ void HierarchicalTabController::removeItem(int id) {
     removeItem(childid);
   // then remove this item
   auto old = _items[id];
-  if (_selection.contains(id))
-    select(old._parentId);
-  _items.remove(id);
   _roots.removeAll(id);
   _edges.remove(id);
+  if (_selection.contains(id)) { // if tab was selected
+    if (old._parentId)
+      select(old._parentId); // select parent
+    else
+      select(_roots.value(0)); // or first remaining root tab
+  }
+  _items.remove(id);
   emit removed(id, old._pointer, old._label);
   _structureHasChanged = true;
   updateGeometry();
