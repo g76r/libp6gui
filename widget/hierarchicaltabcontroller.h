@@ -81,6 +81,7 @@ class LIBP6GUISHARED_EXPORT HierarchicalTabController : public QWidget {
   Q_PROPERTY(bool underlineSelected READ underlineSelected
              WRITE setUnderlineSelected)
   Q_PROPERTY(bool allowTabRename READ allowTabRename WRITE setAllowTabRename)
+  Q_PROPERTY(bool padOnTop READ padOnTop WRITE setPadOnTop)
 
 private:
   mutable QHash<int,HierarchicalTabControllerItem> _items;
@@ -92,7 +93,7 @@ private:
   mutable QList<int> _selection;
   QMap<void*,int> _pointers;
   bool _invertBgColor = false, _drawBaseline = false,
-  _underlineSelected = false, _allowTabRename = true;
+  _underlineSelected = false, _allowTabRename = false, _padOnTop = false;
   int _mouseover_item = 0;
   QLineEdit *_editor;
 
@@ -135,6 +136,8 @@ public:
   bool allowTabRename() const { return _allowTabRename; }
   void setAllowTabRename(bool allowTabRename) {
     _allowTabRename = allowTabRename; }
+  bool padOnTop() const { return _padOnTop; }
+  void setPadOnTop(bool padOnTop) { _padOnTop = padOnTop; }
 
 signals:
   void selected(int id, void *pointer, const QString &label) const;

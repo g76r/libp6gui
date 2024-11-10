@@ -178,11 +178,13 @@ QSize HierarchicalTabController::minimumSizeHint() const {
 
 QRect HierarchicalTabController::item_rect(
     const HierarchicalTabControllerItem &i) {
+  int padding = _padOnTop ? 0 : height()-_depth*CELL_HEIGHT;
   return QRect(i._x*CELL_WIDTH,
-               rect().height()-CELL_HEIGHT*(i._y+1),
+               rect().height()-padding-CELL_HEIGHT*(i._y+1),
                CELL_WIDTH*i._width,
                CELL_HEIGHT-1);
 }
+
 void HierarchicalTabController::paintCell(QPainter &p, int id) {
   // LATER support other positions than south
   HierarchicalTabControllerItem i = _items.value(id);
@@ -230,8 +232,9 @@ HierarchicalTabControllerItem HierarchicalTabController
 ::itemAt(const QPoint &mousePos) const {
   if (_structureHasChanged)
     computeStructure();
+  int padding = _padOnTop ? 0 : height()-_depth*CELL_HEIGHT;
   QPoint pos(mousePos.x()/CELL_WIDTH,
-             (rect().height()-mousePos.y())/CELL_HEIGHT);
+        (rect().height()-padding-mousePos.y())/CELL_HEIGHT);
   return _items.value(_matrix.value(pos));
 }
 
