@@ -28,6 +28,7 @@ void EnhancedMainWindow::closeEvent(QCloseEvent *event) {
     if (w != this)
       w->close();
   }
+#ifdef Q_OS_WIN
   // creating a label here is a hack to ensure that the main window and its
   // chidren destructors will all be called, even on platforms (at less Windows)
   // where closing the last window kills the program
@@ -39,5 +40,6 @@ void EnhancedMainWindow::closeEvent(QCloseEvent *event) {
   label->move(x()+width()/2, y()+height()/2);
   label->show();
   QMetaObject::invokeMethod(label, "deleteLater", Qt::QueuedConnection);
+#endif
   QMainWindow::closeEvent(event);
 }
