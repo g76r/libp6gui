@@ -68,7 +68,9 @@ int HierarchicalTabController::addItem(HierarchicalTabControllerItem item) {
 
 void HierarchicalTabController::setItemLabel(int id, const QString &label) {
   if (!_items.contains(id))
-    return;
+    return; // no such item
+  if (_items[id]._label == label)
+    return; // nothing to do
   _items[id]._label = label;
   update();
 }
