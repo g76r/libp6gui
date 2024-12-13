@@ -67,6 +67,7 @@ SOURCES *= \
     target/toolaction.cpp \
     target/viewfinder.cpp \
     util/guipercentfunctions.cpp \
+    util/indexparamsprovider.cpp \
     util/undocommandadapter.cpp \
     widget/dynamicstackedwidget.cpp \
     modelview/enhancedgraphicsview.cpp \
@@ -118,6 +119,7 @@ HEADERS *=\
     libp6gui_stable.h \
     target/toolaction.h \
     target/viewfinder.h \
+    util/indexparamsprovider.h \
     util/undocommandadapter.h \
     widget/dynamicstackedwidget.h \
     modelview/enhancedgraphicsview.h \
