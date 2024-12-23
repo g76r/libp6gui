@@ -18,6 +18,14 @@ using IndexFunction = std::function<QVariant(
 const Utf8String &key,const QVariant &def,
 const ParamsProvider::EvalContext &context, const QModelIndex &index)>;
 
+/** return index.parent() but using column 0 instead of index.column(), because
+  * Qt convention for tree models is that only column 0 index have parents. */
+static inline QModelIndex parent0(const QModelIndex &index) {
+  if (index.column())
+    return index.siblingAtColumn(0).parent();
+  return index.parent();
+};
+
 static const RadixTree<IndexFunction> _functions {
   { "row", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
       return index.row();
@@ -32,16 +40,16 @@ static const RadixTree<IndexFunction> _functions {
       return index.isValid();
     } },
   { "parent_row", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
-      return index.parent().row();
+      return parent0(index).row();
     } },
   { "parent_column", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
-      return index.parent().column();
+      return parent0(index).column();
     } },
   { "parent_is_valid", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
-      return index.parent().isValid();
+      return parent0(index).isValid();
     } },
   { "parent_internal_id", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
-      return index.parent().internalId();
+      return parent0(index).internalId();
     } },
 };
 
