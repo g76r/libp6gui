@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Hallowyn and others.
+/* Copyright 2014-2024 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -31,14 +31,8 @@ void EnhancedTreeView::keyPressEvent(QKeyEvent *event) {
 
 void EnhancedTreeView::setModel(QAbstractItemModel *model) {
   QAbstractItemModel *old = this->model();
-  if (old) {
-    disconnect(model, &QAbstractItemModel::modelReset,
-               this, &EnhancedTreeView::rowsAppeared);
-    disconnect(model, &QAbstractItemModel::rowsInserted,
-               this, &EnhancedTreeView::rowsAppeared);
-    disconnect(model, &QAbstractItemModel::rowsMoved,
-               this, &EnhancedTreeView::rowsAppeared);
-  }
+  if (old)
+    disconnect(old, nullptr, this, nullptr);
   QTreeView::setModel(model);
   if (model) {
     connect(model, &QAbstractItemModel::modelReset,
@@ -59,9 +53,9 @@ void EnhancedTreeView::dataChanged(
 }
 
 void EnhancedTreeView::rowsAppeared() {
-  if (_expandToDepthOnChange >= 0)
+  if (_expandToDepthOnChange > 0)
     expandToDepth(_expandToDepthOnChange);
-  else
+  else if (_expandToDepthOnChange < 0)
     expandAll();
   rowsAppearedOrChanged();
 }

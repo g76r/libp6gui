@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Hallowyn and others.
+/* Copyright 2014-2024 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -26,8 +26,9 @@
  * - bool ignoreKeyboardInput: disable QTreeView handling of keyboard input and
  *   let container widget handle it instead (default: false)
  * - int expandToDepthOnChange: automaticaly expand tree to given depth every
- *   time new rows appear (default: 0, negative values mean infinite), this is
- *   convenient to display data without previous action from the user
+ *   time new rows appear (default: 0 which disables the feature, negative
+ *   values mean infinite), this is convenient to display data without previous
+ *   action from the user (or to restore a whole branch on undo)
  * - bool resizeColumnsToContentsOnChange: call resizeColumnToContents() on
  *   change
  * - bool editNextMeansEditRight: when editor is closed with EditNextItem or
