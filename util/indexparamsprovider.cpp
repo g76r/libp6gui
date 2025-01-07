@@ -39,6 +39,9 @@ static const RadixTree<IndexFunction> _functions {
   { "is_valid", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
       return index.isValid();
     } },
+  { "children_count", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+      return index.model()->rowCount(index.siblingAtColumn(0));
+    } },
   { "parent_row", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
       return parent0(index).row();
     } },
