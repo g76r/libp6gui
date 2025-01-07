@@ -14,6 +14,7 @@
 #include "util/percentevaluator.h"
 #include "util/utf8stringlist.h"
 #include <QIcon>
+#include <QColor>
 
 static int staticInit() {
   PercentEvaluator::register_function(
@@ -33,6 +34,16 @@ static int staticInit() {
       return icon;
     icon.addFile(Utf8String{params.value(3) % context}, {}, QIcon::Selected);
     return icon;
+  });
+  PercentEvaluator::register_function(
+        "=color", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) -> QVariant {
+    auto params = key.split_headed_list(ml);
+    auto count = params.count();
+    if (count == 0)
+      return {};
+    return QColor::fromString(Utf8String{params.value(0) % context}.toUtf16());
+    // LATER use param 1 to convert specs (e.g. cmyk) or extract component
+    // (e.g. red8, red16, red4, redf, lightness)
   });
   return 0;
 }
