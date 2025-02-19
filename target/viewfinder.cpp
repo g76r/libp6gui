@@ -44,32 +44,28 @@ void ViewFinder::init() {
 void ViewFinder::do_set_target(TargetType target_type, QWidget *widget,
                                const Utf8StringList &items) {
   Target &target = _targets[target_type];
+  TargetType prev_target_type;
   switch (target_type) {
     case MouseOverTarget:
-      if (target._widget == widget && target._items == items) // expensive
-        return; // target did not actually change
-      if (target._widget || !target._items.isEmpty())
-        _targets[PreviousMouseOverTarget] = target;
+      prev_target_type = PreviousMouseOverTarget;
       break;
     case PrimaryTarget:
-      if (target._widget == widget && target._items == items) // expensive
-        return; // target did not actually change
-      if (target._widget || !target._items.isEmpty())
-        _targets[PreviousPrimaryTarget] = target;
+      prev_target_type = PreviousPrimaryTarget;
       break;
     default:
       qDebug() << "TargetManager::set_target() called with an invalid type"
                << target_type;
       return;
   }
-  target = { widget, items };
-  if (target_type == PrimaryTarget) {
-    const Target &prev = _targets[PreviousPrimaryTarget];
-    emit target_changed(PreviousPrimaryTarget, prev._widget, prev._items);
-  }
-  if (target_type == MouseOverTarget) {
-    const Target &prev = _targets[PreviousMouseOverTarget];
-    emit target_changed(PreviousMouseOverTarget, prev._widget, prev._items);
+  if (target._widget == widget && target._items == items) // expensive
+    return; // target did not actually change
+  if (target._widget || !target._items.isEmpty()) {
+    Target &prev = _targets[prev_target_type];
+    prev = target;
+    target = { widget, items };
+    emit target_changed(prev_target_type, prev._widget, prev._items);
+  } else {
+    target = { widget, items };
   }
   emit target_changed(target_type, widget, items);
 }
