@@ -38,13 +38,19 @@ static int staticInit() {
   PercentEvaluator::register_function(
         "=color", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) -> QVariant {
     auto params = key.split_headed_list(ml);
-    auto count = params.count();
-    if (count == 0)
-      return {};
-    return QColor::fromString(Utf8String{params.value(0) % context}.toUtf16());
-    // LATER use param 1 to convert specs (e.g. cmyk) or extract component
-    // (e.g. red8, red16, red4, redf, lightness)
+    for (auto param: params) {
+      auto name = Utf8String{param % context}.toUtf16();
+      if (name.isEmpty())
+        continue;
+      return QColor::fromString(name);
+    }
+    return {};
   });
+  // LATER provide color conversion function, to convert specs (e.g. cmyk) or
+  // extract component (e.g. red8, red16, red4, redf, lightness)
+  // and a way to decide between white or black as contrast depending on the
+  // other color (background vs. foreground), see:
+  // https://stackoverflow.com/questions/2241447/make-foregroundcolor-black-or-white-depending-on-background
   return 0;
 }
 Q_CONSTRUCTOR_FUNCTION(staticInit)
