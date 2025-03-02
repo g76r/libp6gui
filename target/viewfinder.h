@@ -23,7 +23,7 @@ class ToolAction;
 
 /** Global (singleton) targets and tools manager.
  *
- *  For every target (PrimaryTarget, MouseOverTarget...) provides targeted item
+ *  For every target (SelectedTarget, HoveredTarget...) provides targeted item
  *  ids plus the widget through which they were acquired.
  *  Widgets can be null whereas items list is not empty, if items are
   * targeted outside any perspective. Widgets can be set whereas the items list
@@ -34,7 +34,7 @@ class ToolAction;
   *   static Perspective widget_perspective(QWidget *widget);
   *
   * Widgets used for target acquisition, or their ancestors are assumed to have
-  * a Utf8StringList "primary_items" property otherwise focus follow won't
+  * a Utf8StringList "selected_items" property otherwise focus follow won't
   * work.
   *
   * Tools are actions (QActions) set to be used by some GUI triggers instead of
@@ -53,10 +53,10 @@ class LIBP6GUISHARED_EXPORT ViewFinder : public QObject {
 
 public:
   enum TargetType {
-    PrimaryTarget, // primary: current selection, dragged items
-    PreviousPrimaryTarget, // previous primary, usefull for tools requesting a second target since it keeps the first one
-    MouseOverTarget, // can be used for mouseover (fast!) actions but also as context menu target
-    PreviousMouseOverTarget, // previous mouseover, usefull for context menu as soon as it has shown
+    SelectedTarget, // selected: current selection, dragged items
+    PreviousSelectedTarget, // previous selected, usefull for tools requesting a second target since it keeps the first one
+    HoveredTarget, // can be used for mouseover (fast!) actions but also as context menu target and drop target
+    PreviousHoveredTarget, // previous hovered, usefull for context menu as soon as it has shown
   };
   class Target {
   public:
@@ -76,7 +76,7 @@ public:
   /** init() must be called on specialized view finder instead of this one, if
    *  a specialized view finder is used */
   static void init();
-  inline static Target target(TargetType target_type = PrimaryTarget) {
+  inline static Target target(TargetType target_type = SelectedTarget) {
     return instance()->_targets[target_type]; }
   /** Must be called each time widget changes or switch to a new
     * perspective and each time targeted items change. */
@@ -87,7 +87,7 @@ public:
   /** Syntaxic sugar. */
   inline static void set_target(
       QWidget *widget = 0, Utf8StringList items = {}) {
-    instance()->do_set_target(PrimaryTarget, widget, items); }
+    instance()->do_set_target(SelectedTarget, widget, items); }
   static ToolAction *tool(qsizetype rank = 0);
   static void set_tool(qsizetype rank, ToolAction *tool);
   /** Syntaxic sugar. */

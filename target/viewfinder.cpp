@@ -46,11 +46,11 @@ void ViewFinder::do_set_target(TargetType target_type, QWidget *widget,
   Target &target = _targets[target_type];
   TargetType prev_target_type;
   switch (target_type) {
-    case MouseOverTarget:
-      prev_target_type = PreviousMouseOverTarget;
+    case HoveredTarget:
+      prev_target_type = PreviousHoveredTarget;
       break;
-    case PrimaryTarget:
-      prev_target_type = PreviousPrimaryTarget;
+    case SelectedTarget:
+      prev_target_type = PreviousSelectedTarget;
       break;
     default:
       qDebug() << "TargetManager::set_target() called with an invalid type"
@@ -91,9 +91,9 @@ void ViewFinder::focus_changed(QWidget *, QWidget *new_widget) {
   QWidget *sub_widget = new_widget;
   //qDebug() << "widget gained focus:" << new_widget;
   while (new_widget) {
-    // get primary items on deepest widget possible and keep them when found
+    // get selected items on deepest widget possible and keep them when found
     if (items.isEmpty()) {
-      items = new_widget->property("primary_items").value<Utf8StringList>();
+      items = new_widget->property("selected_items").value<Utf8StringList>();
       if (!items.isEmpty()) {
         sub_widget = new_widget;
         break;
@@ -102,7 +102,7 @@ void ViewFinder::focus_changed(QWidget *, QWidget *new_widget) {
     new_widget = new_widget->parentWidget();
   }
   if (new_widget)
-    set_target(sub_widget, items); // update primary target w/ or w/o items
+    set_target(sub_widget, items); // update selected target w/ or w/o items
   else
     set_target();
 }

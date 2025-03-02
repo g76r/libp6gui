@@ -39,7 +39,7 @@ protected:
 
 public:
   explicit ToolAction(
-      ViewFinder::TargetType target_type = ViewFinder::PrimaryTarget,
+      ViewFinder::TargetType target_type = ViewFinder::SelectedTarget,
       QObject *parent = 0);
   ViewFinder::TargetType target_type() const { return _target_type; }
   void set_target_type(ViewFinder::TargetType target_type);
