@@ -170,8 +170,7 @@ int HierarchicalTabController::itemTreeWidth() const {
 QSize HierarchicalTabController::sizeHint() const {
   if (_structureHasChanged)
     computeStructure();
-  QSize s(itemTreeWidth()*CELL_WIDTH, itemDepth()*CELL_HEIGHT);
-  return s;
+  return {_width*CELL_WIDTH, _depth*CELL_HEIGHT};
 }
 
 QSize HierarchicalTabController::minimumSizeHint() const {

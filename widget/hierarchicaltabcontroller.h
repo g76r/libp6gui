@@ -87,9 +87,9 @@ private:
   mutable QHash<int,HierarchicalTabControllerItem> _items;
   QList<int> _roots;
   QMultiMap<int,int> _edges;
-  mutable bool _structureHasChanged;
+  mutable bool _structureHasChanged = false;
   mutable QHash<QPoint,int> _matrix; // converts width×depth coordinates to id
-  mutable int _depth, _width;
+  mutable int _depth = 0, _width = 0;
   mutable QList<int> _selection;
   QMap<void*,int> _pointers;
   bool _invertBgColor = false, _drawBaseline = false,
