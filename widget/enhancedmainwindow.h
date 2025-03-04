@@ -20,12 +20,12 @@
 class LIBP6GUISHARED_EXPORT EnhancedMainWindow: public QMainWindow {
   Q_OBJECT
   Q_DISABLE_COPY(EnhancedMainWindow)
+
 public:
   EnhancedMainWindow(QWidget *parent = 0);
 
 protected:
   void closeEvent(QCloseEvent *event) override;
-
 };
 
 #endif // ENHANCEDMAINWINDOW_H
