@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Hallowyn and others.
+/* Copyright 2014-2025 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -17,34 +17,43 @@
 #include "libp6gui_global.h"
 #include <QGraphicsView>
 
-/** Enhanced QListView
+/** Enhanced QGraphicsView
  *
- * Additionnal behaviours:
- * - rubber band drag on left button by default (setDragMode(RubberBandDrag))
- * - bidirectional mouse grab scrolling on middle button
- * - zoom in and out on control + wheel up/wheel down
+ * Additional properties:
+ * - autoDragMode: if true (the default) use RubberBandDrag drag mode on left
+ *   button (rubber band selection) and mimics ScrollHandDrag on middle button
+ *   (mouse grab scrolling)
+ * - zoomOnCtrlWheel: if true (the default) zoom in and out on ctrl + wheel
  *
  * Additionnal slots:
- * - fitAllInView(): zoom in or out to fit the current items bounding box
- * - zoomIn(), zoomOut(): zoom in or out by 20%
+ * - fit_all_in_view(): zoom in or out to fit the current items bounding box
+ * - zoom_in(), zoom_out(): zoom in or out by 20%
  */
 class LIBP6GUISHARED_EXPORT EnhancedGraphicsView : public QGraphicsView {
   Q_OBJECT
+  Q_DISABLE_COPY(EnhancedGraphicsView)
+  Q_PROPERTY(bool autoDragMode READ autoDragMode WRITE setAutoDragMode)
+  Q_PROPERTY(bool zoomOnCtrlWheel READ zoomOnCtrlWheel WRITE setZoomOnCtrlWheel)
+
 private:
-  bool _mouseDragScrolling, _mouseMoved;
+  bool _mouseMoved = false, _autoDragMode = true, _zoomOnCtrlWheel = true;
   QPoint _lastPos;
-  QPointF _mouseOverPosition;
+  //QPointF _mouseOverPosition;
 
 public:
-  explicit EnhancedGraphicsView(QWidget *parent);
-  /** @return mouse position in scene coordinates, when mouse is overring,
-   * tracking must be enabled, otherwise return QPointF() */
-  QPointF mouseOverPosition() const { return _mouseOverPosition; }
+  explicit EnhancedGraphicsView(QWidget *parent = 0);
+  bool zoomOnCtrlWheel() const { return _zoomOnCtrlWheel; }
+  void setZoomOnCtrlWheel(bool enabled = true) { _zoomOnCtrlWheel = enabled; }
+  bool autoDragMode() const { return _autoDragMode; }
+  void setAutoDragMode(bool enabled = true) { _autoDragMode = enabled; }
+  // /** @return mouse position in scene coordinates, when mouse is overring,
+  //  * tracking must be enabled, otherwise return QPointF() */
+  // QPointF mouseOverPosition() const { return _mouseOverPosition; }
 
 public slots:
-  void fitAllInView();
-  void zoomIn();
-  void zoomOut();
+  void fit_all_in_view();
+  void zoom_in();
+  void zoom_out();
 
 protected:
   void wheelEvent(QWheelEvent *event) override;

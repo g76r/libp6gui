@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Hallowyn and others.
+/* Copyright 2014-2025 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -18,26 +18,24 @@
 #include <QScrollBar>
 
 EnhancedGraphicsView::EnhancedGraphicsView(QWidget *parent)
-  : QGraphicsView(parent), _mouseDragScrolling(false), _mouseMoved(false) {
-  setDragMode(QGraphicsView::RubberBandDrag);
-#if QT_VERSION >= 0x050200
-  setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents); // FIXME
-#endif
+  : QGraphicsView(parent) {
+  if (_autoDragMode)
+    setDragMode(QGraphicsView::RubberBandDrag);
 }
 
-void EnhancedGraphicsView::fitAllInView() {
-  if (scene())
-    fitInView(scene()->itemsBoundingRect(), Qt::KeepAspectRatio);
+void EnhancedGraphicsView::fit_all_in_view() {
+  if (auto s = scene(); !!s)
+    fitInView(s->itemsBoundingRect(), Qt::KeepAspectRatio);
 }
 
-void EnhancedGraphicsView::zoomIn() {
+void EnhancedGraphicsView::zoom_in() {
   auto anchor = transformationAnchor();
   setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
   scale(1.2, 1.2);
   setTransformationAnchor(anchor);
 }
 
-void EnhancedGraphicsView::zoomOut() {
+void EnhancedGraphicsView::zoom_out() {
   auto anchor = transformationAnchor();
   setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
   scale(1.0 / 1.2, 1.0 / 1.2);
@@ -45,42 +43,35 @@ void EnhancedGraphicsView::zoomOut() {
 }
 
 void EnhancedGraphicsView::wheelEvent(QWheelEvent *event) {
-  if (!(event->modifiers() & Qt::ControlModifier))
-    QGraphicsView::wheelEvent(event);
-  if (event->angleDelta().y() == 0)
-    QGraphicsView::wheelEvent(event);
-  else {
+  if (_zoomOnCtrlWheel && event->modifiers() & Qt::ControlModifier
+      && event->angleDelta().y() != 0) {
+    // ctrl + vertical wheel -> zoom
     if (event->angleDelta().y() > 0) {
-      zoomIn();
+      zoom_in();
     } else {
-      zoomOut();
+      zoom_out();
     }
+    return;
   }
+  QGraphicsView::wheelEvent(event);
 }
 
 void EnhancedGraphicsView::mousePressEvent(QMouseEvent *event) {
-  if (event->buttons() & Qt::MiddleButton) {
-    // bidirectional grab scrolling
-    if (!_mouseDragScrolling) {
-      QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-      _mouseDragScrolling = true;
-    }
-  }
+  if (_autoDragMode && event->button() == Qt::MiddleButton)
+    QApplication::setOverrideCursor(Qt::ClosedHandCursor);
   QGraphicsView::mousePressEvent(event);
 }
 
 void EnhancedGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
-  if (_mouseDragScrolling) {
-    QApplication::restoreOverrideCursor();
-    _mouseDragScrolling = false;
-  }
   QGraphicsView::mouseReleaseEvent(event);
-  _mouseMoved = false;
+  if (_autoDragMode && event->button() == Qt::MiddleButton)
+    QApplication::restoreOverrideCursor();
 }
 
 void EnhancedGraphicsView::mouseMoveEvent(QMouseEvent *event) {
-  if (event->buttons() & Qt::MiddleButton) {
-    // bidirectional grab scrolling
+  //_mouseOverPosition = mapToScene(event->pos());
+  if (_autoDragMode && event->buttons() & Qt::MiddleButton) {
+    // middle button move -> bidirectional grab scrolling
     if (!_mouseMoved) {
       _mouseMoved = true;
       _lastPos = event->pos();
@@ -90,13 +81,12 @@ void EnhancedGraphicsView::mouseMoveEvent(QMouseEvent *event) {
       horizontalScrollBar()->setValue(horizontalScrollBar()->value()-delta.x());
       verticalScrollBar()->setValue(verticalScrollBar()->value()-delta.y());
     }
-  } else {
-    QGraphicsView::mouseMoveEvent(event);
+    return;
   }
-  _mouseOverPosition = mapToScene(event->pos());
+  QGraphicsView::mouseMoveEvent(event);
 }
 
 void EnhancedGraphicsView::leaveEvent(QEvent *event) {
   QGraphicsView::leaveEvent(event);
-  _mouseOverPosition = QPointF();
+  //_mouseOverPosition = QPointF();
 }
