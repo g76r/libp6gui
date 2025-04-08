@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Hallowyn and others.
+/* Copyright 2014-2025 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -18,10 +18,10 @@
 #include <QGraphicsLayout>
 
 /** Layout for using Graphviz to layout two item kinds, graph nodes being
- * represented by regular QGraphicsLayoutItems and edges being represented
- * by ad-hoc GraphvizEdgeGraphicsItem objects that are QGraphicsItems but not
- * QGraphicsLayoutItems.
- * @see GraphvizEdgeGraphicsItem
+ *  represented by regular QGraphicsLayoutItems and edges being represented
+ *  by ad-hoc GraphvizEdgeGraphicsItem objects that are QGraphicsItems but not
+ *  QGraphicsLayoutItems.
+ *  @see GraphvizEdgeGraphicsItem
  */
 class LIBP6GUISHARED_EXPORT GraphvizGraphicsLayout : public QGraphicsLayout {
 public:

@@ -1,4 +1,4 @@
-/* Copyright 2014-2023 Hallowyn and others.
+/* Copyright 2014-2025 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -21,8 +21,9 @@
 class GraphvizGraphicsLayout;
 
 /** Graphics item fitting with Graphviz' edges model: B-splines (actually
- * linked cubic Beziers) with a floating label.
- * @see GraphvizGraphicsLayout
+ *  only linked cubic Beziers are supported, even if Graphviz uses B-splines)
+ *  with a floating label.
+ *  @see GraphvizGraphicsLayout
  */
 class LIBP6GUISHARED_EXPORT GraphvizEdgeGraphicsItem : public QGraphicsItem {
   QGraphicsLayoutItem *_tail, *_head;
