@@ -69,6 +69,7 @@ SOURCES *= \
     util/guipercentfunctions.cpp \
     util/indexparamsprovider.cpp \
     util/undocommandadapter.cpp \
+    widget/clipboardinspectorform.cpp \
     widget/dynamicstackedwidget.cpp \
     modelview/enhancedgraphicsview.cpp \
     modelview/enhancedlistview.cpp \
@@ -121,6 +122,7 @@ HEADERS *=\
     target/viewfinder.h \
     util/indexparamsprovider.h \
     util/undocommandadapter.h \
+    widget/clipboardinspectorform.h \
     widget/dynamicstackedwidget.h \
     modelview/enhancedgraphicsview.h \
     modelview/enhancedlistview.h \
@@ -172,6 +174,7 @@ unix {
 }
 
 FORMS *= \
+    widget/clipboardinspectorform.ui \
     widget/interruptiblewaitwidget.ui
 
 
