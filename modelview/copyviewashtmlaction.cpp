@@ -1,4 +1,4 @@
-/* Copyright 2016-2023 Hallowyn and others.
+/* Copyright 2016-2025 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -19,7 +19,6 @@
 #include <QClipboard>
 #include "format/stringutils.h"
 
-// LATER add txt/csv in addition to html
 // LATER add vertical (left) headers, especially for QTableView
 
 CopyViewAsHtmlAction::CopyViewAsHtmlAction(
@@ -28,7 +27,6 @@ CopyViewAsHtmlAction::CopyViewAsHtmlAction(
     _indentationPlaceholder("&nbsp;&nbsp;&nbsp;"),
     _ignoreSelection(ignoreSelection) {
   connect(this, &QAction::triggered, [this]() {
-    //qDebug() << "CopyViewAsHtmlAction";
     QClipboard *clipboard = QApplication::clipboard();
     auto *v = _view.data();
     if (!clipboard || !v)
@@ -37,7 +35,7 @@ CopyViewAsHtmlAction::CopyViewAsHtmlAction(
     if (!m)
       return;
     int columnCount = m->columnCount();
-    QString html("<table>\n<tr>");
+    QString html("<table>\n<tr>"), tsv;
     QSet<int> visibleColumns;
     auto *listView = qobject_cast<QListView*>(v);
     auto *treeView = qobject_cast<QTreeView*>(v);
@@ -61,20 +59,26 @@ CopyViewAsHtmlAction::CopyViewAsHtmlAction(
           .append(StringUtils::htmlEncode(m->headerData(i, Qt::Horizontal)
                                           .toString(), false))
           .append("</th>");
+      tsv.append(m->headerData(i, Qt::Horizontal)
+                 .toString().remove('\t'))
+          .append('\t');
     }
     html.append("</tr>\n");
-    recursiveCopy(html, visibleColumns, v, m, QModelIndex(), QString());
+    tsv.chop(1);
+    tsv.append('\n');
+    recursiveCopy(html, tsv, visibleColumns, v, m, QModelIndex(), QString());
     html.append("</table>\n");
     QMimeData *md = new QMimeData;
     md->setHtml(html);
+    md->setText(tsv);
     clipboard->setMimeData(md);
-    //qDebug() << "  copied";
   });
 }
 
 void CopyViewAsHtmlAction::recursiveCopy(
-    QString &html, QSet<int> &visibleColumns, QAbstractItemView *v,
-    QAbstractItemModel *m, QModelIndex parent, QString indentation) {
+    QString &html, QString &tsv, QSet<int> &visibleColumns,
+    QAbstractItemView *v, QAbstractItemModel *m, const QModelIndex &parent,
+    const QString &indentation) {
   auto *sm = v->selectionModel();
   int rowCount = m->rowCount(parent);
   //qDebug() << indentation << "recursivecopy" << sm << rowCount;
@@ -96,9 +100,14 @@ void CopyViewAsHtmlAction::recursiveCopy(
       html.append(StringUtils::htmlEncode(m->index(row, column, parent)
                                             .data().toString(), false))
           .append("</td>");
+      tsv.append(m->index(row, column, parent)
+                 .data().toString().remove('\t'))
+          .append('\t');
     }
     html.append("</tr>\n");
-    recursiveCopy(html, visibleColumns, v, m, m->index(row, 0, parent),
+    tsv.chop(1);
+    tsv.append('\n');
+    recursiveCopy(html, tsv, visibleColumns, v, m, m->index(row, 0, parent),
                   indentation+_indentationPlaceholder);
   }
 }

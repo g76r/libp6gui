@@ -1,4 +1,4 @@
-/* Copyright 2016-2023 Hallowyn and others.
+/* Copyright 2016-2025 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -19,9 +19,8 @@
 #include <QAbstractItemView>
 #include <QPointer>
 
-/** Copy the content of a QAbstractItemView as HTML to the clipboard.
- *
- * Copy only selected item if any, or the whole content otherwise.
+/** Copy the content of a QAbstractItemView as HTML and TSV to the clipboard.
+ *  Copy only selected item if any, or the whole content otherwise.
  */
 class LIBP6GUISHARED_EXPORT CopyViewAsHtmlAction : public QAction {
   Q_OBJECT
@@ -46,8 +45,9 @@ public:
 
 private:
   void recursiveCopy(
-      QString &html, QSet<int> &visibleColumns, QAbstractItemView *v,
-      QAbstractItemModel *m, QModelIndex parent, QString indentation);
+      QString &html, QString &tsv, QSet<int> &visibleColumns,
+      QAbstractItemView *v, QAbstractItemModel *m, const QModelIndex &parent,
+      const QString &indentation);
 };
 
 
