@@ -1,4 +1,4 @@
-/* Copyright 2024 Hallowyn, Gregoire Barbier and others.
+/* Copyright 2024-2025 Hallowyn, Gregoire Barbier and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -17,6 +17,11 @@
 #include "libp6gui_global.h"
 #include <QMainWindow>
 
+/** QMainWindow with a few convenient enhancements.
+ *  Close subwindows before main window (in case they use resources that will
+ *  be destroyed by main window destructor).
+ *  Avoids
+ */
 class LIBP6GUISHARED_EXPORT EnhancedMainWindow: public QMainWindow {
   Q_OBJECT
   Q_DISABLE_COPY(EnhancedMainWindow)
