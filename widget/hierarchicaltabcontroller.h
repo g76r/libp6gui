@@ -111,6 +111,9 @@ public:
     removeItem(item(pointer)._id);
   }
   inline int itemCount() const { return _items.size(); }
+  inline QList<int> selected_item_ids() const { return _selection; }
+  inline void *item_pointer(int id) const {
+    return _items.contains(id) ? _items.value(id)._pointer : 0; }
   int itemDepth() const;
   int itemTreeWidth() const;
   QSize sizeHint() const override;
