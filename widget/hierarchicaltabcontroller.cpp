@@ -80,7 +80,7 @@ void HierarchicalTabController::removeItem(int id) {
     return;
   // first recursively remove children
   QList<int> children;
-  for (auto [_,v]: _items.asKeyValueRange())
+  for (const auto &[_,v]: _items.asKeyValueRange())
     if (v._parentId == id)
       children += v._id;
   for (auto childid: children)

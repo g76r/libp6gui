@@ -1,4 +1,4 @@
-/* Copyright 2024 Gregoire Barbier and others.
+/* Copyright 2024-2025 Gregoire Barbier and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -38,7 +38,7 @@ static int staticInit() {
   PercentEvaluator::register_function(
         "=color", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) -> QVariant {
     auto params = key.split_headed_list(ml);
-    for (auto param: params) {
+    for (const auto &param: params) {
       auto name = Utf8String{param % context}.toUtf16();
       if (name.isEmpty())
         continue;

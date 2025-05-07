@@ -1,4 +1,4 @@
-/* Copyright 2015-2023 Hallowyn and others.
+/* Copyright 2015-2025 Hallowyn and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -37,7 +37,7 @@ void DeleteItemAction::onTrigger(bool) {
   UndoTransaction transaction(
         dm, tr("Deleting %1 items: %2%3").arg(count).arg(items[0])
       .arg(count > 1 ? "..." : ""));
-  for (auto qualifiedId: items) {
+  for (const auto &qualifiedId: items) {
     SharedUiItem oldItem = dm->itemById(qualifiedId);
     if (!oldItem.isNull() && isThisItemDeletable(oldItem)) {
       QString reason;

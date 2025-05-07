@@ -39,7 +39,7 @@ ClipboardInspectorForm::ClipboardInspectorForm(QWidget *parent) :
     QStringList removed_formats;
     for (auto item: ui->table->selectedItems()) // TODO do better
       removed_formats.append(item->text());
-    for (auto format: old_md->formats())
+    for (const auto &format: old_md->formats())
       if (!removed_formats.contains(format))
         new_md->setData(format, old_md->data(format));
     _clipboard->setMimeData(new_md);
@@ -55,7 +55,7 @@ void ClipboardInspectorForm::update_display() {
   auto md = _clipboard->mimeData();
   ui->table->setRowCount(0);
   if (md) {
-    for (auto format: md->formats()) {
+    for (const auto &format: md->formats()) {
       int row = ui->table->rowCount();
       ui->table->insertRow(row);
       ui->table->setItem(row, 0, new QTableWidgetItem(format));

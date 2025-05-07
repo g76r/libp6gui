@@ -84,7 +84,7 @@ void MultichoiceComboBox::replaceItems(
     const QList<QString> &items, const QSet<QString> &checked) {
   _model->clear();
   int row = 0;
-  for (auto string : items) {
+  for (const auto &string : items) {
     auto item = new QStandardItem(string);
     // must be checkable and not selectable
     item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);

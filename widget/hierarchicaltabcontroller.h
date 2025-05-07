@@ -124,7 +124,7 @@ public:
     return _items.value(id);
   }
   HierarchicalTabControllerItem item(void *pointer) const {
-    for (auto [_,v]: _items.asKeyValueRange())
+    for (const auto &[_,v]: _items.asKeyValueRange())
       if (pointer == v._pointer)
         return v;
     return {};
