@@ -1,4 +1,4 @@
-/* Copyright 2024 Grégoire Barbier and others.
+/* Copyright 2024-2025 Grégoire Barbier and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * Libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -27,31 +27,31 @@ static inline QModelIndex parent0(const QModelIndex &index) {
 };
 
 static const RadixTree<IndexFunction> _functions {
-  { "row", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+  { "row", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
       return index.row();
     } },
-  { "column", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+  { "column", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
       return index.column();
     } },
-  { "internal_id", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+  { "internal_id", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
       return index.internalId();
     } },
-  { "is_valid", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+  { "is_valid", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
       return index.isValid();
     } },
-  { "children_count", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+  { "children_count", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
       return index.model()->rowCount(index.siblingAtColumn(0));
     } },
-  { "parent_row", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+  { "parent_row", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
       return parent0(index).row();
     } },
-  { "parent_column", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+  { "parent_column", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
       return parent0(index).column();
     } },
-  { "parent_is_valid", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+  { "parent_is_valid", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
       return parent0(index).isValid();
     } },
-  { "parent_internal_id", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) -> QVariant {
+  { "parent_internal_id", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
       return parent0(index).internalId();
     } },
 };

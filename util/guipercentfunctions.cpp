@@ -18,7 +18,7 @@
 
 static int staticInit() {
   PercentEvaluator::register_function(
-        "=icon", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) -> QVariant {
+        "=icon", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) STATIC_LAMBDA -> QVariant {
     auto params = key.split_headed_list(ml);
     auto count = params.count();
     if (count == 0)
@@ -36,7 +36,7 @@ static int staticInit() {
     return icon;
   });
   PercentEvaluator::register_function(
-        "=color", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) -> QVariant {
+        "=color", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) STATIC_LAMBDA -> QVariant {
     auto params = key.split_headed_list(ml);
     for (const auto &param: params) {
       auto name = Utf8String{param % context}.toUtf16();
