@@ -14,8 +14,8 @@
 #include "indexparamsprovider.h"
 #include "util/radixtree.h"
 
-using IndexFunction = std::function<QVariant(
-const Utf8String &key,const QVariant &def,
+using IndexFunction = std::function<TypedValue(
+const Utf8String &key,const TypedValue &def,
 const ParamsProvider::EvalContext &context, const QModelIndex &index)>;
 
 /** return index.parent() but using column 0 instead of index.column(), because
@@ -27,37 +27,37 @@ static inline QModelIndex parent0(const QModelIndex &index) {
 };
 
 static const RadixTree<IndexFunction> _functions {
-  { "row", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
+  { "row", [](const Utf8String &,const TypedValue &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> TypedValue {
       return index.row();
     } },
-  { "column", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
+  { "column", [](const Utf8String &,const TypedValue &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> TypedValue {
       return index.column();
     } },
-  { "internal_id", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
+  { "internal_id", [](const Utf8String &,const TypedValue &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> TypedValue {
       return index.internalId();
     } },
-  { "is_valid", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
+  { "is_valid", [](const Utf8String &,const TypedValue &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> TypedValue {
       return index.isValid();
     } },
-  { "children_count", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
+  { "children_count", [](const Utf8String &,const TypedValue &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> TypedValue {
       return index.model()->rowCount(index.siblingAtColumn(0));
     } },
-  { "parent_row", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
+  { "parent_row", [](const Utf8String &,const TypedValue &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> TypedValue {
       return parent0(index).row();
     } },
-  { "parent_column", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
+  { "parent_column", [](const Utf8String &,const TypedValue &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> TypedValue {
       return parent0(index).column();
     } },
-  { "parent_is_valid", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
+  { "parent_is_valid", [](const Utf8String &,const TypedValue &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> TypedValue {
       return parent0(index).isValid();
     } },
-  { "parent_internal_id", [](const Utf8String &,const QVariant &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> QVariant {
+  { "parent_internal_id", [](const Utf8String &,const TypedValue &, const ParamsProvider::EvalContext &, const QModelIndex &index) STATIC_LAMBDA -> TypedValue {
       return parent0(index).internalId();
     } },
 };
 
-QVariant IndexParamsProvider::paramRawValue(
-    const Utf8String &key, const QVariant &def,
+TypedValue IndexParamsProvider::paramRawValue(
+    const Utf8String &key, const TypedValue &def,
     const EvalContext &context) const {
   auto f = _functions.value(key);
   return f ? f(key, def, context, index) : def;

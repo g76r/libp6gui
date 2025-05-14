@@ -1,4 +1,4 @@
-/* Copyright 2024 Grégoire Barbier and others.
+/* Copyright 2024-2025 Grégoire Barbier and others.
  * This file is part of libpumpkin, see <http://libpumpkin.g76r.eu/>.
  * Libpumpkin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -26,8 +26,8 @@ public:
   QModelIndex index;
 
   inline IndexParamsProvider(const QModelIndex &index) : index(index) {}
-  QVariant paramRawValue(const Utf8String &key, const QVariant &def,
-                         const EvalContext &context) const override;
+  TypedValue paramRawValue(const Utf8String &key, const TypedValue &def,
+                           const EvalContext &context) const override;
   Utf8StringSet paramKeys(const EvalContext &context) const override;
   Utf8String paramScope() const override;
 };

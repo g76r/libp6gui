@@ -18,31 +18,31 @@
 
 static int staticInit() {
   PercentEvaluator::register_function(
-        "=icon", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) STATIC_LAMBDA -> QVariant {
+        "=icon", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) STATIC_LAMBDA -> TypedValue {
     auto params = key.split_headed_list(ml);
     auto count = params.count();
     if (count == 0)
       return {};
     QIcon icon(Utf8String{params.value(0) % context});
     if (count == 1)
-      return icon;
+      return TypedValue(icon);
     icon.addFile(Utf8String{params.value(1) % context}, {}, QIcon::Disabled);
     if (count == 2)
-      return icon;
+      return TypedValue(icon);
     icon.addFile(Utf8String{params.value(2) % context}, {}, QIcon::Active);
     if (count == 3)
-      return icon;
+      return TypedValue(icon);
     icon.addFile(Utf8String{params.value(3) % context}, {}, QIcon::Selected);
-    return icon;
+    return icon.isNull() ? TypedValue() : TypedValue(icon);
   });
   PercentEvaluator::register_function(
-        "=color", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) STATIC_LAMBDA -> QVariant {
+        "=color", [](const Utf8String &key, const PercentEvaluator::EvalContext &context, int ml) STATIC_LAMBDA -> TypedValue {
     auto params = key.split_headed_list(ml);
     for (const auto &param: params) {
       auto name = Utf8String{param % context}.toUtf16();
       if (name.isEmpty())
         continue;
-      return QColor::fromString(name);
+      return TypedValue(QColor::fromString(name));
     }
     return {};
   });
